@@ -10,7 +10,7 @@ OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
 #dossier pour l'executable
 BINDIR=bin
-BIN=$(BINDIR)/liste
+BIN=$(BINDIR)/main
 
 #programme du make
 
