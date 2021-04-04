@@ -1,4 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int interface(void);
+void interfaceAccueil(void);
+
+void interfaceBarman(void);
