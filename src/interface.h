@@ -4,3 +4,6 @@
 void interfaceAccueil(void);
 
 void interfaceBarman(void);
+void interfaceClient(void);
+
+void interfaceGestionBoisson(void);
