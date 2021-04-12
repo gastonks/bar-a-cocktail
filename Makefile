@@ -4,6 +4,7 @@ CFLAGS=-Wall
 #nom des dossiers
 SRC=src
 OBJ=obj
+DATA=data
 #arguments pour trouver les éléments dans les dossiers
 SRCS=$(wildcard $(SRC)/*.c)
 OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
@@ -13,6 +14,7 @@ BINDIR=bin
 BIN=$(BINDIR)/main
 
 #programme du make
+
 all:$(BIN)
 
 $(BIN): $(OBJS)
@@ -22,4 +24,4 @@ $(OBJ)/%.o: $(SRC)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -r $(BINDIR)/* $(OBJ)/*
+	rm -r $(BINDIR)/* $(OBJ)/* $(DATA)/*
