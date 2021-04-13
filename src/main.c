@@ -1,6 +1,10 @@
 #include <stdio.h>
-#include"interface.h"
+#include "interface.h"
+#include "interaction.h"
 
-int main(int argv, char** argc){
+int main(int argc, char** argv){
+    initFile();
     interfaceAccueil();
+
+    return 0;
 }
