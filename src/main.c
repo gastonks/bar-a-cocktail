@@ -1,11 +1,10 @@
 #include <stdio.h>
+#include "interface.h"
+#include "interaction.h"
 
-int main(int argv, char** argc){
-<<<<<<< Updated upstream
-    printf("Hello World");
-=======
+int main(int argc, char** argv){
+    initFile();
     interfaceAccueil();
 
     return 0;
->>>>>>> Stashed changes
 }

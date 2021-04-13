@@ -2,6 +2,7 @@
 #include "interaction.h"
 
 int idUser = 0; // 1 = Barman ; 2 = Client
+int nbBoiss = 0; // nombre boisson ajoutee
 
 void interfaceAccueil(){
 
@@ -13,6 +14,7 @@ void interfaceAccueil(){
     printf("\t\t\tMenu Principal\n\n");
     printf("\t\t1. Interface Barman\n\n");
     printf("\t\t2. Interface Client\n\n");
+    printf("\t\t3. Efface entirement le fichier de sauvegarde des boissons\n\n");
     printf("\t\t0. Quitter le programme\n\n");
     printf("===============================================================\n\n");
 
@@ -30,6 +32,10 @@ void interfaceAccueil(){
             break;
         case 2:
             interfaceClient();
+            break;
+        case 3: 
+            system("rm -r data/boisson.dat");
+            printf("Le fichier de sauvegarde des boissons a bien ete supprimee s'il existe.\n");
             break;
 
         case 0:
@@ -152,7 +158,7 @@ void interfaceGestionBoissonClient(){
         switch (numInter)
         {
         case 1:
-            printf("info boisson");
+            interfaceInformationBoisson();
             break;
         case 2:
             printf("commande boisson");
@@ -177,6 +183,7 @@ void interfaceGestionBoissonBarman(){
     printf("\t\t\tMenu Gestion des boissons\n\n");
     printf("\t\t1. Informations sur les boissons\n\n");
     printf("\t\t2. Ajouter ou supprimer une boisson\n\n");
+    printf("\t\t3. Gestion du stock de boisson\n\n");
     printf("\t\t0. Revenir en arrière\n\n");
     printf("===============================================================\n\n");
 
@@ -191,10 +198,13 @@ void interfaceGestionBoissonBarman(){
         switch (numInter)
         {
         case 1:
-            printf("info boisson");
+            interfaceInformationBoisson();
             break;
         case 2:
             interfaceAjoutOuSuppBoisson();
+            break;
+        case 3:
+            printf("gestion stock boisson");
             break;
         case 0:
             interfaceBarman();
@@ -220,6 +230,20 @@ void interfaceAjoutOuSuppBoisson(){
     printf("\t\t0. Revenir en arrière\n\n");
     printf("===============================================================\n\n");
 
+    switch (nbBoiss)
+    {
+    case 0:
+        printf("Aucune boisson a ete ajoutee recemment.\n\n");
+        break;
+    case 1:
+        printf("Une boisson a ete ajoutee recemment.\n\n");
+        break;
+    
+    default:
+        printf("%d boissons ont ete ajoutees recemment.\n\n", nbBoiss);
+        break;
+    }
+
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
@@ -227,17 +251,18 @@ void interfaceAjoutOuSuppBoisson(){
         printf("Erreur dans la saisie du numero de l'interface.\n");
         exit(-1);
     }else{
-
         switch (numInter)
         {
         case 1:
+            nbBoiss++;
             ajoutBoissonAlcool();
             break;
         case 2:
+            nbBoiss++;
             ajoutBoissonNonAlcool();
             break;
         case 3:
-            printf("supp boisson");
+            suppBoisson();
             break;
         case 0:
             interfaceGestionBoissonBarman();
@@ -247,6 +272,7 @@ void interfaceAjoutOuSuppBoisson(){
             printf("Erreur dans le choix de l'interface.");
             break;
         }
+
     }
 }
 
@@ -308,7 +334,7 @@ void interfaceGestionFinance(){
     printf("\t\tLe bar a généré %.2f € par rapport à hier.\n\n", -0.2);
     printf("===============================================================\n\n");
 
-    printf("Entrer 0 pour sortir de l'interface:");
+    printf("Entrer 0 pour revenir en arrière:");
     retour = scanf("%d", &numInter);
 
     if(retour != 1){
@@ -318,21 +344,8 @@ void interfaceGestionFinance(){
 
         switch (numInter)
         {
-        case 1:
-            printf("info cocktail");
-            break;
-        case 2:
-            printf("création cocktail");
-            break;
-        case 3:
-            printf("commande cocktail");
-            break;
         case 0:
-            if(idUser == 1){
-                interfaceBarman();
-            }else{
-                interfaceClient();
-            }
+            interfaceBarman();
             break;
         
         default:
@@ -341,5 +354,44 @@ void interfaceGestionFinance(){
         }
     }
 
+
+}
+
+void interfaceInformationBoisson(){
+    int numInter = 0;
+    int retour = 0;
+
+    system("clear");
+    printf("=====================================================================================================\n\n");
+    printf("\t\t\tMenu Information sur les boissons\n\n");
+    printf("\t\tID\tNom\tContenance\tPrix\tQuantité\tDegre Alcool\tDegre Sucre\n\n");
+
+    informationBoisson();
+
+    printf("===============================================================\n\n");
+
+    printf("Entrer 0 pour revenir en arrière:");
+    retour = scanf("%d", &numInter);
+
+    if(retour != 1){
+        printf("Erreur dans la saisie du numero de l'interface.\n");
+        exit(-1);
+    }else{
+
+        switch (numInter)
+        {
+        case 0:
+            if(idUser == 1){
+                interfaceGestionBoissonBarman();
+            }else{
+                interfaceGestionBoissonClient();
+            }
+            break;
+        
+        default:
+            printf("Erreur dans le choix de l'interface.");
+            break;
+        }
+    }
 
 }

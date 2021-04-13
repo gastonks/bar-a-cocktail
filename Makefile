@@ -14,7 +14,6 @@ BINDIR=bin
 BIN=$(BINDIR)/main
 
 #programme du make
-
 all:$(BIN)
 
 $(BIN): $(OBJS)
