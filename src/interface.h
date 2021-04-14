@@ -13,10 +13,11 @@ void interfaceGestionBoissonBarman(void);
 void interfaceGestionBoissonClient(void);
 void interfaceGestionCocktail(void);
 void interfaceGestionFinance(void);
-void interfaceInformationBoisson(void);
+void interfaceInformationBoissonBarman(void);
 void interfaceAjoutOuSuppBoisson(void);
 
-
+void interfaceInformationBoissonClient(void);
+void interfaceInformationCommandeClient(void);
 void interfaceCommandeBoisson(void);
 
 void interfaceCommandeCocktail(void);

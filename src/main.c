@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include "interface.h"
-#include "interaction.h"
+#include "boissonBarman.h"
+#include "boissonClient.h"
 
 int main(int argc, char** argv){
-    initFile();
+    initFileBarman();
+    initFileClient();
     interfaceAccueil();
 
     return 0;
