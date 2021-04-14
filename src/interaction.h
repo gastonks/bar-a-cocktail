@@ -7,7 +7,6 @@
 
 typedef struct boisson
 {
-    int id;
     char nom[51];
     float contenance;
     float prix;
@@ -17,11 +16,15 @@ typedef struct boisson
 }boisson;
 
 void initFile(void);
-int idInit(void);
 void ajoutBoissonAlcool(void);
 void ajoutBoissonNonAlcool(void);
 void informationBoisson(void);
 void suppBoisson(void);
+void initTab();
+void initFichier(int t);
 
+int calcTaille();
+
+boisson* tab;
 
 #endif

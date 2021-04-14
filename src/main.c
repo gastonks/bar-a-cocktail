@@ -4,6 +4,7 @@
 
 int main(int argc, char** argv){
     initFile();
+    initTab();
     interfaceAccueil();
 
     return 0;

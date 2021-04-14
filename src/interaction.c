@@ -5,8 +5,8 @@
 
 //const char* BOISSON_FORMAT_OUT = "{\n\t\"id:\": %d,\n\t\"nomBoisson\": \"%s\",\n\t\"contenance:\": %.2f,\n\t\"prix:\": %.2f,\n\t\"quantite:\": %.2f,\n\t\"dgrAlc:\": %.2f,\n\t\"dgrScr:\": %.2f\n}\n";
 //const char* BOISSON_FORMAT_IN = "{\n\t\"id:\": %d,\n\t\"nomBoisson\": \"%[^\"]\",\n\t\"contenance:\": %.2f,\n\t\"prix:\": %.2f,\n\t\"quantite:\": %.2f,\n\t\"dgrAlc:\": %.2f,\n\t\"dgrScr:\": %.2f\n}";
-const char* BOISSON_FORMAT_OUT = "(%d, %s, %.2f, %.2f, %.2f, %.2f, %.2f)\n";
-const char* BOISSON_FORMAT_IN = "(%d, %[^,], %f, %f, %f, %f, %f)";
+const char* BOISSON_FORMAT_OUT = "(%s, %.2f, %.2f, %.2f, %.2f, %.2f)\n";
+const char* BOISSON_FORMAT_IN = "(%[^,], %f, %f, %f, %f, %f)";
 
 void initFile(void){
     FILE* file = fopen("data/boisson.dat", "a");
@@ -24,7 +24,7 @@ void ajoutBoissonAlcool(){
     boisson nouvBoisson;
 
     int retour = 0;
-    system("clear");
+    system("cls");
     printf("===============================================================\n\n");
     printf("\t\tMenu de l'ajout d'une boisson\n\n");
 
@@ -64,22 +64,52 @@ void ajoutBoissonAlcool(){
         exit(-1);
     }
 
-    nouvBoisson.id = idInit();
+    nouvBoisson.degreScr = 0.00;
 
-    //nouvBoisson.id = idInit();
-    //printf("\nID : %d\n", nouvBoisson.id);
+    int T = calcTaille();
+    
+    if (T>0) {
+        boisson* tmp = malloc(T*sizeof(boisson));
+        for(int i = 0; i<T; i++) {
+            strcpy(tmp[i].nom, tab[i].nom);
+            tmp[i].contenance = tab[i].contenance;
+            tmp[i].prix = tab[i].prix;
+            tmp[i].quantite = tab[i].quantite;
+            tmp[i].degreAlco = tab[i].degreAlco;
+            tmp[i].degreScr = tab[i].degreScr;
+        }
 
-    // Interaction avec un fichier de sauvegarde
+        free(tab);
+        tab = malloc((T+1)*sizeof(boisson));
 
-    FILE* file = fopen("data/boisson.dat", "a");
+        for(int i = 0; i<T; i++) {
+            strcpy(tab[i].nom, tmp[i].nom);
+            tab[i].contenance = tmp[i].contenance;
+            tab[i].prix = tmp[i].prix;
+            tab[i].quantite = tmp[i].quantite;
+            tab[i].degreAlco = tmp[i].degreAlco;
+            tab[i].degreScr = tmp[i].degreScr;
+        }
 
-    if(file == NULL){
-        printf("fichier non ouvert");
-        exit(-1);
+        strcpy(tab[T].nom, nouvBoisson.nom);
+        tab[T].contenance = nouvBoisson.contenance;
+        tab[T].prix = nouvBoisson.prix;
+        tab[T].quantite = nouvBoisson.prix;
+        tab[T].degreAlco = nouvBoisson.degreAlco;
+        tab[T].degreScr = nouvBoisson.degreScr;
+
+        free(tmp);
+    } else {
+        tab = malloc(1*sizeof(boisson));
+        strcpy(tab[0].nom, nouvBoisson.nom);
+        tab[0].contenance = nouvBoisson.contenance;
+        tab[0].prix = nouvBoisson.prix;
+        tab[0].quantite = nouvBoisson.prix;
+        tab[0].degreAlco = nouvBoisson.degreAlco;
+        tab[0].degreScr = nouvBoisson.degreScr;
     }
 
-    fprintf(file, BOISSON_FORMAT_OUT, nouvBoisson.id, nouvBoisson.nom,nouvBoisson.contenance ,nouvBoisson.prix, nouvBoisson.quantite, nouvBoisson.degreAlco, 0.00);
-    fclose(file);
+    initFichier(T+1);
 
     interfaceAjoutOuSuppBoisson();
 }
@@ -89,7 +119,7 @@ void ajoutBoissonNonAlcool(){
     boisson nouvBoisson;
 
     int retour = 0;
-    system("clear");
+    system("cls");
     printf("===============================================================\n\n");
     printf("\t\tMenu de l'ajout d'une boisson\n\n");
 
@@ -131,108 +161,69 @@ void ajoutBoissonNonAlcool(){
         exit(-1);
     }
 
-    nouvBoisson.id = idInit();
+    int T = calcTaille();
+    
+    if (T>0) {
+        boisson* tmp = malloc(T*sizeof(boisson));
+        for(int i = 0; i<T; i++) {
+            strcpy(tmp[i].nom, tab[i].nom);
+            tmp[i].contenance = tab[i].contenance;
+            tmp[i].prix = tab[i].prix;
+            tmp[i].quantite = tab[i].quantite;
+            tmp[i].degreAlco = tab[i].degreAlco;
+            tmp[i].degreScr = tab[i].degreScr;
+        }
 
-    FILE* file = fopen("data/boisson.dat", "a");
+        free(tab);
+        tab = malloc((T+1)*sizeof(boisson));
 
-    if(file == NULL){
-        printf("fichier non ouvert");
-        exit(-1);
+        for(int i = 0; i<T; i++) {
+            strcpy(tab[i].nom, tmp[i].nom);
+            tab[i].contenance = tmp[i].contenance;
+            tab[i].prix = tmp[i].prix;
+            tab[i].quantite = tmp[i].quantite;
+            tab[i].degreAlco = tmp[i].degreAlco;
+            tab[i].degreScr = tmp[i].degreScr;
+        }
+
+        strcpy(tab[T].nom, nouvBoisson.nom);
+        tab[T].contenance = nouvBoisson.contenance;
+        tab[T].prix = nouvBoisson.prix;
+        tab[T].quantite = nouvBoisson.prix;
+        tab[T].degreAlco = nouvBoisson.degreAlco;
+        tab[T].degreScr = nouvBoisson.degreScr;
+
+        free(tmp);
+    } else {
+        tab = malloc(1*sizeof(boisson));
+        strcpy(tab[0].nom, nouvBoisson.nom);
+        tab[0].contenance = nouvBoisson.contenance;
+        tab[0].prix = nouvBoisson.prix;
+        tab[0].quantite = nouvBoisson.prix;
+        tab[0].degreAlco = nouvBoisson.degreAlco;
+        tab[0].degreScr = nouvBoisson.degreScr;
     }
-    fprintf(file, BOISSON_FORMAT_OUT, nouvBoisson.id, nouvBoisson.nom, nouvBoisson.contenance,nouvBoisson.prix, nouvBoisson.quantite, 0.00, nouvBoisson.degreScr);
-    fclose(file);
 
+    initFichier(T+1);
 
     interfaceAjoutOuSuppBoisson();
 
 }
 
 void informationBoisson(){
+    int i;
+    int T = calcTaille();
 
-    boisson tmp;
-
-    FILE* file = fopen("data/boisson.dat", "r");
-
-    if(file == NULL){
-        printf("fichier non ouvert");
-        exit(-1);
+    for(i = 0; i<T; i++) {
+        printf("\t\t%d\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].quantite, tab[i].degreAlco, tab[i].degreScr);
     }
-
-    rewind(file);
-    // while(!= '\n')
-    while(!feof(file)){
-        
-        fscanf(file, BOISSON_FORMAT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.quantite, &tmp.degreAlco, &tmp.degreScr);
-        printf("\t\t%d", tmp.id);
-        printf("\t%s", tmp.nom);
-        printf("\t%.2f", tmp.contenance);
-        printf("\t\t%.2f", tmp.prix);
-        printf("\t%.2f", tmp.quantite);
-        printf("\t\t%.2f", tmp.degreAlco);
-        printf("\t\t%.2f\n", tmp.degreScr);
-        if(fgetc(file) != '\n'){
-            break;
-        }
-    }
-
-    fclose(file);
-
-}
-
-int idInit(){
-    
-    boisson tmp;
-
-    int nID = tmp.id;
-
-    FILE* file = fopen("data/boisson.dat", "r");
-
-    if(file == NULL){
-        printf("fichier non ouvert ID");
-        exit(-1);
-    }
-
-    rewind(file);
-
-    while(!feof(file)){
-        
-        fscanf(file, BOISSON_FORMAT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.quantite, &tmp.degreAlco, &tmp.degreScr);
-/*
-        if(nID == 0){
-            nID++;
-            printf("\ntmp.id : %d\n", tmp.id);
-            printf("\nnID: %d\n", nID);
-            return tmp.id;
-        }else{
-            while(tmp.id == nID){
-                nID++;
-            }
-            printf("\ntmp.id : %d\n", tmp.id);
-            printf("\nnID: %d\n", nID);
-            return nID;
-        }
-*/
-
-        if(fgetc(file) != '\n'){
-            break;
-        }
-    }
-
-
-    nID = tmp.id + 1;
-
-
-    return nID;
-
-    fclose(file);   
 }
 
 void suppBoisson(){
-
     int idSupp = 0;
     int retour = 0;
 
-    system("clear");
+    system("cls");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
     printf("\t\tID\tNom\tContenance\tPrix\tQuantité\tDegre Alcool\tDegre Sucre\n\n");
@@ -249,8 +240,57 @@ void suppBoisson(){
         exit(-1);
     }
 
-    boisson tmp;
+    int T = calcTaille();
+    int j = 0;
+    int h = 0;
 
+    if(idSupp > T ||idSupp < 1) {
+        printf("Cet ID n'existe pas.");
+        interfaceAjoutOuSuppBoisson();
+    }
+
+    if(T>1) {
+        boisson* tmp = malloc(T*sizeof(boisson));
+        for(int i = 0; i<T; i++) {
+            strcpy(tmp[i].nom, tab[i].nom);
+            tmp[i].contenance = tab[i].contenance;
+            tmp[i].prix = tab[i].prix;
+            tmp[i].quantite = tab[i].quantite;
+            tmp[i].degreAlco = tab[i].degreAlco;
+            tmp[i].degreScr = tab[i].degreScr;
+        }
+
+        free(tab);
+        tab = malloc((T-1)*sizeof(boisson));
+
+        while(j<T) {
+            if(j != idSupp-1) {
+                strcpy(tab[h].nom, tmp[j].nom);
+                tab[h].contenance = tmp[j].contenance;
+                tab[h].prix = tmp[j].prix;
+                tab[h].quantite = tmp[j].quantite;
+                tab[h].degreAlco = tmp[j].degreAlco;
+                tab[h].degreScr = tmp[j].degreScr;
+                h++;
+                j++;
+            }
+            else {
+                j++;
+            }
+        }
+    } else if (T==1 && idSupp==1) {
+        free(tab);
+    }
+
+    initFichier(T-1);
+
+    interfaceAjoutOuSuppBoisson();
+
+}
+
+int calcTaille() {
+    int t = -1;
+    boisson tmp;
     FILE* file = fopen("data/boisson.dat", "r");
 
     if(file == NULL){
@@ -260,20 +300,60 @@ void suppBoisson(){
 
     rewind(file);
 
-    while(!feof(file)){
-        
-        fscanf(file, BOISSON_FORMAT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.quantite, &tmp.degreAlco, &tmp.degreScr);
-
-        if(tmp.id == idSupp){
-            fprintf(file, BOISSON_FORMAT_OUT, 0, 0, 0, 0, 0, 0, 0);
-        }
+    while(!feof(file)) {
+        fscanf(file, BOISSON_FORMAT_IN, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.quantite, &tmp.degreAlco, &tmp.degreScr);
+        t++;
 
         if(fgetc(file) != '\n'){
             break;
         }
     }
+
+    //printf("%d",t);
+
+    return t;
+}
+
+
+void initTab() {
+    int i = 0;
+    FILE* file = fopen("data/boisson.dat", "r");
+
+    if(file == NULL){
+        printf("fichier non ouvert ID");
+        exit(-1);
+    }
+
+    if(calcTaille()>0) {
+        tab = malloc(calcTaille()*sizeof(boisson));
+    }
+
+    rewind(file);
+
+    while(!feof(file)) {
+        fscanf(file, BOISSON_FORMAT_IN, tab[i].nom, &tab[i].contenance, &tab[i].prix, &tab[i].quantite, &tab[i].degreAlco, &tab[i].degreScr);
+        i++;
+
+        if(fgetc(file) != '\n'){
+            break;
+        }
+    }
+
+    for(int j = 0; j<calcTaille(); j++) {
+        printf("%s, %.2f, %.2f, %.2f, %.2f, %.2f\n", tab[j].nom, tab[j].contenance, tab[j].prix, tab[j].quantite, tab[j].degreAlco, tab[j].degreScr);
+    }
+
     fclose(file);
 
-    interfaceAjoutOuSuppBoisson();
+}
 
+void initFichier(int T) {
+    FILE *file = fopen("data/boisson.dat","w");
+    int i;
+
+    for(i=0; i<T; i++) {
+        fprintf(file, BOISSON_FORMAT_OUT, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].quantite, tab[i].degreAlco, tab[i].degreScr);
+    }
+
+    fclose(file);
 }
