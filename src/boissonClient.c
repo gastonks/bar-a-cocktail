@@ -1,6 +1,4 @@
 #include "boissonClient.h"
-#include "boissonBarman.h"
-#include "interface.h"
 
 
 const char* BOISSON_FORMAT_CLIENT_OUT = "\n(%d, %s, %.2f, %.2f, %.2f, %.2f, %.2f)";

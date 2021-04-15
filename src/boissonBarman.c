@@ -1,8 +1,4 @@
-// TODO : revoir le système de finance
-
 #include "boissonBarman.h"
-#include "boissonClient.h"
-#include "interface.h"
 
 //const char* BOISSON_FORMAT_OUT = "{\n\t\"id:\": %d,\n\t\"nomBoisson\": \"%s\",\n\t\"contenance:\": %.2f,\n\t\"prix:\": %.2f,\n\t\"quantite:\": %.2f,\n\t\"dgrAlc:\": %.2f,\n\t\"dgrScr:\": %.2f\n}\n";
 //const char* BOISSON_FORMAT_IN = "{\n\t\"id:\": %d,\n\t\"nomBoisson\": \"%[^\"]\",\n\t\"contenance:\": %.2f,\n\t\"prix:\": %.2f,\n\t\"quantite:\": %.2f,\n\t\"dgrAlc:\": %.2f,\n\t\"dgrScr:\": %.2f\n}";
@@ -14,12 +10,11 @@ const char* COMMANDE_FORMAT_OUT = "\n(%d, %s, %.2f, %.2f)";
 const char* COMMANDE_FORMAT_IN = "(%d, %[^,], %f, %f)";
 const char* COMMANDE_FORMAT_EX = "(%d, %s, %.2f, %.2f)";
 
-void initFileBarman(void){
+void initFileBarman(){
     FILE* file = fopen("data/boissonBarman.dat", "a");
     FILE* filetmp = fopen("data/boissonBarmantmp.dat", "a");
-    FILE* recette = fopen("data/recette.dat", "a");
 
-    if(file == NULL || filetmp == NULL || recette == NULL){
+    if(file == NULL || filetmp == NULL){
         printf("fichier non ouvert");
         exit(-1);
     }
@@ -28,6 +23,7 @@ void initFileBarman(void){
     } 
     
     fclose(file);
+    fclose(filetmp);
 }
 
 void ajoutBoissonAlcool(){
@@ -170,7 +166,7 @@ void informationBoissonBarman(){
     }
 
     rewind(file);
-    // fgetc(file) != '\n'  
+ 
     while(!feof(file)){
         
         fscanf(file, BOISSON_FORMAT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.degreAlco, &tmp.degreScr, &tmp.quantite);
@@ -190,11 +186,9 @@ void informationBoissonBarman(){
                 break;
             }
         }
-
     }
 
     fclose(file);
-
 }
 
 int idInit(){
@@ -263,7 +257,7 @@ void suppBoisson(){
     FILE* filetmp = fopen("data/boissonBarmantmp.dat", "a");
 
     if(file == NULL || filetmp == NULL){
-        printf("fichier non ouvert ID");
+        printf("fichier non ouvert");
         exit(-1);
     }
 
@@ -284,8 +278,6 @@ void suppBoisson(){
                 break;
             }
         }else{
-            printf("\nidSupp = %d\n", idSupp);
-            printf("\ntmp.id = %d\n", tmp.id);
             fprintf(filetmp, BOISSON_FORMAT_OUT, tmp.id, tmp.nom, tmp.contenance,tmp.prix, tmp.degreAlco, tmp.degreScr, tmp.quantite);
             if(fgetc(file) != '\n'){
                 break;
@@ -518,22 +510,19 @@ void gestionStock(){
 
 }
 
-float recetteJour(){
+float recette(){
 
     commande tmp;
 
     float totalJ = 0;
-    float totalH = 0;
 
     FILE* fileCommande = fopen("data/commandeClient.dat", "r");
-    FILE* fileRecette = fopen("data/recette.dat", "a");
 
-    if(fileCommande == NULL || fileRecette == NULL){
+    if(fileCommande == NULL ){
         printf("fichier non ouvert");
         exit(-1);
     }
     rewind(fileCommande);
-    rewind(fileRecette);
 
     while(!feof(fileCommande)){
         
@@ -545,60 +534,8 @@ float recetteJour(){
             break;
         }
     }
-
-    fprintf(fileRecette, "%.2f %.2f", totalJ, totalH);
-
-    fclose(fileRecette);
     fclose(fileCommande);
 
     return totalJ;
 }
 
-float recetteHier(){
-
-    float totalJ;
-    float totalH;
-
-    FILE* fileRecette = fopen("data/recette.dat", "r+");
-
-    if(fileRecette == NULL){
-        printf("fichier non ouvert");
-        exit(-1);
-    }
-
-    rewind(fileRecette);
-
-    fscanf(fileRecette, "%f %f", &totalJ, &totalH);
-
-    totalH = totalJ + totalH;
-
-    fprintf(fileRecette, "%.2f %.2f", totalJ, totalH);
-
-    fclose(fileRecette);
-
-    return totalH;
-}
-
-void remiseZero(){
-    float totalJ;
-    float totalH;
-
-    FILE* fileRecette = fopen("data/recette.dat", "r+");
-
-    if(fileRecette == NULL){
-        printf("fichier non ouvert");
-        exit(-1);
-    }
-
-    rewind(fileRecette);
-
-    fscanf(fileRecette, "%f %f", &totalJ, &totalH);
-
-    totalJ = 0;
-
-    fprintf(fileRecette, "%.2f %.2f", totalJ, totalH);
-
-    fclose(fileRecette);
-
-    interfaceBarman();
-}

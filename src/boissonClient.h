@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "boissonBarman.h"
+#include "interface.h"
 
 typedef struct commande
 {
