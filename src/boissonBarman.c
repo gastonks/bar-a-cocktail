@@ -10,11 +10,12 @@ const char* COMMANDE_FORMAT_OUT = "\n(%d, %s, %.2f, %.2f)";
 const char* COMMANDE_FORMAT_IN = "(%d, %[^,], %f, %f)";
 const char* COMMANDE_FORMAT_EX = "(%d, %s, %.2f, %.2f)";
 
+float recetteBar;
+
 void initFileBarman(){
     FILE* file = fopen("data/boissonBarman.dat", "a");
-    FILE* filetmp = fopen("data/boissonBarmantmp.dat", "a");
 
-    if(file == NULL || filetmp == NULL){
+    if(file == NULL){
         printf("fichier non ouvert");
         exit(-1);
     }
@@ -23,58 +24,49 @@ void initFileBarman(){
     } 
     
     fclose(file);
-    fclose(filetmp);
 }
 
-void ajoutBoissonAlcool(){
+int idInit(){
+    
+    boisson tmp;
+
+    int nID = tmp.id;
+
+    FILE* file = fopen("data/boissonBarman.dat", "r");
+
+    if(file == NULL){
+        printf("fichier non ouvert ID");
+        exit(-1);
+    }
+
+    rewind(file);
+
+    while(!feof(file)){
+        
+        fscanf(file, BOISSON_FORMAT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.degreAlco, &tmp.degreScr, &tmp.quantite);
+        if(fgetc(file) != '\n'){
+            break;
+        }
+    }
+
+
+    nID = tmp.id + 1;
+
+    fclose(file); 
+
+    return nID;  
+}
+
+void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite, float degreAlco){
 
     boisson nouvBoisson;
 
-    int retour = 0;
-    system("clear");
-    printf("===============================================================\n\n");
-    printf("\t\tMenu de l'ajout d'une boisson\n\n");
-
-    printf("Veuillez entrer le nom de la boisson :");
-    getchar();
-    retour = scanf("%[^\n]", nouvBoisson.nom);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la contenance de la boisson :");
-    retour = scanf("%f", &nouvBoisson.contenance);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le prix de la boisson :");
-    retour = scanf("%f", &nouvBoisson.prix);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la quantite de boisson :");
-    retour = scanf("%f", &nouvBoisson.quantite);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le degre d'alcool de cette boisson :");
-    retour = scanf("%f", &nouvBoisson.degreAlco);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    nouvBoisson.id = idInit();
-
-    //nouvBoisson.id = idInit();
-    //printf("\nID : %d\n", nouvBoisson.id);
+    nouvBoisson.id = idInit();;
+    strcpy(nouvBoisson.nom,nom);
+    nouvBoisson.contenance = contenance;
+    nouvBoisson.prix = prix;
+    nouvBoisson.quantite = quantite;
+    nouvBoisson.degreAlco = degreAlco;
 
     // Interaction avec un fichier de sauvegarde
 
@@ -91,54 +83,16 @@ void ajoutBoissonAlcool(){
     interfaceAjoutOuSuppBoisson();
 }
 
-void ajoutBoissonNonAlcool(){
+void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quantite, float degreSrc){
 
     boisson nouvBoisson;
 
-    int retour = 0;
-    system("clear");
-    printf("===============================================================\n\n");
-    printf("\t\tMenu de l'ajout d'une boisson\n\n");
-
-    printf("Veuillez entrer le nom de la boisson :");
-    getchar();
-    retour = scanf("%[^\n]", nouvBoisson.nom);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la contenance de la boisson :");
-    retour = scanf("%f", &nouvBoisson.contenance);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le prix de la boisson :");
-    retour = scanf("%f", &nouvBoisson.prix);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la quantite de boisson :");
-    retour = scanf("%f", &nouvBoisson.quantite);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    nouvBoisson.degreAlco = 0.00;
-
-    printf("Entrer le degre de sucre de cette boisson :");
-    retour = scanf("%f", &nouvBoisson.degreScr);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
     nouvBoisson.id = idInit();
+    strcpy(nouvBoisson.nom,nom);
+    nouvBoisson.contenance = contenance;
+    nouvBoisson.prix = prix;
+    nouvBoisson.quantite = quantite;
+    nouvBoisson.degreScr = degreSrc;
 
     FILE* file = fopen("data/boissonBarman.dat", "a");
 
@@ -191,65 +145,7 @@ void informationBoissonBarman(){
     fclose(file);
 }
 
-int idInit(){
-    
-    boisson tmp;
-
-    int nID = tmp.id;
-
-    FILE* file = fopen("data/boissonBarman.dat", "r");
-
-    if(file == NULL){
-        printf("fichier non ouvert ID");
-        exit(-1);
-    }
-
-    rewind(file);
-
-    while(!feof(file)){
-        
-        fscanf(file, BOISSON_FORMAT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.degreAlco, &tmp.degreScr, &tmp.quantite);
-        if(fgetc(file) != '\n'){
-            break;
-        }
-    }
-
-
-    nID = tmp.id + 1;
-
-    fclose(file); 
-
-    return nID;  
-}
-
-void suppBoisson(){
-
-    int idSupp = 0;
-    int retour = 0;
-
-    system("clear");
-    printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les boissons\n\n");
-    printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
-
-    informationBoissonBarman();
-
-    printf("===============================================================\n\n");
-
-    printf("Entrer l'ID de la boisson a supprimer :");
-    retour = scanf("%d", &idSupp);
-
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
-    }
-
-    if(idSupp == 0){
-        while(idSupp == 0){
-            printf("ID impossible a supprimer.\nEntrer un nouveau ID :");
-            retour = scanf("%d", &idSupp);
-        }
-    }
+void suppBoisson(int idSupp){
 
     boisson tmp;
 
@@ -298,35 +194,17 @@ void suppBoisson(){
 
 }
 
-void modifBoisson(){
-    int idChange = 0;
-    int retour = 0;
-
-    system("clear");
-    printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les boissons\n\n");
-    printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
-
-    informationBoissonBarman();
-
-    printf("===============================================================\n\n");
-
-    printf("Entrer l'ID de la boisson a modifie :");
-    retour = scanf("%d", &idChange);
-
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
-    }
-
-    if(idChange == 0){
-        while(idChange == 0 || retour != 1){
-            printf("ID impossible a modifie.\nEntrer un nouveau ID :");
-            retour = scanf("%d", &idChange);
-        }
-    }
+void modifBoisson(int idChange, char nom[], float contenance, float prix, float quantite, float degreAlco, float degreSrc){
 
     boisson tmp;
+    boisson modifBoisson;
+
+    strcpy(modifBoisson.nom, nom);
+    modifBoisson.contenance = contenance;
+    modifBoisson.prix = prix;
+    modifBoisson.quantite = quantite;
+    modifBoisson.degreAlco= degreAlco;
+    modifBoisson.degreScr = degreSrc;
 
     FILE* file = fopen("data/boissonBarman.dat", "r");
     FILE* filetmp = fopen("data/boissonBarmantmp.dat", "a");
@@ -349,51 +227,7 @@ void modifBoisson(){
                 break;
             }
         }else if(tmp.id == idChange){
-
-            printf("Veuillez entrer le nouveu nom de la boisson :");
-            getchar();
-            retour = scanf("%[^\n]", tmp.nom);
-            if(retour != 1){
-                printf("\nErreur dans la saisie.\n");
-                exit(-1);
-            }
-
-            printf("Entrer la nouvelle contenance de la boisson :");
-            retour = scanf("%f", &tmp.contenance);
-            if(retour != 1){
-                printf("\nErreur dans la saisie.\n");
-                exit(-1);
-            }
-
-            printf("Entrer le nouveau prix de la boisson :");
-            retour = scanf("%f", &tmp.prix);
-            if(retour != 1){
-                printf("\nErreur dans la saisie.\n");
-                exit(-1);
-            }
-
-            printf("Entrer la quantite de boisson :");
-            retour = scanf("%f", &tmp.quantite);
-            if(retour != 1){
-                printf("\nErreur dans la saisie.\n");
-                exit(-1);
-            }
-
-            printf("Entrer le nouveau degre d'alcool de cette boisson :");
-            retour = scanf("%f", &tmp.degreAlco);
-            if(retour != 1){
-                printf("\nErreur dans la saisie.\n");
-                exit(-1);
-            }
-
-            printf("Entrer le nouveau degre de sucre de cette boisson :");
-            retour = scanf("%f", &tmp.degreScr);
-            if(retour != 1){
-                printf("\nErreur dans la saisie.\n");
-                exit(-1);
-            }
-
-            fprintf(filetmp, BOISSON_FORMAT_OUT, tmp.id, tmp.nom, tmp.contenance,tmp.prix, tmp.degreAlco, tmp.degreScr, tmp.quantite);
+            fprintf(filetmp, BOISSON_FORMAT_OUT, tmp.id, modifBoisson.nom, modifBoisson.contenance,modifBoisson.prix, modifBoisson.degreAlco, modifBoisson.degreScr, modifBoisson.quantite);
             if(fgetc(file) != '\n'){
                 break;
             }
@@ -417,36 +251,7 @@ void modifBoisson(){
 
 }
     
-void gestionStock(){
-    int idStock = 0;
-    float stockV = 0;
-    float stockR = 0;
-    int retour = 0;
-
-    system("clear");
-    printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les boissons\n\n");
-    printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
-
-    informationBoissonBarman();
-
-    printf("===============================================================\n\n");
-
-    printf("Entrer l'ID du stock de la boisson a modifie :");
-    retour = scanf("%d", &idStock);
-
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
-    }
-
-    if(idStock == 0){
-        while(idStock == 0){
-            printf("ID impossible a modifie.\nEntrer un nouveau ID :");
-            retour = scanf("%d", &idStock);
-        }
-    }
-
+void gestionStock(int idStock, float stockR, float stockV){
     boisson tmp;
 
     FILE* file = fopen("data/boissonBarman.dat", "r");
@@ -466,19 +271,6 @@ void gestionStock(){
 
         if(tmp.id == idStock){
 
-            printf("Entrer la quantite de boisson recue :");
-            retour = scanf("%f", &stockR);
-            if(retour != 1){
-                printf("\nErreur dans la saisie.\n");
-                exit(-1);
-            }
-            printf("Entrer la quantite de boisson vendue :");
-            retour = scanf("%f", &stockV);
-            if(retour != 1){
-                printf("\nErreur dans la saisie.\n");
-                exit(-1);
-            }
-            
             tmp.quantite = tmp.quantite + fabsf(stockR) - fabsf(stockV);
 
             fprintf(filetmp, BOISSON_FORMAT_OUT, tmp.id, tmp.nom, tmp.contenance,tmp.prix, tmp.degreAlco, tmp.degreScr, tmp.quantite);
@@ -510,32 +302,58 @@ void gestionStock(){
 
 }
 
-float recette(){
+float recette(float prix){
 
-    commande tmp;
+    recetteBar = recetteBar + prix;
 
-    float totalJ = 0;
+    return recetteBar;
 
+}
+
+void satisfactionCommande(int nCommande){
     FILE* fileCommande = fopen("data/commandeClient.dat", "r");
+    FILE* fileBoisson = fopen("data/boissonBarman.dat", "a+");
 
-    if(fileCommande == NULL ){
+    if(fileCommande == NULL || fileBoisson == NULL){
         printf("fichier non ouvert");
         exit(-1);
     }
+
     rewind(fileCommande);
+
+    commande tmp;
+    boisson boiss;
 
     while(!feof(fileCommande)){
         
-        fscanf(fileCommande, COMMANDE_FORMAT_IN, &tmp.id, tmp.nom, &tmp.prix, &tmp.quantite);
+        fscanf(fileCommande, COMMANDE_FORMAT_IN, &tmp.id, &tmp.idBoisson, tmp.nom, &tmp.prix, &tmp.quantite);
 
-        totalJ = totalJ + tmp.prix;
-
-        if(fgetc(fileCommande) != '\n'){
-            break;
+        if(tmp.id == nCommande){
+            rewind(fileBoisson);
+            while(!feof(fileBoisson)){
+                fscanf(fileBoisson, BOISSON_FORMAT_IN, &boiss.id, boiss.nom, &boiss.contenance, &boiss.prix, &boiss.degreAlco, &boiss.degreScr, &boiss.quantite);
+                if(tmp.idBoisson == boiss.id){
+                    if(boiss.quantite < tmp.quantite){
+                        printf("\nCommande impossible à satisfaire.\n");
+                        interfaceGestionBoissonBarman();
+                    }else{
+                        gestionStock(boiss.id, 0, tmp.quantite);
+                        printf("\nCommande satisfaite.\n");
+                        recette(tmp.prix);
+                    }
+                }else{
+                    if(fgetc(fileBoisson) != '\n'){
+                        break;
+                    }
+                }
+            }
+        }else{
+            if(fgetc(fileCommande) != '\n'){
+                break;
+            }
         }
     }
     fclose(fileCommande);
-
-    return totalJ;
+    fclose(fileBoisson);
+    interfaceGestionBoissonBarman();
 }
-

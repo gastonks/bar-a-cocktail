@@ -19,6 +19,12 @@ void interfaceGestionCocktail(void);
 void interfaceGestionFinance(void);
 void interfaceInformationBoissonBarman(void);
 void interfaceAjoutOuSuppBoisson(void);
+void interfaceAjoutBoissonAlcool(void);
+void interfaceAjoutBoissonNonAlcool(void);
+void interfaceSuppBoisson(void);
+void interfaceModifBoisson(void);
+void interfaceGestionStock(void);
+void interfaceSatisfactionCommande(void);
 
 // Interface specifique au client
 void interfaceGestionBoissonClient(void);

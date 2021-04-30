@@ -22,8 +22,15 @@ typedef struct cocktail
 void initFileCocktail(void);
 int idInitCocktail(void);
 void creationCocktailBarman(void);
-
 void informationCocktail(void);
 
+void creationCocktailClient(void);
+
 void majCocktail(void);
+void commanderCocktail(void);
+
+void supprimerCocktail(int idCocktail);
+void supprimerListBoisson(int idCocktail);
+void supprimerCocktailDemande(void);
+
 #endif

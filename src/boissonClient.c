@@ -5,9 +5,9 @@ const char* BOISSON_FORMAT_CLIENT_OUT = "\n(%d, %s, %.2f, %.2f, %.2f, %.2f, %.2f
 const char* BOISSON_FORMAT_CLIENT_EX = "(%d, %s, %.2f, %.2f, %.2f, %.2f, %.2f)";
 const char* BOISSON_FORMAT_CLIENT_IN = "(%d, %[^,], %f, %f, %f, %f, %f)";
 
-const char* COMMANDE_FORMAT_CLIENT_OUT = "\n(%d, %s, %.2f, %.2f)";
-const char* COMMANDE_FORMAT_CLIENT_IN = "(%d, %[^,], %f, %f)";
-const char* COMMANDE_FORMAT_CLIENT_EX = "(%d, %s, %.2f, %.2f)";
+const char* COMMANDE_FORMAT_CLIENT_OUT = "\n(%d, %d, %s, %.2f, %.2f)";
+const char* COMMANDE_FORMAT_CLIENT_IN = "(%d, %d, %[^,], %f, %f)";
+const char* COMMANDE_FORMAT_CLIENT_EX = "(%d, %d, %s, %.2f, %.2f)";
 
 void initFileClient(void){
     FILE* file = fopen("data/commandeClient.dat", "a");
@@ -18,7 +18,7 @@ void initFileClient(void){
     }
 
     if(ftell(file) == 0){
-        fprintf(file, COMMANDE_FORMAT_CLIENT_EX, 0, "Exemple",0,0);
+        fprintf(file, COMMANDE_FORMAT_CLIENT_EX, 0, 0,"Exemple",0,0);
     } 
 
     fclose(file);
@@ -37,7 +37,7 @@ int idInitCommande(){
 
     while(!feof(file)){
         
-        fscanf(file, COMMANDE_FORMAT_CLIENT_IN, &tmp.id, tmp.nom, &tmp.prix, &tmp.quantite);
+        fscanf(file, COMMANDE_FORMAT_CLIENT_IN, &tmp.id, &tmp.idBoisson,  tmp.nom, &tmp.prix, &tmp.quantite);
 
         if(fgetc(file) != '\n'){
             break;
@@ -91,6 +91,11 @@ void commandeBoissonClient(int idBoisson){
     FILE* fileCommande = fopen("data/commandeClient.dat", "a");
     FILE* fileBoisson = fopen("data/boissonBarman.dat", "r");
 
+    if(fileCommande == NULL || fileBoisson == NULL){
+        printf("fichier non ouvert");
+        exit(-1);
+    }
+
     commande nComm;
     boisson tmp;
 
@@ -111,21 +116,19 @@ void commandeBoissonClient(int idBoisson){
 
 
     while(!feof(fileBoisson)){
-
         fscanf(fileBoisson, BOISSON_FORMAT_CLIENT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.degreAlco, &tmp.degreScr, &tmp.quantite);
 
         if(idBoisson == tmp.id){
-            printf("\ntmp.id = %d\n", tmp.id);
-            printf("\nidBoisson = %d\n", idBoisson);
             nComm.prix = nComm.quantite * tmp.prix;
-            fprintf(fileCommande, COMMANDE_FORMAT_CLIENT_OUT, nComm.id, tmp.nom, nComm.prix, nComm.quantite);
+            nComm.idBoisson = idBoisson;
+            fprintf(fileCommande, COMMANDE_FORMAT_CLIENT_OUT, nComm.id, nComm.idBoisson, tmp.nom, nComm.prix, nComm.quantite);
             if(fgetc(fileBoisson) != '\n'){
                 break;
             }
         }
         if(fgetc(fileBoisson) != '\n'){
                 break;
-            }
+        }
     }
 
     fclose(fileCommande);
@@ -150,7 +153,7 @@ void informationCommandeClient(){
     
     while(!feof(file)){
         
-        fscanf(file, COMMANDE_FORMAT_CLIENT_IN, &tmp.id, tmp.nom, &tmp.prix, &tmp.quantite);
+        fscanf(file, COMMANDE_FORMAT_CLIENT_IN, &tmp.id, &tmp.idBoisson, tmp.nom, &tmp.prix, &tmp.quantite);
         if(tmp.id > 0){
             printf("\t\t%d", tmp.id);
             printf("\t%s", tmp.nom);
