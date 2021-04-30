@@ -22,7 +22,7 @@ void initFileClient(void){
 void informationBoissonClient(){
 
     int i;
-    int T = calcTaille();
+    int T = calcTailleFichier();
 
     for(i = 0; i<T; i++) {
         if(tab[i].quantite>0) {
@@ -39,7 +39,7 @@ void commandeBoissonClient(int idBoisson){
     strcpy(nComm.nom, tab[idBoisson-1].nom);
 
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\tMenu de commande d'une boisson\n\n");
 
@@ -134,7 +134,7 @@ void initTabCom() {
         exit(-1);
     }
 
-    if(calcTaille()>0) {
+    if(calcTailleFichier()>0) {
         tabCom = malloc(calcTailleCom()*sizeof(commande));
     }
 

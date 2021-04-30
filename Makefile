@@ -14,18 +14,6 @@ OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 BINDIR=bin
 BIN=$(BINDIR)/main
 
-# commande pour suppresion
-# Idee pour utiliser la fonction clean en fonction du systeme d'exploitation mais ne fonctionne pas: 
-# ifdef _WIN32
-# 	SUP = del
-# 	CLEANFLAGS = /F /Q
-# 	FILESUP = $(BINDIR)\* $(OBJ)\* $(DATA)\*
-# else 
-# 	SUP = rm
-# 	CLEANFLAGS = -rf
-# 	FILESUP = $(BINDIR)/* $(OBJ)/* $(DATA)/*
-# endif
-
 CLEANFLAGS = /F /Q
 
 #programme du make
@@ -38,9 +26,6 @@ $(BIN): $(OBJS)
 $(OBJ)/%.o: $(SRC)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-Clean pour windows :
-clean:
-	del $(CLEANFLAGS) $(BINDIR)\* $(OBJ)\* $(DATA)\*
 
-# clean :
-# 	rm -rf $(BINDIR)/* $(OBJ)/* $(DATA)/*
+clean :
+	rm -rf $(BINDIR)/* $(OBJ)/* $(DATA)/*

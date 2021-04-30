@@ -1,35 +1,52 @@
+/*
+    Ce fichier contient toutes les fonctions liées au fonctionnement de l'interface du barman.
+*/
+
+// On inclue le fichier header associé
 #include "boissonBarman.h"
 
-//const char* BOISSON_FORMAT_OUT = "{\n\t\"id:\": %d,\n\t\"nomBoisson\": \"%s\",\n\t\"contenance:\": %.2f,\n\t\"prix:\": %.2f,\n\t\"quantite:\": %.2f,\n\t\"dgrAlc:\": %.2f,\n\t\"dgrScr:\": %.2f\n}\n";
-//const char* BOISSON_FORMAT_IN = "{\n\t\"id:\": %d,\n\t\"nomBoisson\": \"%[^\"]\",\n\t\"contenance:\": %.2f,\n\t\"prix:\": %.2f,\n\t\"quantite:\": %.2f,\n\t\"dgrAlc:\": %.2f,\n\t\"dgrScr:\": %.2f\n}";
+// Macros permettant une utilisation plus facile et plus rapide du format dans l'utilisation de fscanf et fprintf, pour les boissons.
 const char* BOISSON_FORMAT_OUT = "(%s, %.2f, %.2f, %.2f, %.2f, %.2f)\n";
-const char* BOISSON_FORMAT_EX = "(%s, %.2f, %.2f, %.2f, %.2f, %.2f)";
 const char* BOISSON_FORMAT_IN = "(%[^,], %f, %f, %f, %f, %f)";
 
+// Macros permettant une utilisation plus facile et plus rapide du format dans l'utilisation de fscanf et fprintf, pour les commandes.
 const char* COMMANDE_FORMAT_OUT = "(%d, %s, %.2f, %.2f)\n";
 const char* COMMANDE_FORMAT_IN = "(%d, %[^,], %f, %f)";
-const char* COMMANDE_FORMAT_EX = "(%d, %s, %.2f, %.2f)";
 
+/*
+    Fonction permettant d'initialiser le fichier devant contenir toutes les boissons et toutes leurs informations associées.
+    Cette fonction a pour simple but de vérifier si le fichier a bien été initialisé.
+*/
 void initFileBarman(){
+    // On crée une variable de type FILE, permettant de manipuler le fichier, et on l'ouvre avec le paramètre "a", qui permet d'ajouter des informations
+    // directement après le bas du fichier.
     FILE* file = fopen("data/boissonBarman.dat", "a");
 
+    // On vérifie si le fichier a bien été ouvert, et on arrete le programme s'il y a une erreur. 
     if(file == NULL){
         printf("fichier non ouvert");
         exit(-1);
     }
-    // if(ftell(file) == 0){
-    //     fprintf(file, BOISSON_FORMAT_EX, 0, "Exemple",0,0,0,0,0);
-    // } 
     
+    // On ferme le fichier, après avoir vérifié qu'il était bien initialisé.
     fclose(file);
 }
 
+/*
+    Fonction permettant d'ajouter une boisson alcoolisée.
+*/
 void ajoutBoissonAlcool(){
 
+    // On créer une variable de type boisson, qui sera ajouté au fichier après avoir récupéré toutes ses informations.
     boisson nouvBoisson;
 
+    /*
+        On demande à l'utilisateur d'entrer les informations de la boisson une par une, sauf le degré de sucre que l'on met automatiquement à 0, 
+        puisqu'il s'agit d'une boisson alcoolisée.
+    */
+
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\tMenu de l'ajout d'une boisson\n\n");
 
@@ -71,9 +88,17 @@ void ajoutBoissonAlcool(){
 
     nouvBoisson.degreScr = 0.00;
 
-    int T = calcTaille();
+    // On récupère le nombre de boissons qu'il existe déjà dans le fichier.
+    int T = calcTailleFichier();
     
+    // On dissocie deux cas, s'il existe déjà des boissons, ou si le fichier est vide.
+
+    /*
+        S'il y a déjà des boissons, on crée un second tableau dynamique où on copie toutes les informations de base, et on recrée le tableau de base 
+        avec une case supplémentaire permettant d'ajouter la nouvelle boisson.
+    */ 
     if (T>0) {
+        // On crée le tableau temporaire et on y copie toutes les informations du tableau de base.
         boisson* tmp = malloc(T*sizeof(boisson));
         for(int i = 0; i<T; i++) {
             strcpy(tmp[i].nom, tab[i].nom);
@@ -84,6 +109,8 @@ void ajoutBoissonAlcool(){
             tmp[i].degreScr = tab[i].degreScr;
         }
 
+        // On libère l'espace du tableau de base et on le crée avec une case supplémentaire, puis on y recopie toutes les informations avec la
+        // nouvelle boisson à la fin.
         free(tab);
         tab = malloc((T+1)*sizeof(boisson));
 
@@ -103,8 +130,11 @@ void ajoutBoissonAlcool(){
         tab[T].degreAlco = nouvBoisson.degreAlco;
         tab[T].degreScr = nouvBoisson.degreScr;
 
+        // On libère l'espace du tableau temporaire.
         free(tmp);
-    } else {
+    } 
+    // Sinon, si le fichier ne contient aucune boisson, on crée un tableau avec une seule case où on y copie la nouvelle boisson.
+    else {
         tab = malloc(1*sizeof(boisson));
         strcpy(tab[0].nom, nouvBoisson.nom);
         tab[0].contenance = nouvBoisson.contenance;
@@ -114,17 +144,25 @@ void ajoutBoissonAlcool(){
         tab[0].degreScr = nouvBoisson.degreScr;
     }
 
+    // On recopie toutes les informations du tableau dans le fichier, en indicant la taille +1 car on a ajouté une boisson.
     initFichier(T+1);
 
+    // On retourne à l'interface précédente.
     interfaceAjoutOuSuppBoisson();
 }
 
+
+/*
+    Fonction permettant d'ajouter une boisson non alcoolisée.
+    Cette fonction procède exactement de la même manière que la fonction permettant d'ajouter une boisson alcoolisée, sauf qu'on demande à l'utilisateur 
+    d'entrer le degré de sucre et on met automatiquement le degré d'alcool à 0. 
+*/
 void ajoutBoissonNonAlcool(){
 
     boisson nouvBoisson;
 
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\tMenu de l'ajout d'une boisson\n\n");
 
@@ -166,7 +204,7 @@ void ajoutBoissonNonAlcool(){
         exit(-1);
     }
 
-    int T = calcTaille();
+    int T = calcTailleFichier();
     
     if (T>0) {
         boisson* tmp = malloc(T*sizeof(boisson));
@@ -215,20 +253,31 @@ void ajoutBoissonNonAlcool(){
 
 }
 
+/*
+    Fonction permettant d'afficher les informations des boissons des boissons, pour le barman.
+*/
 void informationBoissonBarman(){
+    // On crée des variables, une permettant de parcourir le tableau et l'autre qui contient le nombre de boissons.
     int i;
-    int T = calcTaille();
+    int T = calcTailleFichier();
 
+    // On fait une boucle qui passe à travers tout le tableau et qui affiche chaque information de chaque boisson.
     for(i = 0; i<T; i++) {
         printf("\t\t%d\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].quantite, tab[i].degreAlco, tab[i].degreScr);
     }
 }
 
+/*
+    Fonction permettant de supprimer une boisson.
+*/
 void suppBoisson(){
+
+    // On crée une variable qui correspond à l'ID de la boisson à supprimer.
     int idSupp = 0;
     int retour = 0;
 
-    system("cls");
+    // On affiche toutes les boissons, ainsi que leurs informations.
+    system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
     printf("\t\tID\tNom\tContenance\tPrix\tQuantité\tDegre Alcool\tDegre Sucre\n\n");
@@ -237,24 +286,44 @@ void suppBoisson(){
 
     printf("===============================================================\n\n");
 
-    printf("Entrer l'ID de la boisson à supprimer :");
+    // On demande à l'utilisateur d'entrer l'ID de la boisson qu'il désire supprimer.
+    printf("Entrer l'ID de la boisson à supprimer (0 pour revenir en arrière):");
     retour = scanf("%d", &idSupp);
 
+    // On vérifie s'il y a eu une erreur dans la saisie.
     if(retour != 1){
         printf("Erreur dans la saisie du numero de l'interface.\n");
         exit(-1);
     }
 
-    int T = calcTaille();
-    int j = 0;
-    int h = 0;
-
-    if(idSupp > T ||idSupp < 1) {
-        printf("Cet ID n'existe pas.");
+    // En entrant 0, l'utilisateur a la possibilité de retourner à l'interface précédente.
+    if(idSupp == 0) {
         interfaceAjoutOuSuppBoisson();
     }
 
+    // Si l'utilisateur a entré un ID n'existant pas, il a la possibilité d'en entrer un nouveau.
+    while (idSupp < 1 || idSupp > calcTailleFichier()) {
+        printf("ID impossible a supprimer.\nEntrer un nouveau ID :");
+        retour = scanf("%d", &idSupp);
+        if(idSupp == 0) {
+            interfaceAjoutOuSuppBoisson();
+        }
+    }
+
+    /*
+        Cette partie est similaire à l'ajout d'une boisson, sauf qu'au lieu d'augmenter la taille du tableau, on la dominue.
+        On crée un tableau temporaire où on copie toutes les informations du tableau de base, on recrée le tableau de base avec une case en moins, 
+        puis on recopie toutes les informations dans le tableau de base sans la boisson à supprimer.
+    */
+
+    // On crée des variables pour stocker la taille du tableau et pour gérer la boucle permettant de recopier les valeurs d'un tableau à l'autre.
+    int T = calcTailleFichier();
+    int j = 0;
+    int h = 0;
+
+    // Si le tableau contient plus d'une boisson, on fait l'opération énoncée précédemment, sinon on libère simplement l'espace du tableau.
     if(T>1) {
+        // On crée le tableau temporaire et on y copie toutes les informations du tableau de base.
         boisson* tmp = malloc(T*sizeof(boisson));
         for(int i = 0; i<T; i++) {
             strcpy(tmp[i].nom, tab[i].nom);
@@ -265,9 +334,11 @@ void suppBoisson(){
             tmp[i].degreScr = tab[i].degreScr;
         }
 
+        // On libère l'espace du tableau de base et on le recrée avec une case en moins.
         free(tab);
         tab = malloc((T-1)*sizeof(boisson));
 
+        // CONTINUER A COMMENTER ICI
         while(j<T) {
             if(j != idSupp-1) {
                 strcpy(tab[h].nom, tmp[j].nom);
@@ -297,7 +368,7 @@ void modifBoisson(){
     int idChange = 0;
     int retour = 0;
 
-    system("cls");
+    system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
     printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
@@ -306,7 +377,7 @@ void modifBoisson(){
 
     printf("===============================================================\n\n");
 
-    if(calcTaille() == 0) {
+    if(calcTailleFichier() == 0) {
         printf("La liste est vide, il n'y a rien à modifier.\n");
         printf("Entrez 0 pour revenir en arrière : ");
         retour = scanf("%d", &idChange);
@@ -321,7 +392,7 @@ void modifBoisson(){
         exit(-1);
     }
 
-    while(idChange > calcTaille() || idChange < 1 || retour != 1){
+    while(idChange > calcTailleFichier() || idChange < 1 || retour != 1){
         printf("ID impossible a modifie.\nEntrer un nouveau ID :");
         retour = scanf("%d", &idChange);
     }
@@ -369,7 +440,7 @@ void modifBoisson(){
         exit(-1);
     }
 
-    initFichier(calcTaille());
+    initFichier(calcTailleFichier());
 
     interfaceGestionBoissonBarman();
 
@@ -381,7 +452,7 @@ void gestionStock(){
     float stockR = 0;
     int retour = 0;
 
-    system("cls");
+    system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
     printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
@@ -390,7 +461,7 @@ void gestionStock(){
 
     printf("===============================================================\n\n");
 
-    if(calcTaille() == 0) {
+    if(calcTailleFichier() == 0) {
         printf("La liste est vide, il n'y a rien à modifier.\n");
         printf("Entrez 0 pour revenir en arrière : ");
         retour = scanf("%d", &idStock);
@@ -405,7 +476,7 @@ void gestionStock(){
         exit(-1);
     }
 
-    while(idStock < 1 || idStock > calcTaille()){
+    while(idStock < 1 || idStock > calcTailleFichier()){
         printf("ID impossible a modifie.\nEntrer un nouveau ID :");
         retour = scanf("%d", &idStock);
     }
@@ -425,7 +496,7 @@ void gestionStock(){
 
     tab[idStock-1].quantite = tab[idStock-1].quantite + fabsf(stockR) - fabsf(stockV);
 
-    initFichier(calcTaille());
+    initFichier(calcTailleFichier());
 
     interfaceGestionBoissonBarman();
 
@@ -442,7 +513,7 @@ float recette(){
     return totalJ;
 }
 
-int calcTaille() {
+int calcTailleFichier() {
     int t = -1;
     boisson tmp;
     FILE* file = fopen("data/boissonBarman.dat", "r");
@@ -468,6 +539,14 @@ int calcTaille() {
     return t;
 }
 
+// à revoir
+/*
+int calcTailleTab() {
+    int i=0;
+    while(tab[i].prix > 0) i++;
+    return i;
+}
+*/
 
 void initTab() {
     int i = 0;
@@ -478,8 +557,8 @@ void initTab() {
         exit(-1);
     }
 
-    if(calcTaille()>0) {
-        tab = malloc(calcTaille()*sizeof(boisson));
+    if(calcTailleFichier()>0) {
+        tab = malloc(calcTailleFichier()*sizeof(boisson));
     }
 
     rewind(file);

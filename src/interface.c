@@ -1,6 +1,6 @@
 #include "interface.h"
 
-const char* REMOVE_DATA = "del -F -Q data/boissonBarman.dat data/boissonBarmantmp.dat data/commandeClient.dat data/cocktail.dat data/cocktailListBoisson.dat";
+const char* REMOVE_DATA = "rm -rf data/boissonBarman.dat data/commandeClient.dat data/cocktail.dat data/cocktailListBoisson.dat";
 
 int idUser = 0; // 1 = Barman ; 2 = Client
 int nbBoiss = 0; // nombre boisson ajoutee
@@ -10,7 +10,7 @@ void interfaceAccueil(){
     idUser = 0;
     int numInter = 0;
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu Principal\n\n");
     printf("\t\t1. Interface Barman\n\n");
@@ -56,7 +56,7 @@ void interfaceBarman(){
 
     int numInter = 0;
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu Barman\n\n");
     printf("\t\t1. Gestion des boissons\n\n");
@@ -102,7 +102,7 @@ void interfaceClient(){
     int numInter = 0;
     int retour = 0;
 
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu Client\n\n");
     printf("\t\t1. Gestion des boissons\n\n");
@@ -140,7 +140,7 @@ void interfaceGestionBoissonClient(){
 
     int numInter = 0;
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu Gestion des boissons\n\n");
     printf("\t\t1. Informations sur les boissons\n\n");
@@ -182,7 +182,7 @@ void interfaceGestionBoissonBarman(){
 
     int numInter = 0;
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu Gestion des boissons\n\n");
     printf("\t\t1. Informations sur les boissons\n\n");
@@ -229,7 +229,7 @@ void interfaceAjoutOuSuppBoisson(){
 
     int numInter = 0;
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu Ajout ou suppression de boisson\n\n");
     printf("\t\t1. Ajouter une boisson alcoolisee\n\n");
@@ -288,7 +288,7 @@ void interfaceGestionFinance(){
 
     int numInter = 0;
     int retour = 0;
-    system("cls");
+    system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu Gestion Finances\n\n");
     printf("\t\tLa recette des commandes du jour est de : %.2f €.\n\n", recette());
@@ -320,7 +320,7 @@ void interfaceInformationBoissonBarman(){
     int numInter = 0;
     int retour = 0;
 
-    system("cls");
+    system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
     printf("\t\tID\tNom\tContenance\tPrix\tQuantité\tDegre Alcool\tDegre Sucre\n\n");
@@ -355,7 +355,7 @@ void interfaceInformationBoissonClient(){
     int numInter = 0;
     int retour = 0;
 
-    system("cls");
+    system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
     printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\n\n");
@@ -390,7 +390,7 @@ void interfaceCommandeBoisson(){
     int numInter = 0;
     int retour = 0;
 
-    system("cls");
+    system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu commande d'une boisson\n\n");
     printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\n\n");
@@ -407,7 +407,7 @@ void interfaceCommandeBoisson(){
         exit(-1);
     }
 
-    while(numInter > calcTaille() || numInter < 0) {
+    while(numInter > calcTailleFichier() || numInter < 0) {
         if(retour != 1){
             printf("Erreur dans la saisie du numero de l'interface.\n");
             exit(-1);
@@ -427,7 +427,7 @@ void interfaceInformationCommandeClient(){
     int numInter = 0;
     int retour = 0;
 
-    system("cls");
+    system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
     printf("\t\tID\tNom\tPrix\tQuantite\n\n");
@@ -462,7 +462,7 @@ void interfaceInformationCommandeClient(){
 
 //     int numInter = 0;
 //     int retour = 0;
-//     system("cls");
+//     system("clear");
 //     if(idUser == 1){
 //         printf("===============================================================\n\n");
 //         printf("\t\t\tMenu Gestion des cocktails\n\n");
@@ -538,7 +538,7 @@ void interfaceInformationCommandeClient(){
 //     int numInter = 0;
 //     int retour = 0;
 
-//     system("cls");
+//     system("clear");
 //     printf("=======================================================================================================================\n\n");
 //     printf("\t\t\tMenu Information sur les cocktails\n\n");
 //     printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tNombre_Boisson\n\n");

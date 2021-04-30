@@ -37,7 +37,9 @@ float recette(void);
 
 void initTab();
 void initFichier(int t);
-int calcTaille();
+int calcTailleFichier();
+
+int calcTailleTab();
 
 boisson* tab;
 
