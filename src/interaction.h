@@ -1,30 +1,30 @@
-#ifndef INTERACTION_H
-#define INTERACTION_H
+// #ifndef INTERACTION_H
+// #define INTERACTION_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
 
-typedef struct boisson
-{
-    char nom[51];
-    float contenance;
-    float prix;
-    float quantite;
-    float degreAlco;
-    float degreScr;
-}boisson;
+// typedef struct boisson
+// {
+//     char nom[51];
+//     float contenance;
+//     float prix;
+//     float quantite;
+//     float degreAlco;
+//     float degreScr;
+// }boisson;
 
-void initFile(void);
-void ajoutBoissonAlcool(void);
-void ajoutBoissonNonAlcool(void);
-void informationBoisson(void);
-void suppBoisson(void);
-void initTab();
-void initFichier(int t);
+// void initFile(void);
+// void ajoutBoissonAlcool(void);
+// void ajoutBoissonNonAlcool(void);
+// void informationBoisson(void);
+// void suppBoisson(void);
 
-int calcTaille();
+// void initTab();
+// void initFichier(int t);
+// int calcTaille();
 
-boisson* tab;
+// boisson* tab;
 
-#endif
+// #endif
