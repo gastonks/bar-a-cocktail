@@ -35,6 +35,7 @@ void gestionStock(void);
 // Fonction pour la gestion des finances
 float recette(void);
 
+// Fonctions pour la gestion du tableau dynamique
 void initTab();
 void initFichier(int t);
 int calcTailleFichier();
