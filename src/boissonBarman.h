@@ -8,9 +8,10 @@
 #include "boissonClient.h"
 #include "interface.h"
 
-
+// Structure boisson permettant de gérer les informations de chaque boisson
 typedef struct boisson
 {
+    int id;
     char nom[51];
     float contenance;
     float prix;
@@ -38,9 +39,7 @@ float recette(void);
 // Fonctions pour la gestion du tableau dynamique
 void initTab();
 void initFichier(int t);
-int calcTailleFichier();
-
-int calcTailleTab();
+int tailleTabBarman();
 
 boisson* tab;
 

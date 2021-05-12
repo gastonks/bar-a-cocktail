@@ -222,6 +222,10 @@ void interfaceGestionBoissonBarman(){
     printf("\t\t0. Revenir en arrière\n\n");
     printf("===============================================================\n\n");
 
+    for(int i = 0; i<tailleTabBarman(); i++) {
+        printf("%d\n", tab[i].id);
+    }
+
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
@@ -454,7 +458,7 @@ void interfaceCommandeBoisson(){
     }else{
         if(numInter == 0){
             interfaceGestionBoissonClient();
-        }else if(numInter > calcTailleFichier() || numInter<0){
+        }else if(numInter > tailleTabBarman() || numInter<0){
             interfaceCommandeBoisson();
         }else{
             commandeBoissonClient(numInter);
