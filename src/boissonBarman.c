@@ -24,29 +24,41 @@ void initFileBarman(){
     fclose(file);
 }
 
+/*
+    Fonction permettant d'initiliser l'ID d'une boisson.
+    L'ID de la boisson nous permet de mieux gerer la creation de cocktails par la suite.
+*/
 int idInit(){
     
+    // On cree 3 variables, une temporaire de type boisson et deux entiers 
     boisson tmp;
     int taille;
     int nID = 0;
 
+    // On ouvre le fichier en mode lecture avec le parametre "rb"
     FILE* file = fopen("data/boissonBarman", "rb");
 
+    // On verifie que le fichier s'est bien ouvert
     if(file == NULL){
         printf("fichier non ouvert ID");
         exit(-1);
     }
 
+    // On lit le nombre de boissson, qui se situe ou tout debut du fichier
     fread(&taille, sizeof(int), 1, file);
 
+    // On lit les boissons jusqu'a ce qu'il n'y en ait plus, et on recupere ainsi l'ID de la derniere boisson
     while(fread(&tmp, sizeof(boisson), 1, file)) {
         nID = tmp.id;
     }
 
+    // On ajoute 1 a l'ID, puisqu'on a recupere l'ID de la derniere boisson juste avant
     nID++;
 
+    // On ferme le fichier
     fclose(file); 
 
+    // On retourne le nouvel ID
     return nID;  
 }
 
@@ -589,19 +601,30 @@ float recette(){
     return totalJ;
 }
 
+/*
+    Fonction permettant de recuperer le nombre de boisson a partir du fichier.
+*/
 int tailleTabBarman() {
+
+    // On cree une variable pour recuperer la taille.
     int taille = 0;
+
+    // On ouvre le fichier en mode lecture. 
     FILE* file = fopen("data/boissonBarman", "rb");
 
+    // On verifie que le fichier s'est bien ouvert. 
     if(file == NULL){
         printf("fichier non ouvert ID");
         exit(-1);
     }
 
+    // On lit la premiere valeur qui apparait, qui correspond au nombre de boissons.
     fread(&taille, sizeof(int), 1, file);
 
+    // On ferme le fichier.
     fclose(file);
     
+    // On retourne le nombre de boissons.
     return taille;
 }
 
@@ -628,7 +651,7 @@ void initTab() {
         tab = malloc(taille*sizeof(boisson));
     }
 
-    // On parcoure le fichier et on recopie les informations une par une dans le tableau.
+    // On parcoure le fichier et on recopie les informations une par une dans le tableau, tant qu'il y en a.
     while(fread(&boisson, sizeof(boisson), 1, file)) {
         tab[i] = boisson;
         i++;
