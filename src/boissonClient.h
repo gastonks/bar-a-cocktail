@@ -10,8 +10,10 @@
 typedef struct commande
 {
     int id;
-    int idBoisson;
-    char nom[51];
+    int nbrBoisson;
+    struct boisson * tabBoisson;
+    int nbrCocktail;
+    struct cocktail * tabCocktail;
     float prix;
     float quantite;
 }commande;

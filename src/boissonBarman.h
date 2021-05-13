@@ -30,12 +30,19 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
 void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quantite, float degreAlco);
 void informationBoissonBarman(void);
 void suppBoisson(int idSupp);
-void modifBoisson(int idChange, char nom[], float contenance, float prix, float quantite, float degreAlco, float degreSrc);
+void modifBoisson(int idChange);
 void gestionStock(int idStock, float stockR, float stockV);
 void satisfactionCommande(int nCommande);
 
 // Fonction pour la gestion des finances
 float recette(float prix);
+
+// Fonctions pour la gestion du tableau dynamique
+void initTab();
+void initFichier(int t);
+int tailleTabBarman();
+
+boisson* tab;
 
 
 

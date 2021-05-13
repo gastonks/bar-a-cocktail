@@ -1,11 +1,22 @@
 #include "interface.h"
 
+//Definition d'une macro, permettant de gagner du temps et de l'espace dans le programme.
+
 const char* REMOVE_DATA = "rm -r data/boissonBarman.dat data/boissonBarmantmp.dat data/commandeClient.dat data/cocktail.dat data/cocktailListBoisson.dat data/cocktailListBoissontmp.dat data/cocktailtmp.dat";
 
 int prix = 0;
 int idUser = 0; // 1 = Barman ; 2 = Client
 int nbBoiss = 0; // nombre boisson ajoutee
 
+/*  
+    Interface principale du programme, c'est celle-ci qui est appelee en premiere lors de l'execution du programme.
+    On a le choix sur l'interface a laquelle on veut acceder, et on peut aussi supprimer le fichier de sauvegarde des boissons.
+    On demande simplement a l'utilisateur d'entrer un nombre pour acceder a une interface, 
+    on effectue ce processus a chaque fois que l'on veut acceder a une interface.
+    La logique des interfaces est la suivante : on entre un nombre de 1 a n pour acceder a une des n interfaces, on entre 0 pour revenir en arriere,
+    et si un nombre negatif ou un nombre superieur au nombre d'interfaces est entre, alors la fonction de l'interface dans laquelle on se situe est
+    tout simplement reafficher.
+*/
 void interfaceAccueil(){
 
     idUser = 0;
@@ -13,7 +24,7 @@ void interfaceAccueil(){
     int retour = 0;
     system("clear");
     printf("===============================================================\n\n");
-    printf("\t\t\tMenu Principal\n\n");
+    printf("\t\t\tMenu principal\n\n");
     printf("\t\t1. Interface Barman\n\n");
     printf("\t\t2. Interface Client\n\n");
     printf("\t\t3. Efface entierement le fichier de sauvegarde des boissons\n\n");
@@ -23,12 +34,17 @@ void interfaceAccueil(){
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.");
-        exit(-1);
-    }else{
-        switch (numInter)
-        {
+    if(retour != 1 || numInter < 0 || numInter > 3){
+        while(retour != 1 || numInter < 0 || numInter > 3){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
+    switch (numInter)
+    {
         case 1:
             interfaceBarman();
             break;
@@ -45,12 +61,14 @@ void interfaceAccueil(){
             break;
         
         default:
-            printf("Erreur dans le choix de l'interface.");
+            printf("Erreur dans le choix de l'interface.\n");
             break;
-        }
     }
 }
 
+/*  
+    Interface principale du barman, on a acces aux differentes fonctionnalites disponibles au barman a partir de cette interface.  
+*/
 void interfaceBarman(){
 
     idUser = 1;
@@ -59,22 +77,27 @@ void interfaceBarman(){
     int retour = 0;
     system("clear");
     printf("===============================================================\n\n");
-    printf("\t\t\tMenu Barman\n\n");
+    printf("\t\t\tMenu barman\n\n");
     printf("\t\t1. Gestion des boissons\n\n");
     printf("\t\t2. Gestion des cocktails\n\n");
     printf("\t\t3. Gestion des finances\n\n");
-    printf("\t\t0. Revenir en arrière\n\n");
+    printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.");
-        exit(-1);
-    }else{
+    if(retour != 1 || numInter < 0 || numInter > 3){
+        while(retour != 1 || numInter < 0 || numInter > 3){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
 
-        switch (numInter)
+    switch (numInter)
         {
         case 1:
             interfaceGestionBoissonBarman();
@@ -93,9 +116,11 @@ void interfaceBarman(){
             printf("Erreur dans le choix de l'interface.");
             break;
         }
-    }
 }
 
+/*
+    Interface principale du client, on a acces aux differentes fonctionnalites disponibles au client a partir de cette interface.
+*/
 void interfaceClient(){
 
     idUser = 2;
@@ -105,20 +130,25 @@ void interfaceClient(){
 
     system("clear");
     printf("===============================================================\n\n");
-    printf("\t\t\tMenu Client\n\n");
+    printf("\t\t\tMenu client\n\n");
     printf("\t\t1. Gestion des boissons\n\n");
     printf("\t\t2. Gestion des cocktails\n\n");
-    printf("\t\t0. Revenir en arrière\n\n");
+    printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.");
-        exit(-1);
-    }else{
-        switch (numInter)
+    if(retour != 1 || numInter < 0 || numInter > 2){
+        while(retour != 1 || numInter < 0 || numInter > 2){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
+    switch (numInter)
         {
         case 1:
             interfaceGestionBoissonClient();
@@ -133,32 +163,40 @@ void interfaceClient(){
         default:
             printf("Erreur dans le choix de l'interface.");
             break;
-        }
     }
 }
 
+
+/*
+    Interface permettant principalement au client d'acceder a l'interface de commande d'une boisson.
+    Il a aussi acces aux informations sur les boissons et aux informations sur les commandes.
+*/
 void interfaceGestionBoissonClient(){
 
     int numInter = 0;
     int retour = 0;
     system("clear");
     printf("===============================================================\n\n");
-    printf("\t\t\tMenu Gestion des boissons\n\n");
+    printf("\t\t\tMenu de commande des boissons\n\n");
     printf("\t\t1. Informations sur les boissons\n\n");
     printf("\t\t2. Information sur les commandes\n\n");
     printf("\t\t3. Commander une boisson\n\n");
-    printf("\t\t0. Revenir en arrière\n\n");
+    printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
-
-        switch (numInter)
+    if(retour != 1 || numInter < 0 || numInter > 3){
+        while(retour != 1 || numInter < 0 || numInter > 3){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
+    switch (numInter)
         {
         case 1:
             interfaceInformationBoissonClient();
@@ -175,10 +213,13 @@ void interfaceGestionBoissonClient(){
         default:
             printf("Erreur dans le choix de l'interface.");
             break;
-        }
     }
 }
 
+/*
+    Interface de gestion des boisson du barman. Cette interface lui permet d'avoir toutes les inforamtions sur les boissons, ajouter/supprimer une boisson,
+    modifier une boisson et modifier le stock d'une boisson.
+*/
 void interfaceGestionBoissonBarman(){
 
     int numInter = 0;
@@ -191,18 +232,23 @@ void interfaceGestionBoissonBarman(){
     printf("\t\t3. Modifie une boisson\n\n");
     printf("\t\t4. Gestion du stock de boisson\n\n");
     printf("\t\t5. Satisfaire une commande d'un client\n\n");
-    printf("\t\t0. Revenir en arrière\n\n");
+    printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
+    if(retour != 1 || numInter < 0 || numInter > 5){
+        while(retour != 1 || numInter < 0 || numInter > 5){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
 
-        switch (numInter)
+    switch (numInter)
         {
         case 1:
             interfaceInformationBoissonBarman();
@@ -226,10 +272,12 @@ void interfaceGestionBoissonBarman(){
         default:
             printf("Erreur dans le choix de l'interface.");
             break;
-        }
     }
 }
 
+/*
+    Interface permettant d'ajouter ou de supprimer une boisson. Il est possible d'ajouter une boisson alcoolisee ou non, et de supprimer une boisson.
+*/
 void interfaceAjoutOuSuppBoisson(){
 
     int numInter = 0;
@@ -240,7 +288,7 @@ void interfaceAjoutOuSuppBoisson(){
     printf("\t\t1. Ajouter une boisson alcoolisee\n\n");
     printf("\t\t2. Ajouter une boisson non alcoolisee\n\n");
     printf("\t\t3. Supprimer une boisson\n\n");
-    printf("\t\t0. Revenir en arrière\n\n");
+    printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     switch (nbBoiss)
@@ -260,11 +308,16 @@ void interfaceAjoutOuSuppBoisson(){
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
-        switch (numInter)
+    if(retour != 1 || numInter < 0 || numInter > 3){
+        while(retour != 1 || numInter < 0 || numInter > 3){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
+    switch (numInter)
         {
         case 1:
             nbBoiss++;
@@ -286,111 +339,221 @@ void interfaceAjoutOuSuppBoisson(){
             printf("Erreur dans le choix de l'interface.");
             break;
         }
-
-    }
 }
-
+/*
+    Interface pour ajouter une boisson alcoolisee.
+*/
 void interfaceAjoutBoissonAlcool(){
 
     boisson nouvBoisson;
+    int numInter;
 
+    /*
+        On demande a l'utilisateur d'entrer les informations de la boisson une par une, sauf le degre de sucre que l'on met automatiquement a 0, 
+        puisqu'il s'agit d'une boisson alcoolisee.
+    */
     int retour = 0;
     system("clear");
     printf("===============================================================\n\n");
     printf("\t\tMenu de l'ajout d'une boisson\n\n");
 
-    printf("Veuillez entrer le nom de la boisson :");
-    getchar();
-    retour = scanf("%[^\n]", nouvBoisson.nom);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
+    printf("Entrez 0 pour revenir en arrière.\nEntrez 1 pour ajouter la nouvelle boisson:");
+    retour = scanf("%d", &numInter);
+
+    if(retour != 1 || numInter < 0 || numInter > 1){
+        while(retour != 1 || numInter < 0 || numInter > 1){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
     }
 
-    printf("Entrer la contenance de la boisson :");
-    retour = scanf("%f", &nouvBoisson.contenance);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
+    switch (numInter)
+    {
+    case 0:
+        interfaceAjoutOuSuppBoisson();
+        break;
+    case 1:
+        printf("Veuillez entrer le nom de la boisson :");
+        getchar();
+        retour = scanf("%[^\n]", nouvBoisson.nom);
+        if(retour != 1){
+            printf("\nErreur dans la saisie.\n");
+            exit(-1);
+        }
+
+        printf("Entrer la contenance de la boisson :");
+        retour = scanf("%f", &nouvBoisson.contenance);
+        if(retour != 1 || nouvBoisson.contenance < 0){
+        while(retour != 1 || nouvBoisson.contenance < 0){
+                retour = 1;
+                printf("Cette contenance est impossible.\n");
+                printf("Veuillez entrer une contenance de boisson positive:");
+                getchar();
+                retour = scanf("%f", &nouvBoisson.contenance);
+            }
+        }
+
+        printf("Entrer le prix de la boisson :");
+        retour = scanf("%f", &nouvBoisson.prix);
+        if(retour != 1 || nouvBoisson.prix < 0){
+        while(retour != 1 || nouvBoisson.prix < 0){
+                retour = 1;
+                printf("Ce prix est impossible.\n");
+                printf("Veuillez entrer un prix de boisson positif:");
+                getchar();
+                retour = scanf("%f", &nouvBoisson.prix);
+            }
+        }
+
+        printf("Entrer la quantite de boisson :");
+        retour = scanf("%f", &nouvBoisson.quantite);
+        if(retour != 1 || nouvBoisson.quantite < 0){
+        while(retour != 1 || nouvBoisson.quantite < 0){
+                retour = 1;
+                printf("Cette quantite est impossible.\n");
+                printf("Veuillez entrer une quantite de boisson positive:");
+                getchar();
+                retour = scanf("%f", &nouvBoisson.quantite);
+            }
+        }
+
+        printf("Entrer le degre d'alcool de cette boisson :");
+        retour = scanf("%f", &nouvBoisson.degreAlco);
+        if(retour != 1 || nouvBoisson.degreAlco < 0){
+        while(retour != 1 || nouvBoisson.degreAlco < 0){
+                retour = 1;
+                printf("Ce degre d'alcool est impossible.\n");
+                printf("Veuillez entrer un degre d'alcool positif:");
+                getchar();
+                retour = scanf("%f", &nouvBoisson.degreAlco);
+            }
+        }
+
+        ajoutBoissonAlcool(nouvBoisson.nom, nouvBoisson.contenance, nouvBoisson.prix, nouvBoisson.quantite, nouvBoisson.degreAlco);
+        break;
+    default:
+        printf("Erreur dans la saisie de l'interface.");
+        break;
     }
 
-    printf("Entrer le prix de la boisson :");
-    retour = scanf("%f", &nouvBoisson.prix);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la quantite de boisson :");
-    retour = scanf("%f", &nouvBoisson.quantite);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le degre d'alcool de cette boisson :");
-    retour = scanf("%f", &nouvBoisson.degreAlco);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    ajoutBoissonAlcool(nouvBoisson.nom, nouvBoisson.contenance, nouvBoisson.prix, nouvBoisson.quantite, nouvBoisson.degreAlco);
 }
 
+/*
+    Interface pour ajouter une boisson non alcoolisee.
+*/
 void interfaceAjoutBoissonNonAlcool(){
 
     boisson nouvBoisson;
 
+    /*
+        On demande a l'utilisateur d'entrer les informations de la boisson une par une, sauf le degre d'alcool que l'on met automatiquement a 0, 
+        puisqu'il s'agit d'une boisson non alcoolisee.
+    */
+
     int retour = 0;
+    int numInter;
     system("clear");
     printf("===============================================================\n\n");
     printf("\t\tMenu de l'ajout d'une boisson\n\n");
 
-    printf("Veuillez entrer le nom de la boisson :");
-    getchar();
-    retour = scanf("%[^\n]", nouvBoisson.nom);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
+    printf("Entrez 0 pour revenir en arrière.\nEntrez 1 pour ajouter la nouvelle boisson:");
+    retour = scanf("%d", &numInter);
+
+    if(retour != 1 || numInter < 0 || numInter > 1){
+        while(retour != 1 || numInter < 0 || numInter > 1){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
     }
 
-    printf("Entrer la contenance de la boisson :");
-    retour = scanf("%f", &nouvBoisson.contenance);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
+    switch (numInter)
+    {
+    case 0:
+        interfaceAjoutOuSuppBoisson();
+        break;
+    case 1:
+        printf("Veuillez entrer le nom de la boisson :");
+        getchar();
+        retour = scanf("%[^\n]", nouvBoisson.nom);
+        if(retour != 1){
+            printf("\nErreur dans la saisie.\n");
+            exit(-1);
+        }
 
-    printf("Entrer le prix de la boisson :");
-    retour = scanf("%f", &nouvBoisson.prix);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
+        printf("Entrer la contenance de la boisson :");
+        retour = scanf("%f", &nouvBoisson.contenance);
+        if(retour != 1 || nouvBoisson.contenance < 0){
+        while(retour != 1 || nouvBoisson.contenance < 0){
+                retour = 1;
+                printf("Cette contenance est impossible.\n");
+                printf("Veuillez entrer une contenance de boisson positive:");
+                getchar();
+                retour = scanf("%f", &nouvBoisson.contenance);
+            }
+        }
 
-    printf("Entrer la quantite de boisson :");
-    retour = scanf("%f", &nouvBoisson.quantite);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
+        printf("Entrer le prix de la boisson :");
+        retour = scanf("%f", &nouvBoisson.prix);
+        if(retour != 1 || nouvBoisson.prix < 0){
+        while(retour != 1 || nouvBoisson.prix < 0){
+                retour = 1;
+                printf("Ce prix est impossible.\n");
+                printf("Veuillez entrer un prix de boisson positif:");
+                getchar();
+                retour = scanf("%f", &nouvBoisson.prix);
+            }
+        }
 
-    printf("Entrer le degre de sucre de cette boisson :");
-    retour = scanf("%f", &nouvBoisson.degreScr);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
+        printf("Entrer la quantite de boisson :");
+        retour = scanf("%f", &nouvBoisson.quantite);
+        if(retour != 1 || nouvBoisson.quantite < 0){
+        while(retour != 1 || nouvBoisson.quantite < 0){
+                retour = 1;
+                printf("Cette quantite est impossible.\n");
+                printf("Veuillez entrer une quantite de boisson positive:");
+                getchar();
+                retour = scanf("%f", &nouvBoisson.quantite);
+            }
+        }
+
+        printf("Entrer le degre de sucre de cette boisson :");
+        retour = scanf("%f", &nouvBoisson.degreScr);
+        if(retour != 1 || nouvBoisson.degreScr < 0){
+        while(retour != 1 || nouvBoisson.degreScr < 0){
+                retour = 1;
+                printf("Ce degre d'alcool est impossible.\n");
+                printf("Veuillez entrer un degre de sucre positif:");
+                getchar();
+                retour = scanf("%f", &nouvBoisson.degreScr);
+            }
+        }
+
+        ajoutBoissonNonAlcool(nouvBoisson.nom, nouvBoisson.contenance, nouvBoisson.prix, nouvBoisson.quantite, nouvBoisson.degreScr);
+        break;
+    default:
+        printf("Erreur dans la saisie du numero de l'interface.");
+        break;
     }
-    
-    ajoutBoissonNonAlcool(nouvBoisson.nom, nouvBoisson.contenance, nouvBoisson.prix, nouvBoisson.quantite, nouvBoisson.degreScr);
 }
 
+/*
+    Interface pour supprimer une boisson.
+*/
 void interfaceSuppBoisson(){
+
+    // On cree une variable qui correspond a l'ID de la boisson a supprimer.
 
     int idSupp = 0;
     int retour = 0;
 
+    // On affiche toutes les boissons, ainsi que leurs informations. 
+
     system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
@@ -400,29 +563,43 @@ void interfaceSuppBoisson(){
 
     printf("===============================================================\n\n");
 
-    printf("Entrer l'ID de la boisson a supprimer :");
+     // On demande a l'utilisateur d'entrer l'ID de la boisson qu'il desire supprimer. On verifie aussi s'il y a eu une erreur dans la saisie.
+    printf("Entrer l'ID de la boisson a supprimer (0 pour revenir en arriere):");
     retour = scanf("%d", &idSupp);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
-    }
-
-    if(idSupp == 0){
-        while(idSupp == 0){
-            printf("ID impossible a supprimer.\nEntrer un nouveau ID :");
-            retour = scanf("%d", &idSupp);
+    if(retour != 1 || idSupp < 0){
+        while(retour != 1 || idSupp < 0 || idSupp > tailleTabBarman()){
+                retour = 1;
+                printf("Cette contenance est impossible.\n");
+                printf("Veuillez entrer une contenance de boisson positive:");
+                getchar();
+                retour = scanf("%d", &idSupp);
+            }
         }
-    }
 
-    suppBoisson(idSupp);
+    // En entrant 0, l'utilisateur a la possibilite de retourner a l'interface precedente.
+    // La fonction de suppression s'execute.
+    if(idSupp == 0) {
+        nbBoiss++;
+        interfaceAjoutOuSuppBoisson();
+    }else{   
+        suppBoisson(idSupp);
+    }
 
 }
 
+/*
+    Interface pour modifier une boisson.
+*/
 void interfaceModifBoisson(){
+
+    // On cree une variable qui correspond a l'ID de la boisson a modifier.
+
     int idChange = 0;
     int retour = 0;
 
+    // On affiche toutes les boissons, ainsi que leurs informations.
+
     system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les boissons\n\n");
@@ -432,71 +609,31 @@ void interfaceModifBoisson(){
 
     printf("===============================================================\n\n");
 
-    printf("Entrer l'ID de la boisson a modifie :");
+    // On demande a l'utilisateur d'entrer l'ID de la boisson qu'il desire modifier.
+
+    printf("Entrez 0 pour revenir en arrière.\nEntrer l'ID de la boisson a modifie :");
     retour = scanf("%d", &idChange);
-/*
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
-    }
-*/
-    if(idChange == 0){
-        while(idChange == 0 || retour != 1){
+
+    if(retour != 1 || idChange < 0){
+        while(retour != 1 || idChange < 0){
+            retour = 1;
+            printf("\nCe nombre n'existe pas.\n");
+            printf("Veuillez entrer un nombre valide pour soit sortir ou selectionner une boisson:");
             getchar();
-            printf("ID impossible a modifie.\nEntrer un nouveau ID :");
             retour = scanf("%d", &idChange);
         }
+    }
+
+    if(idChange == 0){
+        interfaceGestionBoissonBarman();
     }else{
-
-        boisson tmp;
-
-        printf("Veuillez entrer le nouveu nom de la boisson :");
-        getchar();
-        retour = scanf("%[^\n]", tmp.nom);
-        if(retour != 1){
-            printf("\nErreur dans la saisie.\n");
-            exit(-1);
-        }
-
-        printf("Entrer la nouvelle contenance de la boisson :");
-        retour = scanf("%f", &tmp.contenance);
-        if(retour != 1){
-            printf("\nErreur dans la saisie.\n");
-            exit(-1);
-        }
-
-        printf("Entrer le nouveau prix de la boisson :");
-        retour = scanf("%f", &tmp.prix);
-        if(retour != 1){
-            printf("\nErreur dans la saisie.\n");
-            exit(-1);
-        }
-
-        printf("Entrer la quantite de boisson :");
-        retour = scanf("%f", &tmp.quantite);
-        if(retour != 1){
-            printf("\nErreur dans la saisie.\n");
-            exit(-1);
-        }
-
-        printf("Entrer le nouveau degre d'alcool de cette boisson :");
-        retour = scanf("%f", &tmp.degreAlco);
-        if(retour != 1){
-            printf("\nErreur dans la saisie.\n");
-            exit(-1);
-        }
-
-        printf("Entrer le nouveau degre de sucre de cette boisson :");
-        retour = scanf("%f", &tmp.degreScr);
-        if(retour != 1){
-            printf("\nErreur dans la saisie.\n");
-            exit(-1);
-        }
-
-        modifBoisson(idChange, tmp.nom, tmp.contenance, tmp.prix, tmp.quantite, tmp.degreAlco, tmp.degreScr);
+        modifBoisson(idChange);
     }
 }
 
+/*
+    Interface pour gerer le stock de boisson.
+*/
 void interfaceGestionStock(){
     int idStock = 0;
     float stockV = 0;
@@ -512,19 +649,37 @@ void interfaceGestionStock(){
 
     printf("===============================================================\n\n");
 
-    printf("Entrer l'ID du stock de la boisson a modifie :");
+    if(tailleTabBarman() == 0) {
+        printf("La liste est vide, il n'y a rien a modifier.\n");
+        printf("Entrez 0 pour revenir en arriere : ");
+        retour = scanf("%d", &idStock);
+        if(retour != 1 || idStock < 0 || idStock > 0){
+        while(retour != 1 || idStock < 0 || idStock > 0){
+            retour = 1;
+            printf("\nCe nombre n'existe pas.\n");
+            printf("Veuillez entrer un nombre valide pour revenir en arriere:");
+            getchar();
+            retour = scanf("%d", &idStock);
+            }
+        }
+        interfaceGestionBoissonBarman();
+    }
+
+    printf("Entrez 0 pour revenir en arrière.\nEntrer l'ID de la boisson pour modifier le stock :");
     retour = scanf("%d", &idStock);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
+    if(retour != 1 || idStock < 0){
+        while(retour != 1 || idStock < 0){
+            retour = 1;
+            printf("\nCe nombre n'existe pas.\n");
+            printf("Veuillez entrer un nombre valide pour soit sortir ou modifier le stock d'une boisson:");
+            getchar();
+            retour = scanf("%d", &idStock);
+        }
     }
 
     if(idStock == 0){
-        while(idStock == 0){
-            printf("ID impossible a modifie.\nEntrer un nouveau ID :");
-            retour = scanf("%d", &idStock);
-        }
+        interfaceGestionBoissonBarman();
     }else{
         printf("Entrer la quantite de boisson recue :");
         retour = scanf("%f", &stockR);
@@ -556,17 +711,31 @@ void interfaceSatisfactionCommande(){
 
     printf("=====================================================================================================\n\n");
 
-    printf("Entrer l'ID de la commande que vous voulez satisfaire:");
+    printf("Entrez 0 pour revenir en arrière.\nEntrer l'ID de la commande que vous voulez satisfaire :");
     retour = scanf("%d", &nCommande);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
+    if(retour != 1 || nCommande < 0){
+        while(retour != 1 || nCommande < 0){
+            retour = 1;
+            printf("\nCe nombre n'existe pas.\n");
+            printf("Veuillez entrer un nombre valide pour soit sortir, soit satisfaire une commande :");
+            getchar();
+            retour = scanf("%d", &nCommande);
+        }
     }
 
-    satisfactionCommande(nCommande);
+    if(nCommande == 0){
+        interfaceGestionBoissonBarman();
+    }else{
+        satisfactionCommande(nCommande);
+    }
 }
 
+/*
+    A COMPLETER AVEC LA NOUVELLE VERSION
+
+    Interface de gestion des finances. Il permet, pour le moment, d'afficher les recettes journalieres.
+*/
 void interfaceGestionFinance(){
 
     int numInter = 0;
@@ -580,12 +749,16 @@ void interfaceGestionFinance(){
     printf("Entrer 0 pour revenir en arriere :");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
-
-        switch (numInter)
+    if(retour != 1 || numInter < 0 || numInter > 0){
+        while(retour != 1 || numInter < 0 || numInter > 0){
+            retour = 1;
+            printf("\nCe nombre n'existe pas.\n");
+            printf("Veuillez entrer 0 pour revenir en arriere :");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
+    switch (numInter)
         {
         case 0:
             interfaceBarman();
@@ -597,8 +770,9 @@ void interfaceGestionFinance(){
     }
 
 
-}
-
+/*
+    Interface affichant les informations sur les boissons, pour le barman. Toutes les boissons sont affichees sous forme de liste. 
+*/
 void interfaceInformationBoissonBarman(){
     int numInter = 0;
     int retour = 0;
@@ -615,12 +789,17 @@ void interfaceInformationBoissonBarman(){
     printf("Entrer 0 pour revenir en arriere:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
+    if(retour != 1 || numInter > 0 ||numInter < 0){
+        while(retour != 1 || numInter > 0 || numInter < 0){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer 0 pour revenir en arriere :");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
 
-        switch (numInter)
+    switch (numInter)
         {
         case 0:
             interfaceGestionBoissonBarman();
@@ -629,11 +808,12 @@ void interfaceInformationBoissonBarman(){
         default:
             printf("Erreur dans le choix de l'interface.");
             break;
-        }
     }
-
 }
 
+/*
+    Interface affichant les informations sur les boissons, pour le client. Toutes les boissons sont affichees sous forme de liste.
+*/
 void interfaceInformationBoissonClient(){
     int numInter = 0;
     int retour = 0;
@@ -650,10 +830,15 @@ void interfaceInformationBoissonClient(){
     printf("Entrer 0 pour revenir en arriere:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
+    if(retour != 1 || numInter > 0 || numInter < 0){
+        while(retour != 1 || numInter > 0 || numInter < 0){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer 0 pour revenir en arriere :");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
 
         switch (numInter)
         {
@@ -665,10 +850,11 @@ void interfaceInformationBoissonClient(){
             printf("Erreur dans le choix de l'interface.");
             break;
         }
-    }
-
 }
 
+/*
+    Interface permemttant de commander une boisson. Le client entre l'ID de la boisson qu'il desire, qui est ensuite traite par la fonction commandeBoissonClient()
+*/
 void interfaceCommandeBoisson(){
     int numInter = 0;
     int retour = 0;
@@ -685,18 +871,26 @@ void interfaceCommandeBoisson(){
     printf("Entrer l'ID de la boisson que vous voulez commander.\nEntrer 0 pour annuler la commande:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
-        if(numInter == 0){
-            interfaceGestionBoissonClient();
-        }else{
-            commandeBoissonClient(numInter);
+    if(retour != 1 || numInter < 0){
+        while(retour != 1 || numInter < 0){
+            retour = 1;
+            printf("\nCe nombre n'existe pas.\n");
+            printf("Veuillez entrer un nombre valide pour soit sortir, soit commander une boisson:");
+            getchar();
+            retour = scanf("%d", &numInter);
         }
-    }  
-} 
+    }
 
+    if(numInter == 0){
+        interfaceGestionBoissonClient();
+    }else{
+        commandeBoissonClient(numInter);
+    }
+}
+
+/*
+    Interface affichant l'historique des commandes. Toutes les commandes sont affichees en liste. 
+*/
 void interfaceInformationCommandeClient(){
     int numInter = 0;
     int retour = 0;
@@ -713,25 +907,34 @@ void interfaceInformationCommandeClient(){
     printf("Entrer 0 pour revenir en arriere:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
-
-        switch (numInter)
-        {
-        case 0:
-            interfaceGestionBoissonClient();
-            break;
-        
-        default:
-            printf("Erreur dans le choix de l'interface.");
-            break;
+    if(retour != 1 || numInter > 0 || numInter < 0){
+        while(retour != 1 || numInter > 0 || numInter < 0){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer 0 pour revenir en arriere :");
+            getchar();
+            retour = scanf("%d", &numInter);
         }
     }
 
+    switch (numInter)
+    {
+    case 0:
+        interfaceGestionBoissonClient();
+        break;
+    default:
+        printf("Erreur dans le choix de l'interface.");
+        break;
+    }
 }
 
+/*
+    SUREMENT A MODIFIER OU COMPLETER
+
+    Interface de gestion des cocktails. En fonction de l'interface (barman ou client), des inforamtions differentes sont affichees.
+    Pour le barman, il est possible d'avoir les informations sur les cocktails, de creer un coktails (et de supprimer un cocktail).
+    Pour le client, il est possible d'avoir les informations sur les cocktails, de creer son propre cocktail et de commander un cocktail deja existant.
+*/
 void interfaceGestionCocktail(){
 
     int numInter = 0;
@@ -741,16 +944,21 @@ void interfaceGestionCocktail(){
         printf("===============================================================\n\n");
         printf("\t\t\tMenu Gestion des cocktails\n\n");
         printf("\t\t1. Informations sur les cocktails\n\n");
-        printf("\t\t2. Création d'un cocktail\n\n");
+        printf("\t\t2. Creation d'un cocktail\n\n");
         printf("\t\t3. Supprimer un cocktail\n\n");
-        printf("\t\t0. Revenir en arrière\n\n");
+        printf("\t\t0. Revenir en arriere\n\n");
         printf("===============================================================\n\n");
         printf("Entrer le numero de l'interface:");
         retour = scanf("%d", &numInter);
 
-        if(retour != 1){
-            printf("Erreur dans la saisie du numero de l'interface.\n");
-            exit(-1);
+        if(retour != 1 || numInter < 0 || numInter > 3){
+        while(retour != 1 || numInter < 0 || numInter > 3){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+            }
         }else{
 
             switch (numInter)
@@ -776,19 +984,23 @@ void interfaceGestionCocktail(){
         printf("===============================================================\n\n");
         printf("\t\t\tMenu Gestion des cocktails\n\n");
         printf("\t\t1. Informations sur les cocktails\n\n");
-        printf("\t\t2. Création d'un cocktail\n\n");
+        printf("\t\t2. Creation d'un cocktail\n\n");
         printf("\t\t3. Commander un cocktail\n\n");
-        printf("\t\t0. Revenir en arrière\n\n");
+        printf("\t\t0. Revenir en arriere\n\n");
         printf("===============================================================\n\n");
         printf("Entrer le numero de l'interface:");
 
         retour = scanf("%d", &numInter);
 
-        if(retour != 1){
-            printf("Erreur dans la saisie du numero de l'interface.\n");
-            exit(-1);
+        if(retour != 1 || numInter < 0 || numInter > 3){
+        while(retour != 1 || numInter < 0 || numInter > 3){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
         }else{
-
             switch (numInter)
             {
                 case 1:
@@ -812,6 +1024,9 @@ void interfaceGestionCocktail(){
     }
 }
 
+/*
+    Interface affichant les informations sur les cocktails.
+*/
 void interfaceInformationCocktail(){
     int numInter = 0;
     int retour = 0;
@@ -829,19 +1044,23 @@ void interfaceInformationCocktail(){
     printf("Entrer 0 pour revenir en arriere:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }else{
-
-        switch (numInter)
-        {
-        case 0:
-            interfaceGestionCocktail();
-            break;
-        default:
-            printf("Erreur dans le choix de l'interface.");
-            break;
+    if(retour != 1 || numInter > 0 || numInter < 0){
+        while(retour != 1 || numInter > 0 || numInter < 0){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer 0 pour revenir en arriere :");
+            getchar();
+            retour = scanf("%d", &numInter);
         }
+    }
+
+    switch (numInter)
+    {
+    case 0:
+        interfaceGestionCocktail();
+        break;
+    default:
+        printf("Erreur dans le choix de l'interface.");
+        break;
     }
 }

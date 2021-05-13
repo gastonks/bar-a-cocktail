@@ -1,6 +1,10 @@
+/*
+Condition qui permet de définir ou non le header "interface.h" si il est déjà défini quelque part.
+*/
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+// Bibliothèques et headers
 #include <stdio.h>
 #include <stdlib.h>
 #include "boissonBarman.h"
@@ -23,6 +27,8 @@ void interfaceAjoutBoissonAlcool(void);
 void interfaceAjoutBoissonNonAlcool(void);
 void interfaceSuppBoisson(void);
 void interfaceModifBoisson(void);
+void interfaceModifBoissonAlco(void);
+void interfaceModifBoissonNonAlco(void);
 void interfaceGestionStock(void);
 void interfaceSatisfactionCommande(void);
 

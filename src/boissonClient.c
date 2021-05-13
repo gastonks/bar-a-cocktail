@@ -1,25 +1,13 @@
 #include "boissonClient.h"
 
 
-const char* BOISSON_FORMAT_CLIENT_OUT = "\n(%d, %s, %.2f, %.2f, %.2f, %.2f, %.2f)";
-const char* BOISSON_FORMAT_CLIENT_EX = "(%d, %s, %.2f, %.2f, %.2f, %.2f, %.2f)";
-const char* BOISSON_FORMAT_CLIENT_IN = "(%d, %[^,], %f, %f, %f, %f, %f)";
-
-const char* COMMANDE_FORMAT_CLIENT_OUT = "\n(%d, %d, %s, %.2f, %.2f)";
-const char* COMMANDE_FORMAT_CLIENT_IN = "(%d, %d, %[^,], %f, %f)";
-const char* COMMANDE_FORMAT_CLIENT_EX = "(%d, %d, %s, %.2f, %.2f)";
-
 void initFileClient(void){
-    FILE* file = fopen("data/commandeClient.dat", "a");
+    FILE* file = fopen("data/commandeClient", "ab");
 
     if(file == NULL){
-        printf("fichier non ouvert");
+        printf("Fichier non ouvert.");
         exit(-1);
     }
-
-    if(ftell(file) == 0){
-        fprintf(file, COMMANDE_FORMAT_CLIENT_EX, 0, 0,"Exemple",0,0);
-    } 
 
     fclose(file);
 }
@@ -28,22 +16,24 @@ int idInitCommande(){
     commande tmp;
 
     int nID = 0;
-    FILE* file = fopen("data/commandeClient.dat", "r");
+    int taille;
+    FILE* file = fopen("data/commandeClient", "rb");
+
     if(file == NULL){
-        printf("fichier non ouvert");
+        printf("Fichier non ouvert.");
         exit(-1);
     }
-    rewind(file);
 
-    while(!feof(file)){
-        
-        fscanf(file, COMMANDE_FORMAT_CLIENT_IN, &tmp.id, &tmp.idBoisson,  tmp.nom, &tmp.prix, &tmp.quantite);
+    fread(&taille, sizeof(int), 1, file);
 
-        if(fgetc(file) != '\n'){
-            break;
-        }
+    while(fread(&tmp, sizeof(commande), 1, file)) {
+        nID = tmp.id;
     }
 
+    nID++;
+
+    fclose(file); 
+    
     nID = tmp.id + 1;
     fclose(file);   
     return nID;
@@ -52,44 +42,27 @@ int idInitCommande(){
 void informationBoissonClient(){
 
     boisson tmp;
+    int i;
+    int T = tailleTabBarman();
 
-    FILE* file = fopen("data/boissonBarman.dat", "r");
+    FILE* file = fopen("data/boissonBarman", "rb");
 
     if(file == NULL){
-        printf("fichier non ouvert");
+        printf("Fichier non ouvert.");
         exit(-1);
     }
 
-    rewind(file);
-
-    while(!feof(file)){
-        
-        fscanf(file, BOISSON_FORMAT_CLIENT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.degreAlco, &tmp.degreScr, &tmp.quantite);
-        if(tmp.quantite > 0){
-            printf("\t\t%d", tmp.id);
-            printf("\t%s", tmp.nom);
-            printf("\t%.2f", tmp.contenance);
-            printf("\t\t%.2f", tmp.prix);
-            printf("\t%.2f\t", tmp.degreAlco);
-            printf("\t%.2f\n", tmp.degreScr);
-            if(fgetc(file) != '\n'){
-                break;
-            }
-        }else{
-            if(fgetc(file) != '\n'){
-                break;
-            }
-        }
+    // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
+    for(i = 0; i<T; i++) {
+        printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr);
     }
-
-    fclose(file);
 
 }
 
 void commandeBoissonClient(int idBoisson){
 
-    FILE* fileCommande = fopen("data/commandeClient.dat", "a");
-    FILE* fileBoisson = fopen("data/boissonBarman.dat", "r");
+    FILE* fileCommande = fopen("data/commandeClient", "ab");
+    FILE* fileBoisson = fopen("data/boissonBarman", "rb");
 
     if(fileCommande == NULL || fileBoisson == NULL){
         printf("fichier non ouvert");
@@ -114,7 +87,7 @@ void commandeBoissonClient(int idBoisson){
 
     nComm.id = idInitCommande();
 
-
+/*
     while(!feof(fileBoisson)){
         fscanf(fileBoisson, BOISSON_FORMAT_CLIENT_IN, &tmp.id, tmp.nom, &tmp.contenance, &tmp.prix, &tmp.degreAlco, &tmp.degreScr, &tmp.quantite);
 
@@ -133,10 +106,9 @@ void commandeBoissonClient(int idBoisson){
 
     fclose(fileCommande);
     fclose(fileBoisson);
-
+*/
     interfaceGestionBoissonClient();
 }
-
 
 void informationCommandeClient(){
 
@@ -148,7 +120,7 @@ void informationCommandeClient(){
         printf("fichier non ouvert");
         exit(-1);
     }
-
+/*
     rewind(file);
     
     while(!feof(file)){
@@ -169,6 +141,7 @@ void informationCommandeClient(){
             }
         }
     }
+    */
 
     fclose(file);
 
