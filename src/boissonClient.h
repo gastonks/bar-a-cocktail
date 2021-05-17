@@ -9,19 +9,23 @@
 
 typedef struct commande
 {
-    char nom[51];
+    int id;
+    int nbBoisson;
+    int** tabCommandeBoisson;
     float prix;
-    float quantite;
 }commande;
 
 void initFileClient(void);
 void informationBoissonClient(void);
-void commandeBoissonClient(int idBoisson);
+void commandeBoissonClient(int idBoisson, int recom);
 void informationCommandeClient(void);
 
-int calcTailleCom();
+int tailleTabCom();
 void initTabCom();
 void initFichierCom(int T);
+
+int idTOpos(int id);
+int posTOid(int pos);
 
 commande* tabCom;
 

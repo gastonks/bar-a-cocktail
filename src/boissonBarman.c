@@ -5,6 +5,8 @@
 // On inclue le fichier header associe
 #include "boissonBarman.h"
 
+float recetteBar;
+
 /*
     Fonction permettant d'initialiser le fichier contenant toutes les boissons et toutes leurs informations associees.
     Cette fonction a pour simple but de verifier si le fichier a bien ete initialise.
@@ -12,6 +14,7 @@
 void initFileBarman(){
     // On cree une variable de type FILE, permettant de manipuler le fichier, et on l'ouvre avec le parametre "ab", qui permet d'ajouter des informations
     // directement apres le bas du fichier.
+
     FILE* file = fopen("data/boissonBarman", "ab");
 
     // On verifie si le fichier a bien ete ouvert, et on arrete le programme s'il y a une erreur. 
@@ -25,8 +28,9 @@ void initFileBarman(){
 }
 
 /*
-    Fonction permettant d'initiliser l'ID d'une boisson.
-    L'ID de la boisson nous permet de mieux gerer la creation de cocktails par la suite.
+    Fonction permettant d'initialiser l'ID des boissons.
+    Cette fonction renvoie une valeur entière, qui correspond à l'ID de la dernière boisson plus 1.
+    Cette fonction est utile lors de l'ajout d'une boisson dans le fichier, permettant ainsi d'attribuer un ID à une nouvelle boisson.
 */
 int idInit(){
     
@@ -65,60 +69,20 @@ int idInit(){
 /*
     Fonction permettant d'ajouter une boisson alcoolisee.
 */
-void ajoutBoissonAlcool(){
+void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite, float degreAlco){
 
-    // On creer une variable de type boisson, qui sera ajoute au fichier apres avoir recupere toutes ses informations.
+    // On créer une variable de type boisson, qui sera ajouté au fichier après avoir récupéré toutes ses informations.
     boisson nouvBoisson;
 
-    /*
-        On demande a l'utilisateur d'entrer les informations de la boisson une par une, sauf le degre de sucre que l'on met automatiquement a 0, 
-        puisqu'il s'agit d'une boisson alcoolisee.
-    */
-
-    int retour = 0;
-    system("clear");
-    printf("===============================================================\n\n");
-    printf("\t\tMenu de l'ajout d'une boisson\n\n");
-
-    printf("Veuillez entrer le nom de la boisson :");
-    getchar();
-    retour = scanf("%[^\n]", nouvBoisson.nom);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la contenance de la boisson :");
-    retour = scanf("%f", &nouvBoisson.contenance);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le prix de la boisson :");
-    retour = scanf("%f", &nouvBoisson.prix);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la quantite de boisson :");
-    retour = scanf("%f", &nouvBoisson.quantite);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le degre d'alcool de cette boisson :");
-    retour = scanf("%f", &nouvBoisson.degreAlco);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    nouvBoisson.degreScr = 0.00;
+    // On récupère les données en paramétre pour pouvoir les réutiliser par la suite.
 
     nouvBoisson.id = idInit();
+    strcpy(nouvBoisson.nom,nom);
+    nouvBoisson.contenance = contenance;
+    nouvBoisson.prix = prix;
+    nouvBoisson.quantite = quantite;
+    nouvBoisson.degreAlco = degreAlco;
+    nouvBoisson.degreScr = 0;
 
     // On recupere le nombre de boissons qu'il existe deja dans le fichier.
     int T = tailleTabBarman();
@@ -193,54 +157,22 @@ void ajoutBoissonAlcool(){
     Cette fonction procede exactement de la meme maniere que la fonction permettant d'ajouter une boisson alcoolisee, sauf qu'on demande a l'utilisateur 
     d'entrer le degre de sucre et on met automatiquement le degre d'alcool a 0. 
 */
-void ajoutBoissonNonAlcool(){
+void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quantite, float degreSrc){
+
+    // On créer une variable de type boisson, qui sera ajouté au fichier après avoir récupéré toutes ses informations.
 
     boisson nouvBoisson;
 
-    int retour = 0;
-    system("clear");
-    printf("===============================================================\n\n");
-    printf("\t\tMenu de l'ajout d'une boisson\n\n");
-
-    printf("Veuillez entrer le nom de la boisson :");
-    getchar();
-    retour = scanf("%[^\n]", nouvBoisson.nom);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la contenance de la boisson :");
-    retour = scanf("%f", &nouvBoisson.contenance);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le prix de la boisson :");
-    retour = scanf("%f", &nouvBoisson.prix);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la quantite de boisson :");
-    retour = scanf("%f", &nouvBoisson.quantite);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    nouvBoisson.degreAlco = 0.00;
-
-    printf("Entrer le degre de sucre de cette boisson :");
-    retour = scanf("%f", &nouvBoisson.degreScr);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
+    // On récupère les données en paramétre pour pouvoir les réutiliser par la suite.
 
     nouvBoisson.id = idInit();
+    strcpy(nouvBoisson.nom,nom);
+    nouvBoisson.contenance = contenance;
+    nouvBoisson.prix = prix;
+    nouvBoisson.quantite = quantite;
+    nouvBoisson.degreAlco = 0;
+    nouvBoisson.degreScr = degreSrc;
+
 
     int T = tailleTabBarman();
     
@@ -292,7 +224,6 @@ void ajoutBoissonNonAlcool(){
     initFichier(T+1);
 
     interfaceAjoutOuSuppBoisson();
-
 }
 
 /*
@@ -312,45 +243,7 @@ void informationBoissonBarman(){
 /*
     Fonction permettant de supprimer une boisson.
 */
-void suppBoisson(){
-
-    // On cree une variable qui correspond a l'ID de la boisson a supprimer.
-    int idSupp = 0;
-    int retour = 0;
-
-    // On affiche toutes les boissons, ainsi que leurs informations.
-    system("clear");
-    printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les boissons\n\n");
-    printf("\t\tID\tNom\tContenance\tPrix\tQuantite\tDegre Alcool\tDegre Sucre\n\n");
-
-    informationBoissonBarman();
-
-    printf("===============================================================\n\n");
-
-    // On demande a l'utilisateur d'entrer l'ID de la boisson qu'il desire supprimer.
-    printf("Entrer l'ID de la boisson a supprimer (0 pour revenir en arriere):");
-    retour = scanf("%d", &idSupp);
-
-    // On verifie s'il y a eu une erreur dans la saisie.
-    if(retour != 1){
-        printf("Erreur dans la saisie du numero de l'interface.\n");
-        exit(-1);
-    }
-
-    // En entrant 0, l'utilisateur a la possibilite de retourner a l'interface precedente.
-    if(idSupp == 0) {
-        interfaceAjoutOuSuppBoisson();
-    }
-
-    // Si l'utilisateur a entre un ID n'existant pas, il a la possibilite d'en entrer un nouveau.
-    while (idSupp < 1 || idSupp > tailleTabBarman()) {
-        printf("ID impossible a supprimer.\nEntrer un nouveau ID :");
-        retour = scanf("%d", &idSupp);
-        if(idSupp == 0) {
-            interfaceAjoutOuSuppBoisson();
-        }
-    }
+void suppBoisson(int idSupp){
 
     /*
         Cette partie est similaire a l'ajout d'une boisson, sauf qu'au lieu d'augmenter la taille du tableau, on la dominue.
@@ -415,194 +308,191 @@ void suppBoisson(){
 /*
     Fonction permettant de modifier une boisson.
 */ 
-void modifBoisson(){
+void modifBoisson(int idChange){
 
-    // On cree une variable qui correspond a l'ID de la boisson a modifier.
-    int idChange = 0;
-    int retour = 0;
+    int retour;
+    int T = tailleTabBarman();
 
-    // On affiche toutes les boissons, ainsi que leurs informations.
-    system("clear");
-    printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les boissons\n\n");
-    printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
+    // On crée deux variables de type boisson.
+    boisson modifBoisson;
+    for(int i = 0; i<T+1; i++){
+        if(idChange-1 == i){
+            if(tab[i].degreScr == 0){
+                    printf("Veuillez entrer le nouveau nom de la boisson :");
+                    getchar();
+                    retour = scanf("%[^\n]", modifBoisson.nom);
+                    if(retour != 1){
+                        printf("\nErreur dans la saisie.\n");
+                        exit(-1);
+                    }
 
-    informationBoissonBarman();
+                    printf("Entrer la nouvelle contenance de la boisson :");
+                    retour = scanf("%f", &modifBoisson.contenance);
+                    if(retour != 1 || modifBoisson.contenance < 0){
+                    while(retour != 1 || modifBoisson.contenance < 0){
+                            retour = 1;
+                            printf("Cette contenance est impossible.\n");
+                            printf("Veuillez entrer une contenance de boisson positive:");
+                            getchar();
+                            retour = scanf("%f", &modifBoisson.contenance);
+                        }
+                    }
 
-    printf("===============================================================\n\n");
+                    printf("Entrer le nouveau prix de la boisson :");
+                    retour = scanf("%f", &modifBoisson.prix);
+                    if(retour != 1 || modifBoisson.prix < 0){
+                    while(retour != 1 || modifBoisson.prix < 0){
+                            retour = 1;
+                            printf("Ce prix est impossible.\n");
+                            printf("Veuillez entrer un prix de boisson positif:");
+                            getchar();
+                            retour = scanf("%f", &modifBoisson.prix);
+                        }
+                    }
 
-    // Si le fichier est vide, on indique a l'utilisateur qu'il n'y a rien a modifier, et on lui indique qu'il peut revenir a l'interface precedente.
-    if(tailleTabBarman() == 0) {
-        printf("La liste est vide, il n'y a rien a modifier.\n");
-        printf("Entrez 0 pour revenir en arriere : ");
-        retour = scanf("%d", &idChange);
-        interfaceGestionBoissonBarman();
-    }
+                    printf("Entrer la quantite de boisson :");
+                    retour = scanf("%f", &modifBoisson.quantite);
+                    if(retour != 1 || modifBoisson.quantite < 0){
+                    while(retour != 1 || modifBoisson.quantite < 0){
+                            retour = 1;
+                            printf("Cette quantite est impossible.\n");
+                            printf("Veuillez entrer une quantite de boisson positive:");
+                            getchar();
+                            retour = scanf("%f", &modifBoisson.quantite);
+                        }
+                    }
 
-    // On demande a l'utilisateur d'entrer l'ID de la boisson qu'il desire modifier.
-    printf("Entrer l'ID de la boisson a modifie (0 pour revenir en arriere):");
-    retour = scanf("%d", &idChange);
+                    printf("Entrer le nouveau degre d'alcool de cette boisson :");
+                    retour = scanf("%f", &modifBoisson.degreAlco);
+                    if(retour != 1 || modifBoisson.degreAlco < 0){
+                    while(retour != 1 || modifBoisson.degreAlco < 0){
+                            retour = 1;
+                            printf("Ce degre d'alcool est impossible.\n");
+                            printf("Veuillez entrer un degre d'alcool de boisson positif:");
+                            getchar();
+                            retour = scanf("%f", &modifBoisson.degreAlco);
+                        }
+                    }
+                    strcpy(tab[i].nom, modifBoisson.nom);
+                    tab[i].prix = modifBoisson.prix;
+                    tab[i].contenance = modifBoisson.contenance;
+                    tab[i].quantite = modifBoisson.quantite;
+                    tab[i].degreAlco = modifBoisson.degreAlco;
+                    tab[i].degreScr = 0;
 
-    // On verifie s'il y a eu une erreur dans la saisie.
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
-    }
+            }else if(tab[i].degreAlco == 0){
+                    printf("Veuillez entrer le nouveau nom de la boisson :");
+                    getchar();
+                    retour = scanf("%[^\n]", modifBoisson.nom);
+                    if(retour != 1){
+                        printf("\nErreur dans la saisie.\n");
+                        exit(-1);
+                    }
 
-    // En entrant 0, l'utilisateur a la possibilite de retourner a l'interface precedente.
-    if(idChange == 0) {
-        interfaceGestionBoissonBarman();
-    }
+                    printf("Entrer la nouvelle contenance de la boisson :");
+                    retour = scanf("%f", &modifBoisson.contenance);
+                    if(retour != 1 || modifBoisson.contenance < 0){
+                    while(retour != 1 || modifBoisson.contenance < 0){
+                            retour = 1;
+                            printf("Cette contenance est impossible.\n");
+                            printf("Veuillez entrer une contenance de boisson positive:");
+                            getchar();
+                            retour = scanf("%f", &modifBoisson.contenance);
+                        }
+                    }
 
-    // Si l'utilisateur a entre un ID n'existant pas, il a la possibilite d'en entrer un nouveau.
-    while (idChange < 1 || idChange > tailleTabBarman()) {
-        printf("ID inexistant.\nEntrer un nouveau ID :");
-        retour = scanf("%d", &idChange);
-        if(idChange == 0) {
-            interfaceGestionBoissonBarman();
+                    printf("Entrer le nouveau prix de la boisson :");
+                    retour = scanf("%f", &modifBoisson.prix);
+                    if(retour != 1 || modifBoisson.prix < 0){
+                    while(retour != 1 || modifBoisson.prix < 0){
+                            retour = 1;
+                            printf("Ce prix est impossible.\n");
+                            printf("Veuillez entrer un prix de boisson positif:");
+                            getchar();
+                            retour = scanf("%f", &modifBoisson.prix);
+                        }
+                    }
+
+                    printf("Entrer la quantite de boisson :");
+                    retour = scanf("%f", &modifBoisson.quantite);
+                    if(retour != 1 || modifBoisson.quantite < 0){
+                    while(retour != 1 || modifBoisson.quantite < 0){
+                            retour = 1;
+                            printf("Cette quantite est impossible.\n");
+                            printf("Veuillez entrer une quantite de boisson positive:");
+                            getchar();
+                            retour = scanf("%f", &modifBoisson.quantite);
+                        }
+                    }
+
+                    printf("Entrer le nouveau degre de sucre de cette boisson :");
+                    retour = scanf("%f", &modifBoisson.degreScr);
+                    if(retour != 1 || modifBoisson.degreScr < 0){
+                    while(retour != 1 || modifBoisson.degreScr < 0){
+                            retour = 1;
+                            printf("Ce degre de sucre est impossible.\n");
+                            printf("Veuillez entrer un degre de sucre de boisson positif:");
+                            getchar();
+                            retour = scanf("%f", &modifBoisson.degreScr);
+                        }
+                    }
+
+        
+                    strcpy(tab[i].nom, modifBoisson.nom);
+                    tab[i].prix = modifBoisson.prix;
+                    tab[i].contenance = modifBoisson.contenance;
+                    tab[i].quantite = modifBoisson.quantite;
+                    tab[i].degreAlco = 0;
+                    tab[i].degreScr = modifBoisson.degreScr;
+                }
+            }
         }
-    }
 
-    // On demande a l'utilisateur d'entrer les nouvelles informations une par une.
-    printf("Veuillez entrez le nouveau nom de la boisson :");
-    getchar();
-    retour = scanf("%[^\n]", tab[idChange-1].nom);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
+    initFichier(T);
 
-    printf("Entrer la nouvelle contenance de la boisson :");
-    retour = scanf("%f", &tab[idChange-1].contenance);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
+    // On revient à l'interface précédente.
 
-    printf("Entrer le nouveau prix de la boisson :");
-    retour = scanf("%f", &tab[idChange-1].prix);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer la quantite de boisson :");
-    retour = scanf("%f", &tab[idChange-1].quantite);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le nouveau degre d'alcool de cette boisson :");
-    retour = scanf("%f", &tab[idChange-1].degreAlco);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    printf("Entrer le nouveau degre de sucre de cette boisson :");
-    retour = scanf("%f", &tab[idChange-1].degreScr);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-
-    // On recopie les nouvelles informations dans le fichier.
-    initFichier(tailleTabBarman());
-
-    // On remet l'interface modifBoisson(), si l'utilisateur souhaite modifier une autre boisson.
-    modifBoisson();
+    interfaceGestionBoissonBarman();
 
 }
 
 /*
     Fonction permettant de modifier le stock d'une boisson.
-    Dans le fonctionnement, cette fonction est similaire a la fonction modifBoisson().
-    En effet, on demande l'ID a l'utilisateur, on verifie si l'ID est correcte, on demande a l'utilisateur d'entrer le stock qu'il a recu et celui
-    qu'il a vendu et on a actualise les informations dans le fichier.
+    Dans le fonctionnement, cette fonction est similaire à la fonction modifBoisson().
+    En effet, on demande l'ID à l'utilisateur, on vérifie si l'ID est correcte, on utilise deux fichiers, on recopie toutes les informations de l'un
+    dans l'autre, tout en apportant la modification nécessaire, on renome les deux fichiers, on supprime celui qui n'est plus utile et enfin on 
+    retourne à l'interface précédente.
+    Le seul changement notable est que l'utilisateur entre en paramètre le nombre de stocks qu'il a reçu ainsi que le nombre de stocks qu'il a vendu.
 */
-void gestionStock(){
-    int idStock = 0;
-    float stockV = 0;
-    float stockR = 0;
-    int retour = 0;
-
-    system("clear");
-    printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les boissons\n\n");
-    printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
-
-    informationBoissonBarman();
-
-    printf("===============================================================\n\n");
-
-    if(tailleTabBarman() == 0) {
-        printf("La liste est vide, il n'y a rien a modifier.\n");
-        printf("Entrez 0 pour revenir en arriere : ");
-        retour = scanf("%d", &idStock);
-        interfaceGestionBoissonBarman();
-    }
-
-    printf("Entrer l'ID du stock du stock a modifier (0 pour revenir en arriere):");
-    retour = scanf("%d", &idStock);
-
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
-    }
-
-    if(idStock == 0) {
-        interfaceGestionBoissonBarman();
-    }
-
-    while(idStock < 1 || idStock > tailleTabBarman()){
-        printf("ID impossible a modifie.\nEntrer un nouveau ID :");
-        retour = scanf("%d", &idStock);
-    }
-
-    printf("Entrer la quantite de boisson recue :");
-    retour = scanf("%f", &stockR);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
-    printf("Entrer la quantite de boisson vendue :");
-    retour = scanf("%f", &stockV);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
+void gestionStock(int idStock, float stockR, float stockV){
 
     tab[idStock-1].quantite = tab[idStock-1].quantite + fabsf(stockR) - fabsf(stockV);
 
     initFichier(tailleTabBarman());
 
-    // On remet l'interface gestionStock(), si l'utilisateur souhaite modifier le stock d'une autre boisson.
-    gestionStock();
+    interfaceGestionBoissonBarman();
 
 }
 
 /*
-    SUREMENT A REVOIR PUISQUE IL FAUT AJOUTER DES CHOSES
     Fonction permettant de calculer les recettes.
-    Cette fonction renvoie un reel.
+    Cette fonction renvoie un réel.
 */
-float recette(){
+float recette(float prix){
 
-    // On cree une variable qui correspond a la recette totale.
-    float totalJ = 0;
+    recetteBar = recetteBar + prix;
 
-    // On parcours le fichier de commande et on additionne l'argent generee par chaque commande. 
-    for(int i = 0; i<calcTailleCom(); i++) {
-        totalJ += tabCom[i].prix;
-    }
+    return recetteBar;
 
-    // On renvoie la recette.
-    return totalJ;
+}
+
+void satisfactionCommande(int nCommande){
+    interfaceGestionBoissonBarman();
 }
 
 /*
     Fonction permettant de recuperer le nombre de boisson a partir du fichier.
+    Cette fonction renvoie un entier.
 */
 int tailleTabBarman() {
 

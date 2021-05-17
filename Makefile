@@ -13,7 +13,6 @@ OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 #dossier pour l'executable
 BINDIR=bin
 BIN=$(BINDIR)/main
-
 CLEANFLAGS = /F /Q
 
 #programme du make
