@@ -6,16 +6,18 @@
 #include <string.h>
 #include "boissonBarman.h"
 
+#define N 20
+
 typedef struct cocktail
 {
     int id;
-    char nom[51];
-    int* listIdBoisson;
+    char nom[N];
+    int tailleListBoisson;
+    int * listIdBoisson;
     float contenance;
     float prix;
     float degreAlco;
     float degreScr;
-    int tailleList;
 }cocktail;
 
 // Fonction pour la gestion des cocktails
@@ -23,6 +25,7 @@ void initFileCocktail(void);
 int idInitCocktail(void);
 void creationCocktailBarman(void);
 void informationCocktail(void);
+void informationCocktailClient(void);
 
 void creationCocktailClient(void);
 
@@ -30,7 +33,12 @@ void majCocktail(void);
 void commanderCocktail(void);
 
 void supprimerCocktail(int idCocktail);
-void supprimerListBoisson(int idCocktail);
 void supprimerCocktailDemande(void);
+
+void initTabCocktail();
+void initFichierCocktail(int t);
+int tailleTabBarmanCocktail();
+
+cocktail * tabCocktail;
 
 #endif

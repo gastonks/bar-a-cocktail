@@ -6,10 +6,17 @@
 #include "header.h"
 
 int main(int argc, char** argv){
+    printf("Initialisation des fichiers barman...\n");
     initFileBarman();
+    printf("Initialisation des fichiers client...\n");
     initFileClient();
+    printf("Initialisation du fichier cocktail...\n");
     initFileCocktail();
+    printf("Initialisation du tableau boisson...\n");
     initTab();
+    printf("Initialisation du tableau cocktail...\n");
+    initTabCocktail();
+    printf("Affichage de l'interface.\n");
     interfaceAccueil();
 
     return 0;

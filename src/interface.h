@@ -37,6 +37,7 @@ void interfaceGestionBoissonClient(void);
 void interfaceInformationBoissonClient(void);
 void interfaceInformationCommandeClient(void);
 void interfaceCommandeBoisson(void);
+void interfaceInformationCocktailClient (void);
 
 // Interface dans la gestion des cocktail
 void interfaceCommandeCocktail(void);

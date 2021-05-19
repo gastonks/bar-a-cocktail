@@ -570,8 +570,8 @@ void interfaceSuppBoisson(){
     if(retour != 1 || idSupp < 0){
         while(retour != 1 || idSupp < 0 || idSupp > tailleTabBarman()){
                 retour = 1;
-                printf("Cette contenance est impossible.\n");
-                printf("Veuillez entrer une contenance de boisson positive:");
+                printf("Cet ID de boisson est impossible.\n");
+                printf("Veuillez entrer un ID de boisson possible:");
                 getchar();
                 retour = scanf("%d", &idSupp);
             }
@@ -683,15 +683,25 @@ void interfaceGestionStock(){
     }else{
         printf("Entrer la quantite de boisson recue :");
         retour = scanf("%f", &stockR);
-        if(retour != 1){
-            printf("\nErreur dans la saisie.\n");
-            exit(-1);
+        if(retour != 1 || stockR < 0){
+            while(retour != 1 || stockR < 0){
+                retour = 1;
+                printf("Cette quantite est impossible.\n");
+                printf("Veuillez entrer une quantite de boisson positive:");
+                getchar();
+                retour = scanf("%f", &stockR);
+            }
         }
         printf("Entrer la quantite de boisson vendue :");
         retour = scanf("%f", &stockV);
-        if(retour != 1){
-            printf("\nErreur dans la saisie.\n");
-            exit(-1);
+        if(retour != 1 || stockV < 0){
+            while(retour != 1 || stockV < 0){
+                retour = 1;
+                printf("Cette quantite est impossible.\n");
+                printf("Veuillez entrer une quantite de boisson positive:");
+                getchar();
+                retour = scanf("%f", &stockV);
+            }
         }
     }
 
@@ -1004,7 +1014,7 @@ void interfaceGestionCocktail(){
             switch (numInter)
             {
                 case 1:
-                    interfaceInformationCocktail();
+                    interfaceInformationCocktailClient();
                     break;
                 case 2:
                     creationCocktailClient();
@@ -1037,6 +1047,44 @@ void interfaceInformationCocktail(){
     printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tNombre_Boisson\n\n");
 
     informationCocktail();
+
+    printf("\n\n=======================================================================================================================\n\n");
+
+
+    printf("Entrer 0 pour revenir en arriere:");
+    retour = scanf("%d", &numInter);
+
+    if(retour != 1 || numInter > 0 || numInter < 0){
+        while(retour != 1 || numInter > 0 || numInter < 0){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer 0 pour revenir en arriere :");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
+
+    switch (numInter)
+    {
+    case 0:
+        interfaceGestionCocktail();
+        break;
+    default:
+        printf("Erreur dans le choix de l'interface.");
+        break;
+    }
+}
+
+void interfaceInformationCocktailClient(){
+    int numInter = 0;
+    int retour = 0;
+
+    system("clear");
+    printf("=======================================================================================================================\n\n");
+    printf("\t\t\tMenu Information sur les cocktails\n\n");
+    printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tNombre_Boisson\n\n");
+
+    informationCocktailClient();
 
     printf("\n\n=======================================================================================================================\n\n");
 

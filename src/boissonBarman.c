@@ -136,6 +136,10 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
     // Sinon, si le fichier ne contient aucune boisson, on cree un tableau avec une seule case où on y copie la nouvelle boisson.
     else {
         tab = malloc(1*sizeof(boisson));
+        if(tab == NULL){
+            printf("Erreur allocation mémoire.");
+            exit(-1);
+        }
         tab[0].id = nouvBoisson.id;
         strcpy(tab[0].nom, nouvBoisson.nom);
         tab[0].contenance = nouvBoisson.contenance;
@@ -525,9 +529,8 @@ int tailleTabBarman() {
 */
 void initTab() {
     // On cree une variable qui va permettre de recopier les informations du fichier.
-    int i = 0;
     int taille;
-    boisson boisson;
+    //boisson rboisson;
 
     // On ouvre le fichier en mode lecture, avec le parametre "rb".
     FILE* file = fopen("data/boissonBarman", "rb");
@@ -538,16 +541,27 @@ void initTab() {
         exit(-1);
     }
 
+
     // On cree le tableau seulement s'il y a au moins une boisson.
     if(fread(&taille, sizeof(int), 1, file)>0) {
-        tab = malloc(taille*sizeof(boisson));
+        tab = (boisson*) malloc(taille*sizeof(boisson));
+        if(tab == NULL){
+            printf("Erreur allocation mémoire.");
+            exit(-1);
+        }
+
+        // On parcoure le fichier et on recopie les informations une par une dans le tableau.
+        for(int i = 0; i<taille; i++){
+            fread(&tab[i].id, sizeof(int), 1, file);
+            fread(tab[i].nom, sizeof(char), 20, file);
+            fread(&tab[i].contenance, sizeof(float), 1, file);
+            fread(&tab[i].prix, sizeof(float), 1, file);
+            fread(&tab[i].quantite, sizeof(float), 1, file);
+            fread(&tab[i].degreAlco, sizeof(float), 1, file);
+            fread(&tab[i].degreScr, sizeof(float), 1, file);
+        }
     }
 
-    // On parcoure le fichier et on recopie les informations une par une dans le tableau.
-    while(fread(&boisson, sizeof(boisson), 1, file)) {
-        tab[i] = boisson;
-        i++;
-    }
 
     // On ferme le fichier.
     fclose(file);
@@ -574,10 +588,15 @@ void initFichier(int T) {
 
     // On parcoure le tableau et on copie les informations dans le fichier.
     for(i=0; i<T; i++) {
-        fwrite(&tab[i], sizeof(boisson), 1, file);
+        fwrite(&tab[i].id, sizeof(int), 1, file);
+        fwrite(tab[i].nom, sizeof(char), 20, file);
+        fwrite(&tab[i].contenance, sizeof(float), 1, file);
+        fwrite(&tab[i].prix, sizeof(float), 1, file);
+        fwrite(&tab[i].quantite, sizeof(float), 1, file);
+        fwrite(&tab[i].degreAlco, sizeof(float), 1, file);
+        fwrite(&tab[i].degreScr, sizeof(float), 1, file);
     }
 
     // On ferme le fichier.
     fclose(file);
 }
-

@@ -12,7 +12,7 @@
 typedef struct boisson
 {
     int id;
-    char nom[51];
+    char nom[20];
     float contenance;
     float prix;
     float quantite;
