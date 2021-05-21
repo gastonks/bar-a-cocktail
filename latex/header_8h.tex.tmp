@@ -1,0 +1,16 @@
+\hypertarget{header_8h}{}\doxysection{Référence du fichier src/header.h}
+\label{header_8h}\index{src/header.h@{src/header.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}interface.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}boisson\+Barman.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}boisson\+Client.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}cocktail.\+h\char`\"{}}\newline
+Graphe des dépendances par inclusion de header.\+h\+:
+% FIG 0
+Ce graphe montre quels fichiers incluent directement ou indirectement ce fichier \+:
+% FIG 1
+
+
+\doxysubsection{Description détaillée}
+\hypertarget{interface_8h_Présentation}{}\doxysubsection{Présentation}\label{interface_8h_Présentation}
+Ce header rassemble les headers de chaque fichier séparé. Chaque header contient les fonctions du fichier .c qui lui est associé. Nous avons essayé de diviser un maximum le code pour gagner en compréhension. 

@@ -1,0 +1,488 @@
+\hypertarget{interface_8c}{}\doxysection{Référence du fichier src/interface.c}
+\label{interface_8c}\index{src/interface.c@{src/interface.c}}
+
+
+Programme contenant toutes les interfaces, que ce soit pour le barman ou le client. ~\newline
+  
+
+
+{\ttfamily \#include \char`\"{}interface.\+h\char`\"{}}\newline
+Graphe des dépendances par inclusion de interface.\+c\+:
+% FIG 0
+\doxysubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{interface_8c_aaf225425d90ab384be5994c998404d44}{interface\+Accueil}} ()
+\begin{DoxyCompactList}\small\item\em Procedure principale de l\textquotesingle{}interface. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a00ea3ae11841045fcddff2b034c2ce27}{interface\+Barman}} ()
+\begin{DoxyCompactList}\small\item\em Procedure principale de l\textquotesingle{}interface barman. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a02ea798ab1e894e0cf9ae6d0be578e5a}{interface\+Client}} ()
+\begin{DoxyCompactList}\small\item\em Procedure principale de l\textquotesingle{}interface client. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a3a593b007855eb6812d2bc6b54701857}{interface\+Gestion\+Boisson\+Client}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au client d\textquotesingle{}accéder aux informations sur les boissons, les cocktails, et les commandes. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_ac8c07b378ffb7ac347e2caee6d0335b5}{interface\+Gestion\+Boisson\+Barman}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman d\textquotesingle{}accéder aux fonctions de gestion des boissons. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_aef0b96fc144ac6e94e14288903a7d1df}{interface\+Ajout\+Ou\+Supp\+Boisson}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman d\textquotesingle{}accéder aux fonctions pour supprimer ou ajouter une boisson. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a6adf60002e16f436bdbf236e98a74938}{interface\+Ajout\+Boisson\+Alcool}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman d\textquotesingle{}ajouter une boisson alcoolisée. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_acdbac2bac610be881439220a4725dd91}{interface\+Ajout\+Boisson\+Non\+Alcool}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman d\textquotesingle{}ajouter une boisson non alcoolisée. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a3043ae9ff26b12ab9c1703063091b769}{interface\+Supp\+Boisson}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman de supprimer une boisson. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a4b6d8f968f968cbc80642b5aec2f3d8c}{interface\+Modif\+Boisson}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman de modifier une boisson. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_aa7b63ce202653085e16b83c3281555cc}{interface\+Gestion\+Stock}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman de gérer le stock des boissons. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_ac532fff24a25b92d1936b655acd90d7a}{interface\+Satisfaction\+Commande}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman de satisfaire une commande. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a00a104f1b5c4258f36994907b639f4e6}{interface\+Gestion\+Finance}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman d\textquotesingle{}avoir des informations sur ses finances. ~\newline
+ \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a71da306f6b14456884e5b6e419e83562}{interface\+Information\+Boisson\+Barman}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman d\textquotesingle{}avoir les informations des boissons. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a7dcb0636a76ecd2e9b255fabc9759185}{interface\+Information\+Boisson\+Client}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au client d\textquotesingle{}avoir les informations des boissons. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a19f95a610aa20577cc08409edd3214b3}{interface\+Commande\+Boisson}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au client de commander une boisson. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_ada885c6b31d1d6874815771c71dbe4f2}{interface\+Information\+Commande\+Client}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au client d\textquotesingle{}avoir les informations des commandes. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_acb58cdbc7c20a17cf022f4b929f73626}{interface\+Gestion\+Cocktail}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant au barman de gérer les cocktails. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{interface_8c_a345903a12fde038f09958925e46bd4da}{interface\+Information\+Cocktail}} ()
+\begin{DoxyCompactList}\small\item\em Procedure permettant d\textquotesingle{}afficher les informations des cocktails, côté barman. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{interface_8c_a3781b8e2fe63dc7f574f1e98cb473c95}\label{interface_8c_a3781b8e2fe63dc7f574f1e98cb473c95}} 
+void \mbox{\hyperlink{interface_8c_a3781b8e2fe63dc7f574f1e98cb473c95}{interface\+Information\+Cocktail\+Client}} ()
+\begin{DoxyCompactList}\small\item\em Prototype de la procédure \char`\"{}interface\+Information\+Cocktail\+Client\char`\"{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{interface_8c_a757e7ec6d04e102092afec277fba65ae}\label{interface_8c_a757e7ec6d04e102092afec277fba65ae}} 
+const char $\ast$ {\bfseries R\+E\+M\+O\+V\+E\+\_\+\+D\+A\+TA} = \char`\"{}rm -\/r data/boisson\+Barman.\+dat data/boisson\+Barmantmp.\+dat data/commande\+Client.\+dat data/cocktail.\+dat data/cocktail\+List\+Boisson.\+dat data/cocktail\+List\+Boissontmp.\+dat data/cocktailtmp.\+dat\char`\"{}
+\item 
+\mbox{\Hypertarget{interface_8c_a2d30f84e4332f6fe69fc348ee646ec6e}\label{interface_8c_a2d30f84e4332f6fe69fc348ee646ec6e}} 
+int {\bfseries prix} = 0
+\item 
+\mbox{\Hypertarget{interface_8c_a5cfe4cdec52ec4fb9d83b78dd2897c03}\label{interface_8c_a5cfe4cdec52ec4fb9d83b78dd2897c03}} 
+int {\bfseries id\+User} = 0
+\item 
+\mbox{\Hypertarget{interface_8c_ad9d2f8635dc1608f37c8ae8a5288b9e2}\label{interface_8c_ad9d2f8635dc1608f37c8ae8a5288b9e2}} 
+int {\bfseries nb\+Boiss} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+Programme contenant toutes les interfaces, que ce soit pour le barman ou le client. ~\newline
+ 
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+
+Guillerm Francois 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1 
+\end{DoxyVersion}
+
+
+\doxysubsection{Documentation des fonctions}
+\mbox{\Hypertarget{interface_8c_aaf225425d90ab384be5994c998404d44}\label{interface_8c_aaf225425d90ab384be5994c998404d44}} 
+\index{interface.c@{interface.c}!interfaceAccueil@{interfaceAccueil}}
+\index{interfaceAccueil@{interfaceAccueil}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceAccueil()}{interfaceAccueil()}}
+{\footnotesize\ttfamily void interface\+Accueil (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure principale de l\textquotesingle{}interface. 
+
+Prototype de la procédure \char`\"{}interface\+Accueil\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure affiche l\textquotesingle{}interface d\textquotesingle{}acceuil principale. L\textquotesingle{}interface barman et l\textquotesingle{}interface client sont accessibles depuis cette interface. 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_a6adf60002e16f436bdbf236e98a74938}\label{interface_8c_a6adf60002e16f436bdbf236e98a74938}} 
+\index{interface.c@{interface.c}!interfaceAjoutBoissonAlcool@{interfaceAjoutBoissonAlcool}}
+\index{interfaceAjoutBoissonAlcool@{interfaceAjoutBoissonAlcool}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceAjoutBoissonAlcool()}{interfaceAjoutBoissonAlcool()}}
+{\footnotesize\ttfamily void interface\+Ajout\+Boisson\+Alcool (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman d\textquotesingle{}ajouter une boisson alcoolisée. 
+
+Prototype de la procédure \char`\"{}interface\+Ajout\+Boisson\+Alcool\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman d\textquotesingle{}ajouter une boisson alcoolisée. Il doit entrer toutes les informations de la boisson, puis une fonction sera utilisée pour ajouter cette boisson dans le tableau qui les stocke. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_acdbac2bac610be881439220a4725dd91}\label{interface_8c_acdbac2bac610be881439220a4725dd91}} 
+\index{interface.c@{interface.c}!interfaceAjoutBoissonNonAlcool@{interfaceAjoutBoissonNonAlcool}}
+\index{interfaceAjoutBoissonNonAlcool@{interfaceAjoutBoissonNonAlcool}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceAjoutBoissonNonAlcool()}{interfaceAjoutBoissonNonAlcool()}}
+{\footnotesize\ttfamily void interface\+Ajout\+Boisson\+Non\+Alcool (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman d\textquotesingle{}ajouter une boisson non alcoolisée. 
+
+Prototype de la procédure \char`\"{}interface\+Ajout\+Boisson\+Non\+Alcool\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman d\textquotesingle{}ajouter une boisson non alcoolisée. Il doit entrer toutes les informations de la boisson, puis une fonction sera utilisée pour ajouter cette boisson dans le tableau qui les stocke. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_aef0b96fc144ac6e94e14288903a7d1df}\label{interface_8c_aef0b96fc144ac6e94e14288903a7d1df}} 
+\index{interface.c@{interface.c}!interfaceAjoutOuSuppBoisson@{interfaceAjoutOuSuppBoisson}}
+\index{interfaceAjoutOuSuppBoisson@{interfaceAjoutOuSuppBoisson}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceAjoutOuSuppBoisson()}{interfaceAjoutOuSuppBoisson()}}
+{\footnotesize\ttfamily void interface\+Ajout\+Ou\+Supp\+Boisson (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman d\textquotesingle{}accéder aux fonctions pour supprimer ou ajouter une boisson. 
+
+Prototype de la procédure \char`\"{}interface\+Ajout\+Ou\+Supp\+Boisson\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman d\textquotesingle{}ajouter une boisson alcoolisée ou non, ou d\textquotesingle{}en supprimer une. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_a00ea3ae11841045fcddff2b034c2ce27}\label{interface_8c_a00ea3ae11841045fcddff2b034c2ce27}} 
+\index{interface.c@{interface.c}!interfaceBarman@{interfaceBarman}}
+\index{interfaceBarman@{interfaceBarman}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceBarman()}{interfaceBarman()}}
+{\footnotesize\ttfamily void interface\+Barman (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure principale de l\textquotesingle{}interface barman. 
+
+Prototype de la procédure \char`\"{}interface\+Barman\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure affiche l\textquotesingle{}interface d\textquotesingle{}acceuil principale du barman. Il peut accéder à la gestion des boissons, des cocktails et des finances. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_a02ea798ab1e894e0cf9ae6d0be578e5a}\label{interface_8c_a02ea798ab1e894e0cf9ae6d0be578e5a}} 
+\index{interface.c@{interface.c}!interfaceClient@{interfaceClient}}
+\index{interfaceClient@{interfaceClient}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceClient()}{interfaceClient()}}
+{\footnotesize\ttfamily void interface\+Client (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure principale de l\textquotesingle{}interface client. 
+
+Prototype de la procédure \char`\"{}interface\+Client\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure affiche l\textquotesingle{}interface d\textquotesingle{}acceuil principale du client. Il peut accéder aux commandes à partir de cette interface. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_a19f95a610aa20577cc08409edd3214b3}\label{interface_8c_a19f95a610aa20577cc08409edd3214b3}} 
+\index{interface.c@{interface.c}!interfaceCommandeBoisson@{interfaceCommandeBoisson}}
+\index{interfaceCommandeBoisson@{interfaceCommandeBoisson}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceCommandeBoisson()}{interfaceCommandeBoisson()}}
+{\footnotesize\ttfamily void interface\+Commande\+Boisson (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au client de commander une boisson. 
+
+Prototype de la procédure \char`\"{}interface\+Commande\+Boisson\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au client de commander une boisson. Il doit entrer l\textquotesingle{}ID de la boisson qu\textquotesingle{}il veut commander, puis une fonction est appelée pour ajouter cette boisson au panier. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_ac8c07b378ffb7ac347e2caee6d0335b5}\label{interface_8c_ac8c07b378ffb7ac347e2caee6d0335b5}} 
+\index{interface.c@{interface.c}!interfaceGestionBoissonBarman@{interfaceGestionBoissonBarman}}
+\index{interfaceGestionBoissonBarman@{interfaceGestionBoissonBarman}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceGestionBoissonBarman()}{interfaceGestionBoissonBarman()}}
+{\footnotesize\ttfamily void interface\+Gestion\+Boisson\+Barman (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman d\textquotesingle{}accéder aux fonctions de gestion des boissons. 
+
+Prototype de la procédure \char`\"{}interface\+Gestion\+Boisson\+Barman\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman d\textquotesingle{}accéder à plusieurs interfaces pour gérer les boissons. Il peut afficher toutes les informations sur les boissons, ajouter ou supprimer une boisson, modifier une boisson, gérer le stock des boissons et enfin satisfaire les commandes. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_a3a593b007855eb6812d2bc6b54701857}\label{interface_8c_a3a593b007855eb6812d2bc6b54701857}} 
+\index{interface.c@{interface.c}!interfaceGestionBoissonClient@{interfaceGestionBoissonClient}}
+\index{interfaceGestionBoissonClient@{interfaceGestionBoissonClient}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceGestionBoissonClient()}{interfaceGestionBoissonClient()}}
+{\footnotesize\ttfamily void interface\+Gestion\+Boisson\+Client (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au client d\textquotesingle{}accéder aux informations sur les boissons, les cocktails, et les commandes. 
+
+Prototype de la procédure \char`\"{}interface\+Gestion\+Boisson\+Client\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au client d\textquotesingle{}accéder aux différentes informations sur les boissons et cocktails, ainsi que passer des commandes. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_acb58cdbc7c20a17cf022f4b929f73626}\label{interface_8c_acb58cdbc7c20a17cf022f4b929f73626}} 
+\index{interface.c@{interface.c}!interfaceGestionCocktail@{interfaceGestionCocktail}}
+\index{interfaceGestionCocktail@{interfaceGestionCocktail}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceGestionCocktail()}{interfaceGestionCocktail()}}
+{\footnotesize\ttfamily void interface\+Gestion\+Cocktail (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman de gérer les cocktails. 
+
+Prototype de la procédure \char`\"{}interface\+Gestion\+Cocktail\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman de gérer les cocktails. Il a accès à différentes interfaces lui permettant de créer un cocktail, supprimer un cocktail et afficher les informations de tous les cocktails. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_a00a104f1b5c4258f36994907b639f4e6}\label{interface_8c_a00a104f1b5c4258f36994907b639f4e6}} 
+\index{interface.c@{interface.c}!interfaceGestionFinance@{interfaceGestionFinance}}
+\index{interfaceGestionFinance@{interfaceGestionFinance}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceGestionFinance()}{interfaceGestionFinance()}}
+{\footnotesize\ttfamily void interface\+Gestion\+Finance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman d\textquotesingle{}avoir des informations sur ses finances. ~\newline
+ 
+
+Prototype de la procédure \char`\"{}interface\+Gestion\+Finance\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1 
+\end{DoxyVersion}
+\mbox{\Hypertarget{interface_8c_aa7b63ce202653085e16b83c3281555cc}\label{interface_8c_aa7b63ce202653085e16b83c3281555cc}} 
+\index{interface.c@{interface.c}!interfaceGestionStock@{interfaceGestionStock}}
+\index{interfaceGestionStock@{interfaceGestionStock}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceGestionStock()}{interfaceGestionStock()}}
+{\footnotesize\ttfamily void interface\+Gestion\+Stock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman de gérer le stock des boissons. 
+
+Prototype de la procédure \char`\"{}interface\+Gestion\+Stock\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman de gérer les stocks des boissons. Il doit entrer l\textquotesingle{}ID de la boisson pour laquelle il veut modifer les stocks, puis entrer les stocks entrés et les stocks vendus, qui seront ensuite actualisés dans le tableau. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_a71da306f6b14456884e5b6e419e83562}\label{interface_8c_a71da306f6b14456884e5b6e419e83562}} 
+\index{interface.c@{interface.c}!interfaceInformationBoissonBarman@{interfaceInformationBoissonBarman}}
+\index{interfaceInformationBoissonBarman@{interfaceInformationBoissonBarman}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceInformationBoissonBarman()}{interfaceInformationBoissonBarman()}}
+{\footnotesize\ttfamily void interface\+Information\+Boisson\+Barman (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman d\textquotesingle{}avoir les informations des boissons. 
+
+Prototype de la procédure \char`\"{}interface\+Information\+Boisson\+Barman\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1 
+\end{DoxyVersion}
+\mbox{\Hypertarget{interface_8c_a7dcb0636a76ecd2e9b255fabc9759185}\label{interface_8c_a7dcb0636a76ecd2e9b255fabc9759185}} 
+\index{interface.c@{interface.c}!interfaceInformationBoissonClient@{interfaceInformationBoissonClient}}
+\index{interfaceInformationBoissonClient@{interfaceInformationBoissonClient}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceInformationBoissonClient()}{interfaceInformationBoissonClient()}}
+{\footnotesize\ttfamily void interface\+Information\+Boisson\+Client (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au client d\textquotesingle{}avoir les informations des boissons. 
+
+Prototype de la procédure \char`\"{}interface\+Information\+Boisson\+Client\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1 
+\end{DoxyVersion}
+\mbox{\Hypertarget{interface_8c_a345903a12fde038f09958925e46bd4da}\label{interface_8c_a345903a12fde038f09958925e46bd4da}} 
+\index{interface.c@{interface.c}!interfaceInformationCocktail@{interfaceInformationCocktail}}
+\index{interfaceInformationCocktail@{interfaceInformationCocktail}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceInformationCocktail()}{interfaceInformationCocktail()}}
+{\footnotesize\ttfamily void interface\+Information\+Cocktail (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant d\textquotesingle{}afficher les informations des cocktails, côté barman. 
+
+Prototype de la procédure \char`\"{}interface\+Information\+Cocktail\char`\"{}.
+
+Procedure permettant d\textquotesingle{}afficher les informations des cocktails, côté client.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1 
+\end{DoxyVersion}
+\mbox{\Hypertarget{interface_8c_ada885c6b31d1d6874815771c71dbe4f2}\label{interface_8c_ada885c6b31d1d6874815771c71dbe4f2}} 
+\index{interface.c@{interface.c}!interfaceInformationCommandeClient@{interfaceInformationCommandeClient}}
+\index{interfaceInformationCommandeClient@{interfaceInformationCommandeClient}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceInformationCommandeClient()}{interfaceInformationCommandeClient()}}
+{\footnotesize\ttfamily void interface\+Information\+Commande\+Client (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au client d\textquotesingle{}avoir les informations des commandes. 
+
+Prototype de la procédure \char`\"{}interface\+Information\+Commande\+Client\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1 
+\end{DoxyVersion}
+\mbox{\Hypertarget{interface_8c_a4b6d8f968f968cbc80642b5aec2f3d8c}\label{interface_8c_a4b6d8f968f968cbc80642b5aec2f3d8c}} 
+\index{interface.c@{interface.c}!interfaceModifBoisson@{interfaceModifBoisson}}
+\index{interfaceModifBoisson@{interfaceModifBoisson}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceModifBoisson()}{interfaceModifBoisson()}}
+{\footnotesize\ttfamily void interface\+Modif\+Boisson (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman de modifier une boisson. 
+
+Prototype de la procédure \char`\"{}interface\+Modif\+Boisson\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman de modifier une boisson. Il doit entrer l\textquotesingle{}ID de la boisson à modifer puis entrer une à une toutes les informations de la nouvelle boisson, qui sera ensuite actualisée dans le tableau. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_ac532fff24a25b92d1936b655acd90d7a}\label{interface_8c_ac532fff24a25b92d1936b655acd90d7a}} 
+\index{interface.c@{interface.c}!interfaceSatisfactionCommande@{interfaceSatisfactionCommande}}
+\index{interfaceSatisfactionCommande@{interfaceSatisfactionCommande}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceSatisfactionCommande()}{interfaceSatisfactionCommande()}}
+{\footnotesize\ttfamily void interface\+Satisfaction\+Commande (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman de satisfaire une commande. 
+
+Prototype de la procédure \char`\"{}interface\+Satisfaction\+Commande\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman de satisfaire une commande. Il doit entrer l\textquotesingle{}ID de la commande à satisfaire, puis une fonction est appelée pour gérer les stocks et l\textquotesingle{}argent obtenue. ~\newline
+ 
+\end{DoxyRemark}
+\mbox{\Hypertarget{interface_8c_a3043ae9ff26b12ab9c1703063091b769}\label{interface_8c_a3043ae9ff26b12ab9c1703063091b769}} 
+\index{interface.c@{interface.c}!interfaceSuppBoisson@{interfaceSuppBoisson}}
+\index{interfaceSuppBoisson@{interfaceSuppBoisson}!interface.c@{interface.c}}
+\doxysubsubsection{\texorpdfstring{interfaceSuppBoisson()}{interfaceSuppBoisson()}}
+{\footnotesize\ttfamily void interface\+Supp\+Boisson (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Procedure permettant au barman de supprimer une boisson. 
+
+Prototype de la procédure \char`\"{}interface\+Supp\+Boisson\char`\"{}.
+
+\begin{DoxyAuthor}{Auteur}
+Barre Romain 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1
+\end{DoxyVersion}
+\begin{DoxyRemark}{Remarques}
+Cette procédure permet au barman de supprimer une boisson. Il doit entrer l\textquotesingle{}ID de la boisson à supprimer et une fonction est utilisée pour supprimer la boissons du tableau qui les stocke. ~\newline
+ 
+\end{DoxyRemark}
