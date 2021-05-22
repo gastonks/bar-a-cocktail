@@ -5,8 +5,6 @@
 // On inclue le fichier header associé
 #include "boissonBarman.h"
 
-float recetteBar;
-
 /*
     Fonction permettant d'initialiser le fichier devant contenir toutes les boissons et toutes leurs informations associées.
     Cette fonction a pour simple but de vérifier si les deux fichiers ont bien été initialisés.
@@ -496,9 +494,61 @@ float recette(float prix){
 
 }
 
-void satisfactionCommande(int nCommande){
+void satisfactionCommande(int numPanier){
     
-    interfaceGestionBoissonBarman();
+    int Tpanier = tailleTabPanier();
+    int Tboisson = tailleTabBarman();
+    int Tcocktail = tailleTabBarmanCocktail();
+    int erreur = 0;
+
+    for(int i = 0; i < Tpanier; i++){
+        if(i == numPanier-1){
+            for(int j = 0; j<tabPanier[i].nbrCommande; j++){
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrBoisson; k++){
+                    if(tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson < 0){
+                        printf("\nInformation\n");
+                        printf("\nImpossible à satisfaire la demande de boisson.");
+                        printf("\nIl manque %.2f de %s dans le stock.", fabs(tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson), tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].nom);
+                        printf("\nEntrer une touche pour continuer.");
+                        getchar();
+                        erreur++;
+                    }else{
+                        tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite = tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson;
+                    }
+                }
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrCocktail; k++){
+                    for(int m = 0; m < tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].tailleListBoisson; m++){
+                        if(tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail < 0){
+                            printf("\nInformation\n");
+                            printf("\nImpossible à satisfaire la demande de cocktail.");
+                            printf("\nIl manque %.2f de %s dans le stock.", fabs(tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail), tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].nom);
+                            printf("\nEntrer une touche pour continuer.");
+                            getchar();
+                            erreur++;
+                        }else{
+                            tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite = tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    if(erreur != 0){
+        printf("\n\nLe panier ne peut pas être satisfait.\nIl manque des boissons pour completer les commandes.");
+        printf("\nLe panier n'a pas été supprimer.\nVeuillez rajouter des boissons dans le stock pour pouvoir satisfaire le panier.");
+        printf("\nEntrer une touche pour continuer.");
+        getchar();
+        interfaceBarman();
+    }else{
+        recette(tabPanier[numPanier-1].prix);
+        supprimerPanier(numPanier);
+        initFichier(Tboisson);
+        initFichier(Tcocktail);
+        interfaceBarman();
+    }
+
 }
 
 /*
