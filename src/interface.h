@@ -110,24 +110,9 @@ void interfaceSatisfactionCommande(void);
 // Interface specifique au client
 
 /*!
-*  \brief Prototype de la procédure "interfaceGestionBoissonClient"
-*/
-void interfaceGestionBoissonClient(void);
-
-/*!
 *  \brief Prototype de la procédure "interfaceInformationBoissonClient"
 */
 void interfaceInformationBoissonClient(void);
-
-/*!
-*  \brief Prototype de la procédure "interfaceInformationCommandeClient"
-*/
-void interfaceInformationCommandeClient(void);
-
-/*!
-*  \brief Prototype de la procédure "interfaceCommandeBoisson"
-*/
-void interfaceCommandeBoisson(void);
 
 /*!
 *  \brief Prototype de la procédure "interfaceInformationCocktailClient"
@@ -136,12 +121,7 @@ void interfaceInformationCocktailClient (void);
 
 /* ----------------------------------------------------------------------------------------------------------------------------- */
 
-// Interface dans la gestion des cocktail
-
-/*!
-*  \brief Prototype de la procédure "interfaceCommandeCocktail"
-*/
-void interfaceCommandeCocktail(void);
+// Interface dans la gestion des cocktails.
 
 /*!
 *  \brief Prototype de la procédure "interfaceCreationCocktail"
@@ -152,5 +132,29 @@ void interfaceCreationCocktail(void);
 *  \brief Prototype de la procédure "interfaceInformationCocktail"
 */
 void interfaceInformationCocktail(void);
+
+/* ----------------------------------------------------------------------------------------------------------------------------- */
+
+//Interface pour la gestion des commandes.
+
+/*!
+*  \brief Prototype de la procédure "interfaceInformationCommande"
+*/
+void interfaceInformationCommande(void);
+
+/*!
+*  \brief Prototype de la procédure "interfaceInitCommande"
+*/
+void interfaceInitCommande(void);
+
+/*!
+*  \brief Prototype de la procédure "interfaceModifCommande"
+*/
+void interfaceModifCommande(void);
+
+/*!
+*  \brief Prototype de la procédure "interfaceSuppCommande"
+*/
+void interfaceSuppCommande(void);
 
 #endif

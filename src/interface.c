@@ -135,7 +135,7 @@ void interfaceBarman(){
         case 0:
             interfaceAccueil();
             break;
-        
+
         default:
             printf("Erreur dans le choix de l'interface.");
             break;
@@ -164,72 +164,19 @@ void interfaceClient(){
     system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu client\n\n");
-    printf("\t\t1. Gestion des boissons\n\n");
+    printf("\t\t1. Information sur les boissons\n\n");
     printf("\t\t2. Gestion des cocktails\n\n");
+    printf("\t\t3. Information sur les paniers\n\n");
+    printf("\t\t4. Creer un panier\n\n");
+    printf("\t\t5. Supprimer un panier\n\n");
     printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1 || numInter < 0 || numInter > 2){
-        while(retour != 1 || numInter < 0 || numInter > 2){
-            retour = 1;
-            printf("\nCe numero d'interface n'existe pas.\n");
-            printf("Veuillez entrer un nombre pour le choix de l'interface:");
-            getchar();
-            retour = scanf("%d", &numInter);
-        }
-    }
-    switch (numInter)
-        {
-        case 1:
-            interfaceGestionBoissonClient();
-            break;
-        case 2:
-            interfaceGestionCocktail();
-            break;
-        case 0:
-            interfaceAccueil();
-            break;
-        
-        default:
-            printf("Erreur dans le choix de l'interface.");
-            break;
-    }
-}
-
-/*! \fn void interfaceGestionBoissonClient()
-*  \author Barre Romain
-*  \version 1
-*
-*  \brief Procedure permettant au client d'accéder aux informations sur les boissons, les cocktails, et les commandes.
-*
-*  \remarks Cette procédure permet au client d'accéder aux différentes informations sur les boissons et cocktails, ainsi que passer des commandes.  
-*/
-
-/*
-    Interface permettant principalement au client d'acceder a l'interface de commande d'une boisson.
-    Il a aussi acces aux informations sur les boissons et aux informations sur les commandes.
-*/
-void interfaceGestionBoissonClient(){
-
-    int numInter = 0;
-    int retour = 0;
-    system("clear");
-    printf("===============================================================\n\n");
-    printf("\t\t\tMenu de commande des boissons\n\n");
-    printf("\t\t1. Informations sur les boissons\n\n");
-    printf("\t\t2. Information sur les commandes\n\n");
-    printf("\t\t3. Commander une boisson\n\n");
-    printf("\t\t0. Revenir en arriere\n\n");
-    printf("===============================================================\n\n");
-
-    printf("Entrer le numero de l'interface:");
-    retour = scanf("%d", &numInter);
-
-    if(retour != 1 || numInter < 0 || numInter > 3){
-        while(retour != 1 || numInter < 0 || numInter > 3){
+    if(retour != 1 || numInter < 0 || numInter > 5){
+        while(retour != 1 || numInter < 0 || numInter > 5){
             retour = 1;
             printf("\nCe numero d'interface n'existe pas.\n");
             printf("Veuillez entrer un nombre pour le choix de l'interface:");
@@ -243,12 +190,18 @@ void interfaceGestionBoissonClient(){
             interfaceInformationBoissonClient();
             break;
         case 2:
-            interfaceInformationCommandeClient();
-        case 3:
-            interfaceCommandeBoisson();
+            interfaceGestionCocktail();
             break;
+        case 3:
+            interfaceInformationCommande();
+            break;
+        case 4:
+            interfaceInitCommande();
+            break;
+        case 5:
+            interfaceSuppCommande();
         case 0:
-            interfaceClient();
+            interfaceAccueil();
             break;
         
         default:
@@ -838,7 +791,7 @@ void interfaceSatisfactionCommande(){
     printf("\t\t\tMenu Information sur les boissons\n\n");
     printf("\t\tID\tNom\tPrix\tQuantite_Commande\n\n");
 
-    informationCommandeClient();
+    informationCommande();
 
     printf("=====================================================================================================\n\n");
 
@@ -870,8 +823,6 @@ void interfaceSatisfactionCommande(){
 */
 
 /*
-    A COMPLETER AVEC LA NOUVELLE VERSION
-
     Interface de gestion des finances. Il permet, pour le moment, d'afficher les recettes journalieres.
 */
 void interfaceGestionFinance(){
@@ -994,7 +945,7 @@ void interfaceInformationBoissonClient(){
         switch (numInter)
         {
         case 0:
-            interfaceGestionBoissonClient();
+            interfaceClient();
             break;
         
         default:
@@ -1003,72 +954,64 @@ void interfaceInformationBoissonClient(){
         }
 }
 
-/*! \fn void interfaceCommandeBoisson()
+/*! \fn void interfaceInitCommande()
 *  \author Barre Romain
 *  \version 1
 *
 *  \brief Procedure permettant au client de commander une boisson.
-*
-*  \remarks Cette procédure permet au client de commander une boisson. 
-*  Il doit entrer l'ID de la boisson qu'il veut commander, puis une fonction est appelée pour ajouter cette boisson au panier.  
 */
 
 /*
     Interface permemttant de commander une boisson. Le client entre l'ID de la boisson qu'il desire, qui est ensuite traite par la fonction commandeBoissonClient()
 */
-void interfaceCommandeBoisson(){
-    int numInter = 0;
+void interfaceInitCommande(){
+
+    int reponse = 0;
     int retour = 0;
 
     system("clear");
     printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu commande d'une boisson\n\n");
-    printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\n\n");
+    printf("\t\t\tMenu commande de boissons et de cocktails\n\n");
 
-    informationBoissonClient();
+    printf("Entrer 1 pour confirmer l'intention de commander.\nEntrer 0 pour annuler la commande:");
+    retour = scanf("%d", &reponse);
 
-    printf("=====================================================================================================\n\n");
-
-    printf("Entrer l'ID de la boisson que vous voulez commander.\nEntrer 0 pour annuler la commande:");
-    retour = scanf("%d", &numInter);
-
-    if(retour != 1 || numInter < 0){
-        while(retour != 1 || numInter < 0){
+    if(retour != 1 || reponse < 0 || reponse > 1){
+        while(retour != 1 || reponse < 0 || reponse > 1){
             retour = 1;
             printf("\nCe nombre n'existe pas.\n");
             printf("Veuillez entrer un nombre valide pour soit sortir, soit commander une boisson:");
             getchar();
-            retour = scanf("%d", &numInter);
+            retour = scanf("%d", &reponse);
         }
     }
 
-    if(numInter == 0){
-        interfaceGestionBoissonClient();
+    if(reponse == 0){
+        interfaceClient();
     }else{
-        commandeBoissonClient(numInter);
+        demandeCommande();
     }
 }
 
-/*! \fn void interfaceInformationCommandeClient()
+/*! \fn void interfaceInformationCommande()
 *  \author Barre Romain
 *  \version 1
 *
-*  \brief Procedure permettant au client d'avoir les informations des commandes.
+*  \brief Procedure affichant l'historique des commandes.
 */
 
 /*
     Interface affichant l'historique des commandes. Toutes les commandes sont affichees en liste. 
 */
-void interfaceInformationCommandeClient(){
+void interfaceInformationCommande(){
     int numInter = 0;
     int retour = 0;
 
     system("clear");
     printf("=====================================================================================================\n\n");
     printf("\t\t\tMenu Information sur les commandes\n\n");
-    printf("\t\tID\tNom\tPrix\tQuantite_Commande\n\n");
 
-    informationCommandeClient();
+    informationCommande();
 
     printf("=====================================================================================================\n\n");
 
@@ -1088,12 +1031,55 @@ void interfaceInformationCommandeClient(){
     switch (numInter)
     {
     case 0:
-        interfaceGestionBoissonClient();
+        interfaceClient();
         break;
     default:
         printf("Erreur dans le choix de l'interface.");
         break;
     }
+}
+
+/*! \fn void interfaceInformationCommande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant de supprimer une commande.
+*/
+
+/*
+    Interface permettant de supprimer une boisson.
+*/
+void interfaceSuppCommande(){
+    int idSupp = 0;
+    int retour = 0;
+
+    system("clear");
+    printf("=====================================================================================================\n\n");
+    printf("\t\t\tMenu Information sur les commandes\n\n");
+
+    informationCommande();
+
+    printf("=====================================================================================================\n\n");
+
+    printf("Entrer le numero du panier a supprimer (0 pour revenir en arriere):");
+    retour = scanf("%d", &idSupp);
+
+    if(retour != 1 || idSupp < 0 || idSupp > tailleTabPanier()){
+        while(retour != 1 || idSupp < 0 || idSupp > tailleTabPanier()){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer 0 pour revenir en arriere :");
+            getchar();
+            retour = scanf("%d", &idSupp);
+        }
+    }
+
+    if(idSupp == 0) {
+        interfaceClient();
+    }else{   
+        supprimerPanier(idSupp);
+    }
+
 }
 
 /*! \fn void interfaceGestionCocktail()
@@ -1107,8 +1093,6 @@ void interfaceInformationCommandeClient(){
 */
 
 /*
-    SUREMENT A MODIFIER OU COMPLETER
-
     Interface de gestion des cocktails. En fonction de l'interface (barman ou client), des inforamtions differentes sont affichees.
     Pour le barman, il est possible d'avoir les informations sur les cocktails, de creer un coktails (et de supprimer un cocktail).
     Pour le client, il est possible d'avoir les informations sur les cocktails, de creer son propre cocktail et de commander un cocktail deja existant.
@@ -1163,7 +1147,6 @@ void interfaceGestionCocktail(){
         printf("\t\t\tMenu Gestion des cocktails\n\n");
         printf("\t\t1. Informations sur les cocktails\n\n");
         printf("\t\t2. Creation d'un cocktail\n\n");
-        printf("\t\t3. Commander un cocktail\n\n");
         printf("\t\t0. Revenir en arriere\n\n");
         printf("===============================================================\n\n");
         printf("Entrer le numero de l'interface:");
@@ -1187,9 +1170,6 @@ void interfaceGestionCocktail(){
                 case 2:
                     creationCocktailClient();
                     break;
-                case 3:
-                    printf("commande cocktail");
-                    break;
                 case 0:
                     interfaceClient();
                     break;
@@ -1210,7 +1190,7 @@ void interfaceGestionCocktail(){
 */
 
 /*
-    Interface affichant les informations sur les cocktails.
+    Interface affichant les informations sur les cocktails, cote barman.
 */
 void interfaceInformationCocktail(){
     int numInter = 0;
@@ -1257,7 +1237,9 @@ void interfaceInformationCocktail(){
 *  \brief Procedure permettant d'afficher les informations des cocktails, côté client.
 */
 
-
+/*
+    Interface affichant les informations sur les cocktails, cote client.
+*/
 void interfaceInformationCocktailClient(){
     int numInter = 0;
     int retour = 0;

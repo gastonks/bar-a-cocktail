@@ -7,22 +7,50 @@
 #include "boissonBarman.h"
 #include "interface.h"
 
+typedef struct listIdBoisson
+{
+    int idBoisson;
+    int quantiteBoisson;
+}listIdBoisson;
+
+typedef struct listIdCocktail
+{
+    int idCocktail;
+    int quantiteCocktail;
+}listIdCocktail;
+
+
 typedef struct commande
 {
-    int id;
     int nbrBoisson;
-    struct boisson * tabBoisson;
+    listIdBoisson * listBoisson;
     int nbrCocktail;
-    struct cocktail * tabCocktail;
+    listIdCocktail * listCocktail;
     float prix;
-    float quantite;
+
 }commande;
 
+typedef struct panier
+{
+    int id;
+    int nbrCommande;
+    commande * listCommande;
+    float prix;
+}panier;
+
+panier * tabPanier;
+
 void initFileClient(void);
-int idInitCommande(void);
+int idInitPanier(void);
 void informationBoissonClient(void);
-void commandeBoissonClient(int idBoisson);
-void informationCommandeClient(void);
+
+void demandeCommande(void);
+void initCommande(panier nPanier);
+void informationCommande(void);
+void supprimerPanier(int idSupp);
+int tailleTabPanier(void);
+void initTabPanier(void);
+void initFichierCommande(int T);
 
 
 #endif

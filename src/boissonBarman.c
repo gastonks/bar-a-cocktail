@@ -24,7 +24,6 @@ float recetteBar;
 
 /*
     Fonction permettant d'initialiser le fichier devant contenir toutes les boissons et toutes leurs informations associées.
-    Cette fonction a pour simple but de vérifier si les deux fichiers ont bien été initialisés.
 */
 void initFileBarman(){
     // On crée une variable de type FILE, permettant de manipuler les fichiers, et on l'ouvre avec le paramètre "ab", qui permet d'ajouter des informations
