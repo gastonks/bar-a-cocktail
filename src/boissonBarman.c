@@ -1,3 +1,9 @@
+/*! \file boissonBarman.c
+*  \author Guillerm François
+*  \version 1
+*  \brief Programme contenant toutes les fonctions permettant au barman de gérer les boissons.  
+*/
+
 /*
     Ce fichier contient toutes les fonctions liées au fonctionnement de l'interface du barman.
 */
@@ -6,6 +12,15 @@
 #include "boissonBarman.h"
 
 float recetteBar;
+
+/*! \fn void initFileBarman()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Procedure premettant de vérifier si le fichier des boissons fonctionne correctement.
+*
+*  \remarks Cette procédure ouvre le fichier contenant les boissons, vérifie si le fichier s'est bien ouvert et le referme ensuite. 
+*/
 
 /*
     Fonction permettant d'initialiser le fichier devant contenir toutes les boissons et toutes leurs informations associées.
@@ -26,6 +41,17 @@ void initFileBarman(){
     // On ferme le fichier, après avoir vérifié qu'ils étaient bien initialisés.
     fclose(file);
 }
+
+/*! \fn int idInit()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de donner un ID à une boisson.
+*
+*  \return Cette fonction renvoie un ID.
+*
+*  \remarks Cette fonction vérifie l'ID de la boisson la plus récente puis renvoie ce même ID augmenté de 1. 
+*/
 
 /*
     Fonction permettant d'initialiser l'ID des boissons.
@@ -66,6 +92,23 @@ int idInit(){
 
     return nID;  
 }
+
+/*! \fn void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite, float degreAlco)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant d'ajouter une boisson alcoolisée.
+*
+*  \param nom : nom de la boisson à ajouter
+*  \param contenance : contenance de la boisson à ajouter
+*  \param prix : prix de la boisson à ajouter
+*  \param quantite : quantité de la boisson à ajouter
+*  \param degreAlco : degré d'alcool de la boisson à ajouter
+*
+*  \remarks Cette fonction permet d'ajouter une boisson alcoolisée au tableau de boisson.
+*  Le tableau de boissons est recopié dans un tableau temporaire, on libère son espace, on lui alloue le même espace avec une case en plus pour la nouvelle boisson, on recopie toutes les boisson et enfin on ajoute la nouvelle boisson.
+*  Après avoir ajouté la nouvelle boisson, on libère l'espace du tableau temporaire, puis on recopie le contenu du nouveau tableau dans le fichier. 
+*/
 
 /*
     Fonction permettant d'ajouter une boisson alcoolisée.
@@ -156,6 +199,22 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
     interfaceAjoutOuSuppBoisson();
 }
 
+/*! \fn void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quantite, float degreSrc)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant d'ajouter une boisson non alcoolisée.
+*
+*  \param nom : nom de la boisson à ajouter
+*  \param contenance : contenance de la boisson à ajouter
+*  \param prix : prix de la boisson à ajouter
+*  \param quantite : quantité de la boisson à ajouter
+*  \param degreSrc : degré de sucre de la boisson à ajouter
+*
+*  \remarks Cette fonction permet d'ajouter une boisson non alcoolisée au tableau de boisson.
+*  La fonction fonctionne exactement de la même manière que la fonction précédente.
+*/
+
 /*
     Fonction permettant d'ajouter une boisson non alcoolisée.
 */
@@ -228,6 +287,13 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
     interfaceAjoutOuSuppBoisson();
 }
 
+/*! \fn void informationBoissonBarman()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant d'afficher les informations de toutes les boissons.
+*/
+
 /*
     Fonction permettant d'afficher les informations des boissons des boissons, pour le barman.
 */
@@ -242,13 +308,28 @@ void informationBoissonBarman(){
     }
 }
 
+/*! \fn void suppBoisson(int idSupp)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de supprimer une boisson.
+*
+*  \param idSupp : ID de la boisson à supprimer
+*
+*  \remarks Cette fonction permet de supprimer une boisson.
+*  Cette fonction fonctionne de la même manière que les fonctions pour ajouter des boissons, mais dans le sens inverse.
+*  On crée un tableau temporaire pour recopier toutes les boissons, on libère l'espace du tableau de base et on lui alloue le même espace moins un car on supprimer une boisson.
+*  Ensuite on recopie les boissons dans le tableau tout en évitant de recopier la boisson à supprimer.
+*  Enfin, on recopie le nouveau tableau dans le fichier.
+*/
+
 /*
     Fonction permettant de supprimer une boisson.
 */
 void suppBoisson(int idSupp){
 
     /*
-        Cette partie est similaire a l'ajout d'une boisson, sauf qu'au lieu d'augmenter la taille du tableau, on la dominue.
+        Cette partie est similaire a l'ajout d'une boisson, sauf qu'au lieu d'augmenter la taille du tableau, on la diminue.
         On cree un tableau temporaire où on copie toutes les informations du tableau de base, on recree le tableau de base avec une case en moins, 
         puis on recopie toutes les informations dans le tableau de base sans la boisson a supprimer.
     */
@@ -306,6 +387,18 @@ void suppBoisson(int idSupp){
     interfaceAjoutOuSuppBoisson();
 
 }
+
+/*! \fn void modifBoisson(int idChange)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de modifier les informations d'une boisson.
+*
+*  \param idChange : ID de la boisson à changer
+*
+*  \remarks Cette fonction permet de modifier une boisson.
+*  On demande tout simplement au barman d'entrer les nouvelles informations de la boisson, puis on modifie ces valeurs dans le tableau et enfin on recopie le nouveau tableau dans le fichier.
+*/
 
 /*
     Fonction permettant de modifier une boisson.
@@ -458,13 +551,19 @@ void modifBoisson(int idChange){
 
 }
 
+/*! \fn void gestionStock(int idStock, float stockR, float stockV)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de modifier le stock d'une boisson.
+*
+*  \param idStock : ID de la boisson au stock à changer
+*  \param stockR : stock reçu
+*  \param stockV : stock vendu
+*/
+
 /*
     Fonction permettant de modifier le stock d'une boisson.
-    Dans le fonctionnement, cette fonction est similaire à la fonction modifBoisson().
-    En effet, on demande l'ID à l'utilisateur, on vérifie si l'ID est correcte, on utilise deux fichiers, on recopie toutes les informations de l'un
-    dans l'autre, tout en apportant la modification nécessaire, on renome les deux fichiers, on supprime celui qui n'est plus utile et enfin on 
-    retourne à l'interface précédente.
-    Le seul changement notable est que l'utilisateur entre en paramètre le nombre de stocks qu'il a reçu ainsi que le nombre de stocks qu'il a vendu.
 */
 void gestionStock(int idStock, float stockR, float stockV){
 
@@ -475,6 +574,15 @@ void gestionStock(int idStock, float stockR, float stockV){
     interfaceGestionBoissonBarman();
 
 }
+
+/*! \fn void recette(float prix)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de mettre à ajour les recettes du barman.
+*
+*  \param prix : somme d'argent à ajouter aux recettes totales.
+*/
 
 /*
     Fonction permettant de calculer les recettes.
@@ -488,10 +596,25 @@ float recette(float prix){
 
 }
 
+// A FAIRE
+
 void satisfactionCommande(int nCommande){
     
     interfaceGestionBoissonBarman();
 }
+
+/*! \fn int tailleTabBarman()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de récupérer la taille du tableau de boissons.
+*
+*  \return La fonction renvoie la taille du tableau de boissons.
+*
+*  \remarks Cette fonction permet de récupérer la taille du tableau de boissons.
+*  On ouvre le fichier contenant les boissons et on lie tout simplement la première valeure de type entier, qui correspond à la taille.
+*  On renvoie ensuite la taille du tableau.
+*/
 
 /*
     Fonction permettant de calculer le nombre de boissons qu'il y a dans le fichier.
@@ -524,6 +647,17 @@ int tailleTabBarman() {
     return taille;
 
 }
+
+/*! \fn void initTab()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de créer le tableau de boissons.
+*
+*  \remarks Cette fonction permet de créer le tableau de boissons.
+*  On ouvre le fichier, on lit la première valeur pour récupérer le nombre de boissons, on alloue de la mémoire pour le tableau de boissons, on lit toutes les informations des boissons dans un ordre défini pour les mettre dans le tableau et enfin on ferme le fichier.
+*/
+
 /*
     Fonction permettant d'initialiser le tableau contenant les boissons.
 */
@@ -567,6 +701,19 @@ void initTab() {
     fclose(file);
 
 }
+
+/*! \fn void initFichier(int T)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de copier les informations du tableau vers le fichier.
+*
+*  \param T : taille du tableau
+*
+*  \remarks Cette fonction permet de copier les informations du tableau vers le fichier.
+*  On ouvre le fichier, puis on recopie les informations du tableau une par une dans le fichier dans un ordre défini, tout en commençant par mettre le nombre de boissons au tout début du fichier.
+*  Le fichier est binaire car nous avons trouvé plus simple la manipulation des fichiers binaires par rapport aux fichiers classiques.
+*/
 
 /*
     Fonction permettant d'initialiser le fichier.

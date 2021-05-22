@@ -701,4 +701,3 @@ void initFichierCocktail(int T) {
     // On ferme le fichier.
     fclose(file);
 }
-

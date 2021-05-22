@@ -1,6 +1,5 @@
 /*! \file interface.c
 *  \author Barre Romain
-*  \author Guillerm Francois
 *  \version 1
 *  \brief Programme contenant toutes les interfaces, que ce soit pour le barman ou le client.  
 */
