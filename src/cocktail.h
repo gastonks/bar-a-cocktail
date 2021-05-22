@@ -1,6 +1,11 @@
 #ifndef COCKTAIL_H
 #define COCKTAIL_H
-
+/*! \file cocktail.h
+*  \section Présentation
+*  Ce header regroupe les bibliothèques, le(s) constante(s), le(s) structure(s) et les prototypes de fonctions/procédures utiles au bon fonctionnement de la gestion des cocktails.
+*
+*  \brief Regroupe les bibliothèques, le(s) constante(s), le(s) structure(s) et les prototypes de fonctions/procédures.
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,9 +33,6 @@ void informationCocktail(void);
 void informationCocktailClient(void);
 
 void creationCocktailClient(void);
-
-void majCocktail(void);
-void commanderCocktail(void);
 
 void supprimerCocktail(int idCocktail);
 void supprimerCocktailDemande(void);

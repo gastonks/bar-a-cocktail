@@ -97,6 +97,10 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
     if (T>0) {
         // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
         boisson* tmp = malloc(T*sizeof(boisson));
+        if(tmp == NULL){
+            printf("Erreur allocation mémoire.");
+            exit(-1);
+        }
         for(int i = 0; i<T; i++) {
             tmp[i].id = tab[i].id;
             strcpy(tmp[i].nom, tab[i].nom);
@@ -111,6 +115,10 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
         // nouvelle boisson a la fin.
         free(tab);
         tab = malloc((T+1)*sizeof(boisson));
+        if(tab == NULL){
+            printf("Erreur allocation mémoire.");
+            exit(-1);
+        }
 
         for(int i = 0; i<T; i++) {
             tab[i].id = tmp[i].id;

@@ -44,189 +44,214 @@ void creationCocktailBarman(){
     int nbBoisson = 0;
     int idBoisson = 0;
     int retour = 0;
+    int numInter;
     int T = tailleTabBarmanCocktail();
 
     system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu creation d'un cocktail\n\n");
 
-    nCocktail.id = idInitCocktail();
 
-    printf("Veuillez entrer le nom du cocktail :");
-    getchar();
-    retour = scanf("%[^\n]", nCocktail.nom);
-    if(retour != 1){
-        printf("\nErreur dans la saisie.\n");
-        exit(-1);
-    }
+    printf("Entrez 0 pour revenir en arrière.\nEntrez 1 pour ajouter le nouveau cocktail:");
+    retour = scanf("%d", &numInter);
 
-    printf("Combien de boisson votre cocktail est-il compose :");
-    retour = scanf("%d", &nbBoisson);
-    if(retour != 1 || nbBoisson < 1){
-        while(retour != 1 || nbBoisson < 1){
+    if(retour != 1 || numInter < 0 || numInter > 1){
+        while(retour != 1 || numInter < 0 || numInter > 1){
             retour = 1;
-            printf("\nCe nombre de boisson est impossible.\n");
-            printf("Veuillez entrer un nombre positif:");
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
             getchar();
-            retour = scanf("%d", &nbBoisson);
+            retour = scanf("%d", &numInter);
         }
     }
 
-    nCocktail.prix = 0;
-    nCocktail.contenance = 0;
-    nCocktail.degreAlco = 0;
-    nCocktail.degreScr = 0;
-    nCocktail.tailleListBoisson = nbBoisson;
+    if(numInter==0){
 
-    nCocktail.listIdBoisson = (int*) malloc(nbBoisson*sizeof(int));
+        interfaceGestionCocktail();
 
-    if(nCocktail.listIdBoisson == NULL){
-        printf("\nErreur d'allocation de memoire. 1\n");
-        exit(-1);
-    }
+    }else if(numInter == 1){
 
-    printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les boissons\n\n");
-    printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
+        nCocktail.id = idInitCocktail();
 
-    informationBoissonBarman();
+        printf("Veuillez entrer le nom du cocktail :");
+        getchar();
+        retour = scanf("%[^\n]", nCocktail.nom);
+        if(retour != 1){
+            printf("\nErreur dans la saisie.\n");
+            exit(-1);
+        }
 
-    printf("=====================================================================================================\n");
-
-    for(int i = 0; i < nbBoisson; i++){
-        printf("\nEntrer l'ID de la boisson :");
-        retour = scanf("%d", &idBoisson);
-        if(retour != 1 || idBoisson < 1 || idBoisson > tailleTabBarman()){
-            while(retour != 1 || idBoisson < 1 || idBoisson > tailleTabBarman()){
+        printf("Combien de boisson votre cocktail est-il compose :");
+        retour = scanf("%d", &nbBoisson);
+        if(retour != 1 || nbBoisson < 1){
+            while(retour != 1 || nbBoisson < 1){
                 retour = 1;
-                printf("\nCe ID de boisson est impossible.\n");
-                printf("Veuillez entrer un ID de boisson possible:");
+                printf("\nCe nombre de boisson est impossible.\n");
+                printf("Veuillez entrer un nombre positif:");
                 getchar();
                 retour = scanf("%d", &nbBoisson);
             }
-        }else{
-            nCocktail.listIdBoisson[i] = idBoisson-1;
-
-            nCocktail.prix = nCocktail.prix + tab[idBoisson-1].prix;
-
-            nCocktail.contenance= nCocktail.contenance + tab[idBoisson-1].contenance;
-            
-            nCocktail.degreAlco = nCocktail.degreAlco + tab[idBoisson-1].degreAlco;
-            
-            nCocktail.degreScr = nCocktail.degreScr + tab[idBoisson-1].degreScr;
-   
-        }
-    }
-
-    nCocktail.prix = nCocktail.prix + 0.10 * nCocktail.prix;
-
-    if (T>0) {
-        // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
-        cocktail* tmp = (cocktail*) malloc(T*sizeof(cocktail));
-        if(tmp == NULL){
-                printf("Erreur allocation mémoire. 2");
-                exit(-1);
-            }
-        for(int i = 0; i<T; i++) {
-            tmp[i].id = tabCocktail[i].id;
-            strcpy(tmp[i].nom, tabCocktail[i].nom);
-            tmp[i].contenance = tabCocktail[i].contenance;
-            tmp[i].prix = tabCocktail[i].prix;
-            tmp[i].tailleListBoisson = tabCocktail[i].tailleListBoisson;
-            tmp[i].degreAlco = tabCocktail[i].degreAlco;
-            tmp[i].degreScr = tabCocktail[i].degreScr;
-            tmp[i].listIdBoisson = (int*) malloc(tabCocktail[i].tailleListBoisson*sizeof(int));
-            if(tmp[i].listIdBoisson == NULL){
-                printf("Erreur allocation mémoire. 3");
-                exit(-1);
-            }
-            for(int j = 0; j<tabCocktail[i].tailleListBoisson; j++){
-                tmp[i].listIdBoisson[j] = tabCocktail[i].listIdBoisson[j];
-            }
         }
 
-        // On libere l'espace du tableau de base et on le cree avec une case supplementaire, puis on y recopie toutes les informations avec la
-        // nouvelle boisson a la fin.
-        for(int i = 0;i<T; i++){
-            free(tabCocktail[i].listIdBoisson);
-        }
-        free(tabCocktail);
+        nCocktail.prix = 0;
+        nCocktail.contenance = 0;
+        nCocktail.degreAlco = 0;
+        nCocktail.degreScr = 0;
+        nCocktail.tailleListBoisson = nbBoisson;
 
-        tabCocktail = malloc((T+1)*sizeof(cocktail));
-        if(tabCocktail == NULL){
-                printf("Erreur allocation mémoire. 4");
-                exit(-1);
-            }
+        nCocktail.listIdBoisson = (int*) malloc(nbBoisson*sizeof(int));
 
-        for(int i = 0; i<T; i++) {
-            tabCocktail[i].id = tmp[i].id;
-            strcpy(tabCocktail[i].nom, tmp[i].nom);
-            tabCocktail[i].contenance = tmp[i].contenance;
-            tabCocktail[i].prix = tmp[i].prix;
-            tabCocktail[i].degreAlco = tmp[i].degreAlco;
-            tabCocktail[i].tailleListBoisson = tmp[i].tailleListBoisson;
-            tabCocktail[i].degreScr = tmp[i].degreScr;
-            tabCocktail[i].listIdBoisson = (int*) malloc(tmp[i].tailleListBoisson*sizeof(int));
-            if( tabCocktail[i].listIdBoisson == NULL){
-                printf("Erreur allocation mémoire. 5");
-                exit(-1);
-            }
-            for(int j = 0; j<tmp[i].tailleListBoisson; j++){
-                tabCocktail[i].listIdBoisson[j] = tmp[i].listIdBoisson[j];
-            }
-        }
-
-        tabCocktail[T].id = nCocktail.id;
-        strcpy(tabCocktail[T].nom, nCocktail.nom);
-        tabCocktail[T].contenance = nCocktail.contenance;
-        tabCocktail[T].prix = nCocktail.prix;
-        tabCocktail[T].tailleListBoisson = nCocktail.tailleListBoisson;
-        tabCocktail[T].degreAlco = nCocktail.degreAlco;
-        tabCocktail[T].degreScr = nCocktail.degreScr;
-        tabCocktail[T].listIdBoisson = (int*) malloc(nCocktail.tailleListBoisson*sizeof(int));
-        if(tabCocktail[T].listIdBoisson == NULL){
-                printf("Erreur allocation mémoire. 6");
-                exit(-1);
-        }
-        for(int j = 0; j<nCocktail.tailleListBoisson; j++){
-            tabCocktail[T].listIdBoisson[j] = nCocktail.listIdBoisson[j];
-        }
-
-        // On libere l'espace du tableau temporaire.
-        for(int i = 0;i<T; i++){
-            free(tmp[i].listIdBoisson);
-        }
-        free(tmp);
-    } 
-    // Sinon, si le fichier ne contient aucune boisson, on cree un tableau avec une seule case où on y copie la nouvelle boisson.
-    else {
-        tabCocktail = (cocktail*) malloc(1*sizeof(cocktail));
-        if(tabCocktail == NULL){
-            printf("Erreur allocation mémoire. 7");
+        if(nCocktail.listIdBoisson == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
             exit(-1);
         }
-        tabCocktail[0].id = nCocktail.id;
-        strcpy(tabCocktail[0].nom, nCocktail.nom);
-        tabCocktail[0].contenance = nCocktail.contenance;
-        tabCocktail[0].prix = nCocktail.prix;
-        tabCocktail[0].tailleListBoisson = nCocktail.tailleListBoisson;
-        tabCocktail[0].degreAlco = nCocktail.degreAlco;
-        tabCocktail[0].degreScr = nCocktail.degreScr;
-        tabCocktail[0].listIdBoisson = (int*) malloc(nCocktail.tailleListBoisson*sizeof(int));
-        if(tabCocktail[0].listIdBoisson == NULL){
-                printf("Erreur allocation mémoire. 8");
+
+        printf("=====================================================================================================\n\n");
+        printf("\t\t\tMenu Information sur les boissons\n\n");
+        printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
+
+        informationBoissonBarman();
+
+        printf("=====================================================================================================\n");
+
+        for(int i = 0; i < nbBoisson; i++){
+            printf("\nEntrer l'ID de la boisson :");
+            retour = scanf("%d", &idBoisson);
+            if(retour != 1 || idBoisson < 1 || idBoisson > tailleTabBarman()){
+                while(retour != 1 || idBoisson < 1 || idBoisson > tailleTabBarman()){
+                    retour = 1;
+                    printf("\nCe ID de boisson est impossible.\n");
+                    printf("Veuillez entrer un ID de boisson possible:");
+                    getchar();
+                    retour = scanf("%d", &nbBoisson);
+                }
+            }else{
+                nCocktail.listIdBoisson[i] = idBoisson-1;
+
+                nCocktail.prix = nCocktail.prix + tab[idBoisson-1].prix;
+
+                nCocktail.contenance= nCocktail.contenance + tab[idBoisson-1].contenance;
+                
+                nCocktail.degreAlco = nCocktail.degreAlco + tab[idBoisson-1].degreAlco;
+                
+                nCocktail.degreScr = nCocktail.degreScr + tab[idBoisson-1].degreScr;
+    
+            }
+        }
+
+        nCocktail.prix = nCocktail.prix + 0.10 * nCocktail.prix;
+
+        if (T>0) {
+            // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
+            cocktail* tmp = (cocktail*) malloc(T*sizeof(cocktail));
+            if(tmp == NULL){
+                    printf("Erreur allocation mémoire. 2");
+                    exit(-1);
+                }
+            for(int i = 0; i<T; i++) {
+                tmp[i].id = tabCocktail[i].id;
+                strcpy(tmp[i].nom, tabCocktail[i].nom);
+                tmp[i].contenance = tabCocktail[i].contenance;
+                tmp[i].prix = tabCocktail[i].prix;
+                tmp[i].tailleListBoisson = tabCocktail[i].tailleListBoisson;
+                tmp[i].degreAlco = tabCocktail[i].degreAlco;
+                tmp[i].degreScr = tabCocktail[i].degreScr;
+                tmp[i].listIdBoisson = (int*) malloc(tabCocktail[i].tailleListBoisson*sizeof(int));
+                if(tmp[i].listIdBoisson == NULL){
+                    printf("Erreur allocation mémoire. 3");
+                    exit(-1);
+                }
+                for(int j = 0; j<tabCocktail[i].tailleListBoisson; j++){
+                    tmp[i].listIdBoisson[j] = tabCocktail[i].listIdBoisson[j];
+                }
+            }
+
+            // On libere l'espace du tableau de base et on le cree avec une case supplementaire, puis on y recopie toutes les informations avec la
+            // nouvelle boisson a la fin.
+            for(int i = 0;i<T; i++){
+                free(tabCocktail[i].listIdBoisson);
+            }
+            free(tabCocktail);
+
+            tabCocktail = malloc((T+1)*sizeof(cocktail));
+            if(tabCocktail == NULL){
+                    printf("Erreur allocation mémoire. 4");
+                    exit(-1);
+                }
+
+            for(int i = 0; i<T; i++) {
+                tabCocktail[i].id = tmp[i].id;
+                strcpy(tabCocktail[i].nom, tmp[i].nom);
+                tabCocktail[i].contenance = tmp[i].contenance;
+                tabCocktail[i].prix = tmp[i].prix;
+                tabCocktail[i].degreAlco = tmp[i].degreAlco;
+                tabCocktail[i].tailleListBoisson = tmp[i].tailleListBoisson;
+                tabCocktail[i].degreScr = tmp[i].degreScr;
+                tabCocktail[i].listIdBoisson = (int*) malloc(tmp[i].tailleListBoisson*sizeof(int));
+                if( tabCocktail[i].listIdBoisson == NULL){
+                    printf("Erreur allocation mémoire. 5");
+                    exit(-1);
+                }
+                for(int j = 0; j<tmp[i].tailleListBoisson; j++){
+                    tabCocktail[i].listIdBoisson[j] = tmp[i].listIdBoisson[j];
+                }
+            }
+
+            tabCocktail[T].id = nCocktail.id;
+            strcpy(tabCocktail[T].nom, nCocktail.nom);
+            tabCocktail[T].contenance = nCocktail.contenance;
+            tabCocktail[T].prix = nCocktail.prix;
+            tabCocktail[T].tailleListBoisson = nCocktail.tailleListBoisson;
+            tabCocktail[T].degreAlco = nCocktail.degreAlco;
+            tabCocktail[T].degreScr = nCocktail.degreScr;
+            tabCocktail[T].listIdBoisson = (int*) malloc(nCocktail.tailleListBoisson*sizeof(int));
+            if(tabCocktail[T].listIdBoisson == NULL){
+                    printf("Erreur allocation mémoire. 6");
+                    exit(-1);
+            }
+            for(int j = 0; j<nCocktail.tailleListBoisson; j++){
+                tabCocktail[T].listIdBoisson[j] = nCocktail.listIdBoisson[j];
+            }
+
+            // On libere l'espace du tableau temporaire.
+            for(int i = 0;i<T; i++){
+                free(tmp[i].listIdBoisson);
+            }
+            free(tmp);
+        } 
+        // Sinon, si le fichier ne contient aucune boisson, on cree un tableau avec une seule case où on y copie la nouvelle boisson.
+        else {
+            tabCocktail = (cocktail*) malloc(1*sizeof(cocktail));
+            if(tabCocktail == NULL){
+                printf("Erreur allocation mémoire. 7");
                 exit(-1);
             }
-        for(int j = 0; j<nCocktail.tailleListBoisson; j++){
-            tabCocktail[0].listIdBoisson[j] = nCocktail.listIdBoisson[j];
+            tabCocktail[0].id = nCocktail.id;
+            strcpy(tabCocktail[0].nom, nCocktail.nom);
+            tabCocktail[0].contenance = nCocktail.contenance;
+            tabCocktail[0].prix = nCocktail.prix;
+            tabCocktail[0].tailleListBoisson = nCocktail.tailleListBoisson;
+            tabCocktail[0].degreAlco = nCocktail.degreAlco;
+            tabCocktail[0].degreScr = nCocktail.degreScr;
+            tabCocktail[0].listIdBoisson = (int*) malloc(nCocktail.tailleListBoisson*sizeof(int));
+            if(tabCocktail[0].listIdBoisson == NULL){
+                    printf("Erreur allocation mémoire. 8");
+                    exit(-1);
+                }
+            for(int j = 0; j<nCocktail.tailleListBoisson; j++){
+                tabCocktail[0].listIdBoisson[j] = nCocktail.listIdBoisson[j];
+            }
         }
+
+        // On recopie toutes les informations du tableau dans le fichier, en indicant la taille +1 car on a ajoute une boisson.
+        initFichierCocktail(T+1);
+        
+
+        interfaceGestionCocktail();
+    }else{
+        printf("Erreur dans le choix de l'interface.");
+        exit(-1);
     }
-
-    // On recopie toutes les informations du tableau dans le fichier, en indicant la taille +1 car on a ajoute une boisson.
-    initFichierCocktail(T+1);
-    
-
-    interfaceGestionCocktail();
 }
 
 void creationCocktailClient(){
@@ -236,11 +261,31 @@ void creationCocktailClient(){
     int nbBoisson = 0;
     int idBoisson = 0;
     int retour = 0;
+    int numInter;
     int T = tailleTabBarmanCocktail();
 
     system("clear");
     printf("===============================================================\n\n");
     printf("\t\t\tMenu creation d'un cocktail\n\n");
+    
+    printf("Entrez 0 pour revenir en arrière.\nEntrez 1 pour ajouter le nouveau cocktail:");
+    retour = scanf("%d", &numInter);
+
+    if(retour != 1 || numInter < 0 || numInter > 1){
+        while(retour != 1 || numInter < 0 || numInter > 1){
+            retour = 1;
+            printf("\nCe numero d'interface n'existe pas.\n");
+            printf("Veuillez entrer un nombre pour le choix de l'interface:");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
+
+    if(numInter==0){
+
+        interfaceGestionCocktail();
+
+    }else if(numInter == 1){
 
     nCocktail.id = idInitCocktail();
 
@@ -403,6 +448,10 @@ void creationCocktailClient(){
 
 
     interfaceGestionCocktail();
+    }else{
+        printf("Erreur dans le choix de l'interface.");
+        exit(-1);
+    }
 }
 
 void informationCocktail(){
@@ -428,20 +477,20 @@ void informationCocktail(){
 
 void informationCocktailClient(){
 
-    // On cree des variables, une permettant de parcourir le tableau et l'autre qui contient le nombre de boissons.
+    // On cree des variables, une permettant de parcourir le tableau.
     int i;
     int quantiteZero = 0;
     int T = tailleTabBarmanCocktail();
 
     // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
     for(i = 0; i<T; i++) {
+        quantiteZero = 0;
         for(int j = 0; j<tabCocktail[i].tailleListBoisson; j++){
-            quantiteZero = 0;
             if(tab[tabCocktail[i].listIdBoisson[j]].quantite == 0){
                 quantiteZero++;
             }
         }
-        if(quantiteZero != 0 ){
+        if(quantiteZero == 0 ){
             printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2d\n", i+1, tabCocktail[i].nom, tabCocktail[i].contenance, tabCocktail[i].prix, tabCocktail[i].degreAlco, tabCocktail[i].degreScr,  tabCocktail[i].tailleListBoisson);
         
             printf("\t\t=====================================================================================\n");
@@ -554,25 +603,27 @@ void supprimerCocktailDemande(){
 
     printf("=====================================================================================================\n\n");
 
-    printf("Entrer l'ID du cocktail a supprimer :");
+    // On demande a l'utilisateur d'entrer l'ID du cocktail qu'il desire supprimer. On verifie aussi s'il y a eu une erreur dans la saisie.
+    printf("Entrer l'ID de la boisson a supprimer (0 pour revenir en arriere):");
     retour = scanf("%d", &idSupp);
 
-    if(retour != 1){
-        printf("Erreur dans la saisie l'ID.\n");
-        exit(-1);
+    if(retour != 1 || idSupp < 0){
+        while(retour != 1 || idSupp < 0 || idSupp > tailleTabBarman()){
+                retour = 1;
+                printf("Cet ID de boisson est impossible.\n");
+                printf("Veuillez entrer un ID de boisson possible:");
+                getchar();
+                retour = scanf("%d", &idSupp);
+            }
     }
 
-    if(idSupp == 0){
-        while(idSupp == 0){
-            printf("ID impossible a supprimer.\nEntrer un nouveau ID :");
-            retour = scanf("%d", &idSupp);
-        }
+    // En entrant 0, l'utilisateur a la possibilite de retourner a l'interface precedente.
+    // Sinon, la fonction de suppression s'execute.
+    if(idSupp == 0) {
+        interfaceGestionCocktail();
+    }else{   
+        supprimerCocktail(idSupp);
     }
-
-    supprimerCocktail(idSupp);
-
-    //interfaceGestionCocktail();
-
 }
 
 /*
@@ -685,13 +736,10 @@ void initFichierCocktail(int T) {
         fwrite(&tabCocktail[i].id, sizeof(int), 1, file);
         fwrite(&tabCocktail[i].nom, sizeof(char), N, file);
         fwrite(&tabCocktail[i].tailleListBoisson, sizeof(int), 1, file);
-
         for (int l = 0; l < tabCocktail[i].tailleListBoisson; l++)
         {
             fwrite(&tabCocktail[i].listIdBoisson[l], sizeof(int), 1, file);
-        }
-        
-            
+        }   
         fwrite(&tabCocktail[i].contenance, sizeof(float), 1, file);
         fwrite(&tabCocktail[i].prix, sizeof(float), 1, file);
         fwrite(&tabCocktail[i].degreAlco, sizeof(float), 1, file);

@@ -33,15 +33,17 @@ void interfaceGestionStock(void);
 void interfaceSatisfactionCommande(void);
 
 // Interface specifique au client
-void interfaceGestionBoissonClient(void);
 void interfaceInformationBoissonClient(void);
-void interfaceInformationCommandeClient(void);
-void interfaceCommandeBoisson(void);
 void interfaceInformationCocktailClient (void);
 
-// Interface dans la gestion des cocktail
-void interfaceCommandeCocktail(void);
+// Interface dans la gestion des cocktails.
 void interfaceCreationCocktail(void);
 void interfaceInformationCocktail(void);
+
+//Interface pour la gestion des commandes.
+void interfaceInformationCommande(void);
+void interfaceInitCommande(void);
+void interfaceModifCommande(void);
+void interfaceSuppCommande(void);
 
 #endif

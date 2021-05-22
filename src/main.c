@@ -16,6 +16,8 @@ int main(int argc, char** argv){
     initTab();
     printf("Initialisation du tableau cocktail...\n");
     initTabCocktail();
+    printf("Initialisation du tableau panier...\n");
+    initTabPanier();
     printf("Affichage de l'interface.\n");
     interfaceAccueil();
 
