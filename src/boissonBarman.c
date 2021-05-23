@@ -320,6 +320,7 @@ void suppBoisson(int idSupp){
 
     // On recopie le tableau dans le fichier
     suppCocktailBoisson(idSupp);
+    suppPanierBoisson(idSupp);
     initFichier(T-1);
 
     // On retourne a l'interface precedente.
@@ -558,7 +559,7 @@ void satisfactionCommande(int numPanier){
         recette(tabPanier[numPanier-1].prix);
         supprimerPanier(numPanier);
         initFichier(Tboisson);
-        initFichier(Tcocktail);
+        initFichierCocktail(Tcocktail);
         interfaceBarman();
     }
 

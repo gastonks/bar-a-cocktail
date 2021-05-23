@@ -88,7 +88,7 @@ void demandeCommande(){
     }
 
     for(int i = 0; i< nPanier.nbrCommande; i++){
-        if(tab == NULL){
+        if(tab == NULL || tailleTabBarman() <= 0){
             printf("\nAucune boisson disponible.");
             getchar();
         }else{
@@ -163,7 +163,7 @@ void demandeCommande(){
         }
 
 
-        if(tabCocktail == NULL){
+        if(tabCocktail == NULL || tailleTabBarmanCocktail()<=0){
             printf("\nAucun cocktail disponible.\n");
             getchar();
         }else{
@@ -879,6 +879,42 @@ void modifPanier(int idModif){
     initFichierCommande(T);
 
 
+}
+
+void suppPanierBoisson(int idBoisson){
+
+    int T = tailleTabPanier();
+
+    if(T > 0){
+
+        for(int i = 0; i < T; i++){
+            for(int j = 0; j < tabPanier[i].nbrCommande; j++){
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrBoisson; k++){
+                    if(tabPanier[i].listCommande[j].listBoisson[k].idBoisson == idBoisson-1){
+                        supprimerPanier(i+1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void suppPanierCocktail(int idCocktail){
+
+    int T = tailleTabPanier();
+    
+    if(T>0){
+
+        for(int i = 0; i < T; i++){
+            for(int j = 0; j < tabPanier[i].nbrCommande; j++){
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrCocktail; k++){
+                    if(tabPanier[i].listCommande[j].listCocktail[k].idCocktail == idCocktail-1){
+                        supprimerPanier(i+1);
+                    }
+                }
+            }
+        }
+    }
 }
 
 int tailleTabPanier() {

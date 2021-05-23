@@ -49,6 +49,10 @@ void initCommande(panier nPanier);
 void informationCommande(void);
 void supprimerPanier(int idSupp);
 void modifPanier(int idModif);
+
+void suppPanierBoisson(int idBoisson);
+void suppPanierCocktail(int idCocktail);
+
 int tailleTabPanier(void);
 void initTabPanier(void);
 void initFichierCommande(int T);
