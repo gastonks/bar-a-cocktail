@@ -329,7 +329,7 @@ void informationBoissonBarman(){
 
     // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
     for(i = 0; i<T; i++) {
-        printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr,  tab[i].quantite);
+        printf("\t\t%d\t%.7s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr,  tab[i].quantite);
     }
 }
 

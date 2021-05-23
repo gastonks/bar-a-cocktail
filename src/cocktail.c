@@ -112,6 +112,20 @@ void creationCocktailBarman(){
     printf("===============================================================\n\n");
     printf("\t\t\tMenu creation d'un cocktail\n\n");
 
+    if(tailleTabBarman() == 0) {
+        printf("Il n'y a pas de boisson, il n'est pas possible de créer un cocktail.\nEntrez 0 pour revenir en arrière:");
+        retour = scanf("%d", &numInter);
+        if(retour != 1){
+        while(retour != 1){
+            retour = 1;
+            printf("Veuillez entrer un nombre valide:\n");
+            getchar();
+            retour = scanf("%d", &numInter);
+        }
+    }
+        interfaceGestionCocktail();
+    }
+
     // On donne le choix à l'utilisateur de revenir en arrière s'il a fait une erreur
     printf("Entrez 0 pour revenir en arrière.\nEntrez 1 pour ajouter le nouveau cocktail:");
     retour = scanf("%d", &numInter);
@@ -150,11 +164,11 @@ void creationCocktailBarman(){
         // On demande à l'utilisateur d'entrer le nombre de boissons composant le cocktail
         printf("Combien de boisson votre cocktail est-il compose :");
         retour = scanf("%d", &nbBoisson);
-        if(retour != 1 || nbBoisson < 1){
-            while(retour != 1 || nbBoisson < 1){
+        if(retour != 1 || nbBoisson < 1 || nbBoisson>tailleTabBarman()){
+            while(retour != 1 || nbBoisson < 1 || nbBoisson>tailleTabBarman()){
                 retour = 1;
                 printf("\nCe nombre de boisson est impossible.\n");
-                printf("Veuillez entrer un nombre positif:");
+                printf("Veuillez entrer un nombre correct:");
                 getchar();
                 retour = scanf("%d", &nbBoisson);
             }

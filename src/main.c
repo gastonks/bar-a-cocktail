@@ -3,7 +3,8 @@
 *  \author Guillerm Francois
 *  \version 1
 *  \date 20/05/2021 Début de la documentation doxygen du projet
-*  \brief Programme principal du projet, il contient simplement les fonctions d'initialisations, puis la fonction d'affichage du premier interface.  
+*  \brief Programme principal du projet, il contient simplement les fonctions d'initialisations, 
+*  puis la fonction d'affichage du premier interface.  
 */
 
 /*! \mainpage Présentation

@@ -8,7 +8,7 @@
 
 //Definition d'une macro, permettant de gagner du temps et de l'espace dans le programme.
 
-const char* REMOVE_DATA = "rm -r data/boissonBarman.dat data/boissonBarmantmp.dat data/commandeClient.dat data/cocktail.dat data/cocktailListBoisson.dat data/cocktailListBoissontmp.dat data/cocktailtmp.dat";
+const char* REMOVE_DATA = "rm -r data/boissonBarman data/commandeClient data/cocktail";
 
 int prix = 0;
 int idUser = 0; // 1 = Barman ; 2 = Client
