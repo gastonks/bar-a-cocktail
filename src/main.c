@@ -6,6 +6,7 @@
 #include "header.h"
 
 int main(int argc, char** argv){
+    recetteBar = 0;
     printf("Initialisation des fichiers barman...\n");
     initFileBarman();
     printf("Initialisation des fichiers client...\n");

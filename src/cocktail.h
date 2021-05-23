@@ -37,6 +37,8 @@ void creationCocktailClient(void);
 void supprimerCocktail(int idCocktail);
 void supprimerCocktailDemande(void);
 
+void suppCocktailBoisson(int idBoisson);
+
 void initTabCocktail();
 void initFichierCocktail(int t);
 int tailleTabBarmanCocktail();

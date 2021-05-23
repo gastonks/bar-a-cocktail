@@ -5,8 +5,6 @@
 // On inclue le fichier header associé
 #include "boissonBarman.h"
 
-float recetteBar;
-
 /*
     Fonction permettant d'initialiser le fichier devant contenir toutes les boissons et toutes leurs informations associées.
     Cette fonction a pour simple but de vérifier si les deux fichiers ont bien été initialisés.
@@ -172,9 +170,9 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
     // On créer une variable de type boisson, qui sera ajouté au fichier après avoir récupéré toutes ses informations.
 
     boisson nouvBoisson;
+    
 
     // On récupère les données en paramétre pour pouvoir les réutiliser par la suite.
-
     nouvBoisson.id = idInit();
     strcpy(nouvBoisson.nom,nom);
     nouvBoisson.contenance = contenance;
@@ -188,6 +186,10 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
     
     if (T>0) {
         boisson* tmp = malloc(T*sizeof(boisson));
+        if(tmp == NULL){
+            printf("Erreur allocation memoire.");
+            exit(-1);
+        }
         for(int i = 0; i<T; i++) {
             tmp[i].id = tab[i].id;
             strcpy(tmp[i].nom, tab[i].nom);
@@ -200,6 +202,10 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
 
         free(tab);
         tab = malloc((T+1)*sizeof(boisson));
+        if(tab == NULL){
+            printf("Erreur allocation memoire.");
+            exit(-1);
+        }
 
         for(int i = 0; i<T; i++) {
             tab[i].id = tmp[i].id;
@@ -215,21 +221,26 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
         strcpy(tab[T].nom, nouvBoisson.nom);
         tab[T].contenance = nouvBoisson.contenance;
         tab[T].prix = nouvBoisson.prix;
-        tab[T].quantite = nouvBoisson.prix;
+        tab[T].quantite = nouvBoisson.quantite;
         tab[T].degreAlco = nouvBoisson.degreAlco;
         tab[T].degreScr = nouvBoisson.degreScr;
 
         free(tmp);
     } else {
-        tab[0].id = nouvBoisson.id;
         tab = malloc(1*sizeof(boisson));
+        if(tab == NULL){
+            printf("Erreur allocation memoire.");
+            exit(-1);
+        }
+        tab[0].id = nouvBoisson.id;
         strcpy(tab[0].nom, nouvBoisson.nom);
         tab[0].contenance = nouvBoisson.contenance;
         tab[0].prix = nouvBoisson.prix;
-        tab[0].quantite = nouvBoisson.prix;
+        tab[0].quantite = nouvBoisson.quantite;
         tab[0].degreAlco = nouvBoisson.degreAlco;
         tab[0].degreScr = nouvBoisson.degreScr;
     }
+    
 
     initFichier(T+1);
 
@@ -246,7 +257,7 @@ void informationBoissonBarman(){
 
     // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
     for(i = 0; i<T; i++) {
-        printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr,  tab[i].quantite);
+        printf("\t\t%d\t%.7s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr,  tab[i].quantite);
     }
 }
 
@@ -308,6 +319,7 @@ void suppBoisson(int idSupp){
     }
 
     // On recopie le tableau dans le fichier
+    suppCocktailBoisson(idSupp);
     initFichier(T-1);
 
     // On retourne a l'interface precedente.
@@ -496,9 +508,60 @@ float recette(float prix){
 
 }
 
-void satisfactionCommande(int nCommande){
+void satisfactionCommande(int numPanier){
     
-    interfaceGestionBoissonBarman();
+    int Tpanier = tailleTabPanier();
+    int Tboisson = tailleTabBarman();
+    int Tcocktail = tailleTabBarmanCocktail();
+    int erreur = 0;
+
+    for(int i = 0; i < Tpanier; i++){
+        if(i == numPanier-1){
+            for(int j = 0; j<tabPanier[i].nbrCommande; j++){
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrBoisson; k++){
+                    if(tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson < 0){
+                        printf("\nInformation\n");
+                        printf("\nImpossible à satisfaire la demande de boisson.");
+                        printf("\nIl manque %.2f de %s dans le stock.", fabs(tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson), tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].nom);
+                        printf("\nEntrer une touche pour continuer.");
+                        getchar();
+                        erreur++;
+                    }else{
+                        tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite = tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson;
+                    }
+                }
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrCocktail; k++){
+                    for(int m = 0; m < tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].tailleListBoisson; m++){
+                        if(tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail < 0){
+                            printf("\nInformation\n");
+                            printf("\nImpossible à satisfaire la demande de cocktail.");
+                            printf("\nIl manque %.2f de %s dans le stock.", fabs(tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail), tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].nom);
+                            printf("\nEntrer une touche pour continuer.");
+                            getchar();
+                            erreur++;
+                        }else{
+                            tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite = tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(erreur != 0){
+        printf("\n\nLe panier ne peut pas être satisfait.\nIl manque des boissons pour completer les commandes.");
+        printf("\nLe panier n'a pas été supprimer.\nVeuillez rajouter des boissons dans le stock pour pouvoir satisfaire le panier.");
+        printf("\nEntrer une touche pour continuer.");
+        getchar();
+        interfaceBarman();
+    }else{
+        recette(tabPanier[numPanier-1].prix);
+        supprimerPanier(numPanier);
+        initFichier(Tboisson);
+        initFichier(Tcocktail);
+        interfaceBarman();
+    }
+
 }
 
 /*

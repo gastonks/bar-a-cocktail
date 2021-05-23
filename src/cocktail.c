@@ -463,7 +463,7 @@ void informationCocktail(){
 
     // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
     for(i = 0; i<T; i++) {
-        printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2d\n", i+1, tabCocktail[i].nom, tabCocktail[i].contenance, tabCocktail[i].prix, tabCocktail[i].degreAlco, tabCocktail[i].degreScr,  tabCocktail[i].tailleListBoisson);
+        printf("\t\t%d\t%.7s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2d\n", i+1, tabCocktail[i].nom, tabCocktail[i].contenance, tabCocktail[i].prix, tabCocktail[i].degreAlco, tabCocktail[i].degreScr,  tabCocktail[i].tailleListBoisson);
 
         printf("\t\t=====================================================================================\n");
         printf("\t\t\tCe cocktail est compose de(s) la (les) boisson(s) suivante(s):\n");
@@ -491,7 +491,7 @@ void informationCocktailClient(){
             }
         }
         if(quantiteZero == 0 ){
-            printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2d\n", i+1, tabCocktail[i].nom, tabCocktail[i].contenance, tabCocktail[i].prix, tabCocktail[i].degreAlco, tabCocktail[i].degreScr,  tabCocktail[i].tailleListBoisson);
+            printf("\t\t%d\t%.7s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2d\n", i+1, tabCocktail[i].nom, tabCocktail[i].contenance, tabCocktail[i].prix, tabCocktail[i].degreAlco, tabCocktail[i].degreScr,  tabCocktail[i].tailleListBoisson);
         
             printf("\t\t=====================================================================================\n");
             printf("\t\t\tCe cocktail est compose de(s) la (les) boisson(s) suivante(s):\n");
@@ -582,10 +582,6 @@ void supprimerCocktail(int idCocktail){
     // On recopie le tableau dans le fichier
     initFichierCocktail(T-1);
 
-    // On retourne a l'interface precedente.
-    interfaceGestionCocktail();
-
-
 }
 
 
@@ -623,6 +619,20 @@ void supprimerCocktailDemande(){
         interfaceGestionCocktail();
     }else{   
         supprimerCocktail(idSupp);
+    }
+}
+
+
+void suppCocktailBoisson(int idBoisson){
+
+    int T = tailleTabBarmanCocktail();
+
+    for(int i = 0; i < T; i++){
+        for(int j = 0; j < tabCocktail[i].tailleListBoisson; j++){
+            if(tabCocktail[i].listIdBoisson[j] == idBoisson-1){
+                supprimerCocktail(i+1);
+            }
+        }
     }
 }
 

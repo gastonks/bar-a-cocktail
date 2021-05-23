@@ -52,7 +52,7 @@ void informationBoissonClient(){
     // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
     for(i = 0; i<T; i++) {
         if(tab[i].quantite > 0){
-            printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr);
+            printf("\t\t%d\t%.7s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr);
         }
     }
 
@@ -88,149 +88,162 @@ void demandeCommande(){
     }
 
     for(int i = 0; i< nPanier.nbrCommande; i++){
-
-        system("clear");
-        printf("Commande n.%d\n",i+1);
-        printf("=====================================================================================================\n\n");
-        printf("\t\t\tMenu Information sur les boissons\n\n");
-        printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\n\n");
-
-        informationBoissonClient();
-
-        printf("=====================================================================================================\n\n");
-
-        printf("\nCombien de boisson voulez vous commander :");
-        retour = scanf("%d", &nPanier.listCommande[i].nbrBoisson);
-
-        if(retour != 1 || nPanier.listCommande[i].nbrBoisson < 0){
-            while(retour != 1 || nPanier.listCommande[i].nbrBoisson < 0 ){
-                retour = 1;
-                printf("\nCe nombre n'existe pas.\n");
-                printf("Veuillez entrer un nombre valide :");
-                getchar();
-                retour = scanf("%d", &nPanier.listCommande[i].nbrBoisson);
-            }
-        }
-        if(nPanier.listCommande[i].nbrBoisson != 0){
-            
-            nPanier.listCommande[i].listBoisson = (listIdBoisson*) malloc(nPanier.listCommande[i].nbrBoisson*sizeof(listIdBoisson));
-            if(nPanier.listCommande[i].listBoisson == NULL){
-                printf("Erreur allocation memoire.");
-                exit(-1);
-            }
-
-            nPanier.listCommande[i].prix = 0;  
-
-            for(int j = 0; j<nPanier.listCommande[i].nbrBoisson; j++){
-
-                printf("\nEntrez l'ID de la boisson que vous voulez commander :");
-                retour = scanf("%d", &nombreId);
-
-                if(retour != 1 || nombreId < 0){
-                    while(retour != 1 || nombreId < 0 ){
-                        retour = 1;
-                        printf("\nCe nombre n'existe pas.\n");
-                        printf("Veuillez entrer un nombre :");
-                        getchar();
-                        retour = scanf("%d", &nombreId);
-                    }
-                }
-
-                nPanier.listCommande[i].listBoisson[j].idBoisson = nombreId - 1;
-
-                printf("\nEntrez la quantite de boisson que vous voulez commander :");
-                retour = scanf("%d", &nPanier.listCommande[i].listBoisson[j].quantiteBoisson);
-
-                if(retour != 1 || nPanier.listCommande[i].listBoisson[j].quantiteBoisson < 0){
-                    while(retour != 1 || nPanier.listCommande[i].listBoisson[j].quantiteBoisson < 0 ){
-                        retour = 1;
-                        printf("\nCe nombre n'existe pas.\n");
-                        printf("Veuillez entrer un nombre valide :");
-                        getchar();
-                        retour = scanf("%d", &nPanier.listCommande[i].listBoisson[j].quantiteBoisson);
-                    }
-                }
-
-                nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + (nPanier.listCommande[i].listBoisson[j].quantiteBoisson*tab[nPanier.listCommande[i].listBoisson[j].idBoisson].prix);
-            }
+        if(tab == NULL){
+            printf("\nAucune boisson disponible.");
+            getchar();
         }else{
-            nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + 0; 
-            nPanier.listCommande[i].nbrBoisson = 0;
-        }
+            system("clear");
+            printf("Commande n.%d\n",i+1);
+            printf("=====================================================================================================\n\n");
+            printf("\t\t\tMenu Information sur les boissons\n\n");
+            printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\n\n");
 
-        system("clear");
-        printf("Commande n.%d\n",i+1);
-        printf("=====================================================================================================\n\n");
-        printf("\t\t\tMenu Information sur les cocktails\n\n");
-        printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tNombre_Boisson\n\n");
-        informationCocktailClient();
-        printf("=====================================================================================================\n\n");
+            informationBoissonClient();
 
-        printf("\nCombien de cocktail voulez vous commander :");
-        retour = scanf("%d", &nombreCocktail);
+            printf("=====================================================================================================\n\n");
 
-        if(retour != 1 || nombreCocktail < 0){
-            while(retour != 1 || nombreCocktail < 0 ){
-                retour = 1;
-                printf("\nCe nombre n'existe pas.\n");
-                printf("Veuillez entrer un nombre valide :");
-                getchar();
-                retour = scanf("%d", &nPanier.listCommande[i].nbrCocktail);
+            printf("\nCombien de boisson se compose votre commande :");
+            retour = scanf("%d", &nPanier.listCommande[i].nbrBoisson);
+
+            if(retour != 1 || nPanier.listCommande[i].nbrBoisson < 0){
+                while(retour != 1 || nPanier.listCommande[i].nbrBoisson < 0 ){
+                    retour = 1;
+                    printf("\nCe nombre n'existe pas.\n");
+                    printf("Veuillez entrer un nombre valide :");
+                    getchar();
+                    retour = scanf("%d", &nPanier.listCommande[i].nbrBoisson);
+                }
             }
-        }
-        
-
-        nPanier.listCommande[i].nbrCocktail = nombreCocktail;
-
-        if(nPanier.listCommande[i].nbrCocktail != 0){
-            
-            nPanier.listCommande[i].listCocktail = (listIdCocktail*) malloc(nPanier.listCommande[i].nbrCocktail*sizeof(listIdCocktail));
-            if(nPanier.listCommande[i].listCocktail == NULL){
-                printf("Erreur allocation memoire.");
-                exit(-1);
-            }     
-
-            for(int j = 0; j<nPanier.listCommande[i].nbrCocktail; j++){
-                printf("\nEntrez l'ID du cocktail que vous voulez commander :");
-                retour = scanf("%d", &nombreId);
-
-                if(retour != 1 || nombreId < 0){
-                    while(retour != 1 || nombreId < 0 ){
-                        retour = 1;
-                        printf("\nCe nombre n'existe pas.\n");
-                        printf("Veuillez entrer un nombre :");
-                        getchar();
-                        retour = scanf("%d", &nombreId);
-                    }
-                }
-
-                nPanier.listCommande[i].listCocktail[j].idCocktail = nombreId - 1;
-
-                printf("\nEntrez la quantite de cocktail que vous voulez commander :");
-                retour = scanf("%d", &nPanier.listCommande[i].listCocktail[j].quantiteCocktail);
-
-                if(retour != 1 || nPanier.listCommande[i].listCocktail[j].quantiteCocktail < 0){
-                    while(retour != 1 || nPanier.listCommande[i].listCocktail[j].quantiteCocktail < 0 ){
-                        retour = 1;
-                        printf("\nCe nombre n'existe pas.\n");
-                        printf("Veuillez entrer un nombre valide :");
-                        getchar();
-                        retour = scanf("%d", &nPanier.listCommande[i].listCocktail[j].quantiteCocktail);
-                    }
-                }
+            if(nPanier.listCommande[i].nbrBoisson != 0){
                 
-                nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + (nPanier.listCommande[i].listCocktail[j].quantiteCocktail*tabCocktail[nPanier.listCommande[i].listCocktail[j].idCocktail].prix);
+                nPanier.listCommande[i].listBoisson = (listIdBoisson*) malloc(nPanier.listCommande[i].nbrBoisson*sizeof(listIdBoisson));
+                if(nPanier.listCommande[i].listBoisson == NULL){
+                    printf("Erreur allocation memoire.");
+                    exit(-1);
+                }
 
+                nPanier.listCommande[i].prix = 0;  
+
+                for(int j = 0; j<nPanier.listCommande[i].nbrBoisson; j++){
+
+                    printf("\nEntrez l'ID de la boisson que vous voulez commander :");
+                    retour = scanf("%d", &nombreId);
+
+                    if(retour != 1 || nombreId < 0){
+                        while(retour != 1 || nombreId < 0 ){
+                            retour = 1;
+                            printf("\nCe nombre n'existe pas.\n");
+                            printf("Veuillez entrer un nombre :");
+                            getchar();
+                            retour = scanf("%d", &nombreId);
+                        }
+                    }
+
+                    nPanier.listCommande[i].listBoisson[j].idBoisson = nombreId - 1;
+
+                    printf("\nEntrez la quantite de boisson que vous voulez commander :");
+                    retour = scanf("%d", &nPanier.listCommande[i].listBoisson[j].quantiteBoisson);
+
+                    if(retour != 1 || nPanier.listCommande[i].listBoisson[j].quantiteBoisson < 0){
+                        while(retour != 1 || nPanier.listCommande[i].listBoisson[j].quantiteBoisson < 0 ){
+                            retour = 1;
+                            printf("\nCe nombre n'existe pas.\n");
+                            printf("Veuillez entrer un nombre valide :");
+                            getchar();
+                            retour = scanf("%d", &nPanier.listCommande[i].listBoisson[j].quantiteBoisson);
+                        }
+                    }
+
+                    nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + (nPanier.listCommande[i].listBoisson[j].quantiteBoisson*tab[nPanier.listCommande[i].listBoisson[j].idBoisson].prix);
+                }
+            }else{
+                nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + 0; 
+                nPanier.listCommande[i].nbrBoisson = 0;
             }
+        }
+
+
+        if(tabCocktail == NULL){
+            printf("\nAucun cocktail disponible.\n");
+            getchar();
         }else{
-            nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + 0; 
-            nPanier.listCommande[i].nbrCocktail = 0;
+            system("clear");
+            printf("Commande n.%d\n",i+1);
+            printf("=====================================================================================================\n\n");
+            printf("\t\t\tMenu Information sur les cocktails\n\n");
+            printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tNombre_Boisson\n\n");
+            informationCocktailClient();
+            printf("=====================================================================================================\n\n");
+
+            printf("\nCombien de cocktail se compose votre commande :");
+            retour = scanf("%d", &nombreCocktail);
+
+            if(retour != 1 || nombreCocktail < 0){
+                while(retour != 1 || nombreCocktail < 0 ){
+                    retour = 1;
+                    printf("\nCe nombre n'existe pas.\n");
+                    printf("Veuillez entrer un nombre valide :");
+                    getchar();
+                    retour = scanf("%d", &nPanier.listCommande[i].nbrCocktail);
+                }
+            }
+            
+
+            nPanier.listCommande[i].nbrCocktail = nombreCocktail;
+
+            if(nPanier.listCommande[i].nbrCocktail != 0){
+                
+                nPanier.listCommande[i].listCocktail = (listIdCocktail*) malloc(nPanier.listCommande[i].nbrCocktail*sizeof(listIdCocktail));
+                if(nPanier.listCommande[i].listCocktail == NULL){
+                    printf("Erreur allocation memoire.");
+                    exit(-1);
+                }     
+
+                for(int j = 0; j<nPanier.listCommande[i].nbrCocktail; j++){
+                    printf("\nEntrez l'ID du cocktail que vous voulez commander :");
+                    retour = scanf("%d", &nombreId);
+
+                    if(retour != 1 || nombreId < 0){
+                        while(retour != 1 || nombreId < 0 ){
+                            retour = 1;
+                            printf("\nCe nombre n'existe pas.\n");
+                            printf("Veuillez entrer un nombre :");
+                            getchar();
+                            retour = scanf("%d", &nombreId);
+                        }
+                    }
+
+                    nPanier.listCommande[i].listCocktail[j].idCocktail = nombreId - 1;
+
+                    printf("\nEntrez la quantite de cocktail que vous voulez commander :");
+                    retour = scanf("%d", &nPanier.listCommande[i].listCocktail[j].quantiteCocktail);
+
+                    if(retour != 1 || nPanier.listCommande[i].listCocktail[j].quantiteCocktail < 0){
+                        while(retour != 1 || nPanier.listCommande[i].listCocktail[j].quantiteCocktail < 0 ){
+                            retour = 1;
+                            printf("\nCe nombre n'existe pas.\n");
+                            printf("Veuillez entrer un nombre valide :");
+                            getchar();
+                            retour = scanf("%d", &nPanier.listCommande[i].listCocktail[j].quantiteCocktail);
+                        }
+                    }
+                    
+                    nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + (nPanier.listCommande[i].listCocktail[j].quantiteCocktail*tabCocktail[nPanier.listCommande[i].listCocktail[j].idCocktail].prix);
+
+                }
+            }else{
+                nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + 0; 
+                nPanier.listCommande[i].nbrCocktail = 0;
+            }
         }
 
         nPanier.prix = nPanier.prix + nPanier.listCommande[i].prix;
+
     }
 
-    initCommande(nPanier);
+    if(nPanier.nbrCommande != 0){
+        initCommande(nPanier);
+    }
 
     interfaceClient();
 }
@@ -433,7 +446,7 @@ void initCommande(panier nPanier){
     // Sinon, si le fichier ne contient aucune boisson, on cree un tableau avec une seule case où on y copie la nouvelle boisson.
     else {
         tabPanier = malloc(1*sizeof(panier));
-        if(tab == NULL){
+        if(tabPanier == NULL){
             printf("Erreur allocation mémoire.");
             exit(-1);
         }
@@ -696,10 +709,177 @@ void supprimerPanier(int idSupp){
     // On recopie le tableau dans le fichier
     initFichierCommande(T-1);
 
-    // On retourne a l'interface precedente.
-    interfaceClient();
 }
 
+void modifPanier(int idModif){
+    int T = tailleTabPanier();
+    int retour = 0;
+    int idCommande;
+    int idBoisson;
+    int quantiteBoiss;
+    int idCocktail;
+    int quantiteCock;
+
+
+    for (int i = 0; i < T; i++){
+        if(i == idModif-1){
+            system("clear");
+            for(int l = 0; l < tabPanier[i].nbrCommande; l ++){
+                printf("\t\tCommande n.%d:\t\tPrix de la commande: %.2f euros\n\n", l+1, tabPanier[i].listCommande[l].prix);
+                printf("\t=====================================================================================\n");
+                printf("\t\tCette commande est compose de(s) la (les) boisson(s) suivante(s):\n");
+                printf("\t");
+                if(tabPanier[i].listCommande[l].nbrBoisson != 0){
+                    for(int j = 0; j<tabPanier[i].listCommande[l].nbrBoisson; j++){
+                        printf("%s", tab[tabPanier[i].listCommande[l].listBoisson[j].idBoisson].nom);
+                        printf(" x");
+                        printf("%d\t", tabPanier[i].listCommande[l].listBoisson[j].quantiteBoisson);
+                    }
+                }else{
+                    printf("Aucune boisson commande.");
+                }
+                printf("\n\t=====================================================================================\n\n");
+                printf("\t=====================================================================================\n");
+                printf("\t\tCette commande est compose du (des) cocktail(s) suivant(s):\n");
+                printf("\t");
+                if(tabPanier[i].listCommande[l].nbrCocktail != 0){
+                    for(int j = 0; j<tabPanier[i].listCommande[l].nbrCocktail; j++){
+                        printf("%s", tabCocktail[tabPanier[i].listCommande[l].listCocktail[j].idCocktail].nom);
+                        printf(" x");
+                        printf("%d\t", tabPanier[i].listCommande[l].listCocktail[j].quantiteCocktail);
+                    }
+                }else{
+                    printf("Aucun cocktail commande.");
+                }
+                printf("\n\t=====================================================================================\n\n");
+            }
+
+            printf("Entrez le numero de la commande a modifie :");
+            retour = scanf("%d", &idCommande);
+            if(retour != 1 || idCommande < 0 || idCommande > tabPanier[i].nbrCommande){
+                while(retour != 1 || idCommande < 0 || idCommande > tabPanier[i].nbrCommande){
+                    retour = 1;
+                    printf("\nCe nombre n'existe pas.\n");
+                    printf("Veuillez entrer un nombre valide pour modifer une commande:");
+                    getchar();
+                    retour = scanf("%d", &idCommande);
+                }
+            }
+
+            for(int l = 0; l < tabPanier[i].nbrCommande; l++){
+                if(l == idCommande-1){
+                    system("clear");
+                    printf("\t=====================================================================================\n");
+                    printf("\t\tCette commande est compose de(s) la (les) boisson(s) suivante(s):\n");
+                    printf("\t");
+                    if(tabPanier[i].listCommande[l].nbrBoisson != 0){
+                        for(int j = 0; j<tabPanier[i].listCommande[l].nbrBoisson; j++){
+                            printf("%d. %s",j+1, tab[tabPanier[i].listCommande[l].listBoisson[j].idBoisson].nom);
+                            printf(" x");
+                            printf("%d\t", tabPanier[i].listCommande[l].listBoisson[j].quantiteBoisson);
+                        }
+                    }else{
+                        printf("Aucune boisson commande.\n");
+                    }
+
+                    printf("\n\t=====================================================================================\n\n");
+                    if(tabPanier[i].listCommande[l].listBoisson != 0){
+                        printf("Entrez 0 pour ne rien modifier.\nEntrez le numero de la boisson pour modifier sa quantite commande:");
+                        retour = scanf("%d", &idBoisson);
+                        if(retour != 1 || idBoisson < 0 || idBoisson > tabPanier[i].listCommande[l].nbrBoisson){
+                            while(retour != 1 || idBoisson < 0 || idBoisson > tabPanier[i].listCommande[l].nbrBoisson){
+                                retour = 1;
+                                printf("\nCe nombre n'existe pas.\n");
+                                printf("Veuillez entrer un nombre valide pour selectionner une boisson:");
+                                getchar();
+                                retour = scanf("%d", &idBoisson);
+                            }
+                        }
+
+                        if(idBoisson != 0){
+                            printf("Entrez la nouvelle quantite de boisson:");
+                            retour = scanf("%d", &quantiteBoiss);
+                            if(retour != 1 || quantiteBoiss < 0 ){
+                                while(retour != 1 || quantiteBoiss < 0){
+                                    retour = 1;
+                                    printf("\nCe nombre n'existe pas.\n");
+                                    printf("Veuillez entrer un nombre valide pour la qauntite de boisson:");
+                                    getchar();
+                                    retour = scanf("%d", &quantiteBoiss);
+                                }
+                            }
+                            
+                            for(int k = 0; k < tabPanier[i].listCommande[l].nbrBoisson; k++){
+                                if(k == idBoisson-1){
+                                    tabPanier[i].listCommande[l].listBoisson[k].quantiteBoisson = quantiteBoiss;
+                                }
+                            }
+                        }else{
+                            printf("\t\nAucune boisson a modifier.");
+                            printf("\nAppuyer sur une toucher pour continuer.\n");
+                            getchar();
+                        }
+                    }
+
+                    system("clear");
+                    printf("\t=====================================================================================\n");
+                    printf("\t\tCette commande est compose du (des) cocktail(s) suivant(s):\n");
+                    printf("\t");
+                    if(tabPanier[i].listCommande[l].nbrCocktail != 0){
+                        for(int j = 0; j<tabPanier[i].listCommande[l].nbrCocktail; j++){
+                            printf("%d. %s",j+1, tabCocktail[tabPanier[i].listCommande[l].listCocktail[j].idCocktail].nom);
+                            printf(" x");
+                            printf("%d\t", tabPanier[i].listCommande[l].listCocktail[j].quantiteCocktail);
+                        }
+                    }else{
+                        printf("Aucun cocktail commande.\n");
+                    }
+                    if(tabPanier[i].listCommande[l].nbrCocktail != 0){
+                        printf("\n\t=====================================================================================\n\n");
+                        printf("Entrez 0 pour ne rien modifier.\nEntrez le numero du cocktail pour modifier sa quantite commande:");
+                        retour = scanf("%d", &idCocktail);
+                        if(retour != 1 || idCocktail < 0 || idCocktail > tabPanier[i].listCommande[l].nbrCocktail){
+                            while(retour != 1 || idCocktail < 0 || idCocktail > tabPanier[i].listCommande[l].nbrCocktail){
+                                retour = 1;
+                                printf("\nCe nombre n'existe pas.\n");
+                                printf("Veuillez entrer un nombre valide pour selectionner un cocktail:");
+                                getchar();
+                                retour = scanf("%d", &idCocktail);
+                            }
+                        }
+                        if(idCocktail != 0){
+                            printf("Entrez la nouvelle quantite de cocktail:");
+                            retour = scanf("%d", &quantiteCock);
+                            if(retour != 1 || quantiteCock < 0 ){
+                                while(retour != 1 || quantiteCock < 0){
+                                    retour = 1;
+                                    printf("\nCe nombre n'existe pas.\n");
+                                    printf("Veuillez entrer un nombre valide pour la qauntite de cocktail:");
+                                    getchar();
+                                    retour = scanf("%d", &quantiteCock);
+                                }
+                            }
+                            
+                            for(int k = 0; k < tabPanier[i].listCommande[l].nbrCocktail; k++){
+                                if(k == idCocktail-1){
+                                    tabPanier[i].listCommande[l].listCocktail[k].quantiteCocktail = quantiteCock;
+                                }
+                            }
+                        }else{
+                            printf("\nAucun cocktail a modifier.");
+                            printf("\nAppuyer sur une toucher pour continuer.\n");
+                            getchar();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    initFichierCommande(T);
+
+
+}
 
 int tailleTabPanier() {
 
