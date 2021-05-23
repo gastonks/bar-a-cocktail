@@ -1,12 +1,27 @@
+/*! \file interface.c
+*  \author Barre Romain
+*  \version 1
+*  \brief Programme contenant toutes les interfaces, que ce soit pour le barman ou le client.  
+*/
+
 #include "interface.h"
 
 //Definition d'une macro, permettant de gagner du temps et de l'espace dans le programme.
 
-const char* REMOVE_DATA = "rm -r date/*";
+const char* REMOVE_DATA = "rm -r data/boissonBarman.dat data/boissonBarmantmp.dat data/commandeClient.dat data/cocktail.dat data/cocktailListBoisson.dat data/cocktailListBoissontmp.dat data/cocktailtmp.dat";
 
 int prix = 0;
 int idUser = 0; // 1 = Barman ; 2 = Client
 int nbBoiss = 0; // nombre boisson ajoutee
+
+/*! \fn void interfaceAccueil()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure principale de l'interface.
+*
+*  \remarks Cette procédure affiche l'interface d'acceuil principale. L'interface barman et l'interface client sont accessibles depuis cette interface. 
+*/
 
 /*  
     Interface principale du programme, c'est celle-ci qui est appelee en premiere lors de l'execution du programme.
@@ -66,6 +81,15 @@ void interfaceAccueil(){
     }
 }
 
+/*! \fn void interfaceBarman()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure principale de l'interface barman.
+*
+*  \remarks Cette procédure affiche l'interface d'acceuil principale du barman. Il peut accéder à la gestion des boissons, des cocktails et des finances.  
+*/
+
 /*  
     Interface principale du barman, on a acces aux differentes fonctionnalites disponibles au barman a partir de cette interface.  
 */
@@ -118,6 +142,15 @@ void interfaceBarman(){
         }
 }
 
+/*! \fn void interfaceClient()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure principale de l'interface client.
+*
+*  \remarks Cette procédure affiche l'interface d'acceuil principale du client. Il peut accéder aux commandes à partir de cette interface.  
+*/
+
 /*
     Interface principale du client, on a acces aux differentes fonctionnalites disponibles au client a partir de cette interface.
 */
@@ -136,14 +169,15 @@ void interfaceClient(){
     printf("\t\t3. Information sur les paniers\n\n");
     printf("\t\t4. Creer un panier\n\n");
     printf("\t\t5. Supprimer un panier\n\n");
+    printf("\t\t6. Modifier un panier\n\n");
     printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1 || numInter < 0 || numInter > 5){
-        while(retour != 1 || numInter < 0 || numInter > 5){
+    if(retour != 1 || numInter < 0 || numInter > 6){
+        while(retour != 1 || numInter < 0 || numInter > 6){
             retour = 1;
             printf("\nCe numero d'interface n'existe pas.\n");
             printf("Veuillez entrer un nombre pour le choix de l'interface:");
@@ -167,6 +201,8 @@ void interfaceClient(){
             break;
         case 5:
             interfaceSuppCommande();
+        case 6:
+            interfaceModifCommande();
         case 0:
             interfaceAccueil();
             break;
@@ -177,6 +213,15 @@ void interfaceClient(){
     }
 }
 
+/*! \fn void interfaceGestionBoissonBarman()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman d'accéder aux fonctions de gestion des boissons.
+*
+*  \remarks Cette procédure permet au barman d'accéder à plusieurs interfaces pour gérer les boissons.
+*  Il peut afficher toutes les informations sur les boissons, ajouter ou supprimer une boisson, modifier une boisson, gérer le stock des boissons et enfin satisfaire les commandes.  
+*/
 
 /*
     Interface de gestion des boisson du barman. Cette interface lui permet d'avoir toutes les inforamtions sur les boissons, ajouter/supprimer une boisson,
@@ -236,6 +281,15 @@ void interfaceGestionBoissonBarman(){
             break;
     }
 }
+
+/*! \fn void interfaceAjoutOuSuppBoisson()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman d'accéder aux fonctions pour supprimer ou ajouter une boisson.
+*
+*  \remarks Cette procédure permet au barman d'ajouter une boisson alcoolisée ou non, ou d'en supprimer une.  
+*/
 
 /*
     Interface permettant d'ajouter ou de supprimer une boisson. Il est possible d'ajouter une boisson alcoolisee ou non, et de supprimer une boisson.
@@ -302,6 +356,17 @@ void interfaceAjoutOuSuppBoisson(){
             break;
         }
 }
+
+/*! \fn void interfaceAjoutBoissonAlcool()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman d'ajouter une boisson alcoolisée.
+*
+*  \remarks Cette procédure permet au barman d'ajouter une boisson alcoolisée. 
+*  Il doit entrer toutes les informations de la boisson, puis une fonction sera utilisée pour ajouter cette boisson dans le tableau qui les stocke.  
+*/
+
 /*
     Interface pour ajouter une boisson alcoolisee.
 */
@@ -402,6 +467,16 @@ void interfaceAjoutBoissonAlcool(){
     }
 
 }
+
+/*! \fn void interfaceAjoutBoissonNonAlcool()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman d'ajouter une boisson non alcoolisée.
+*
+*  \remarks Cette procédure permet au barman d'ajouter une boisson non alcoolisée. 
+*  Il doit entrer toutes les informations de la boisson, puis une fonction sera utilisée pour ajouter cette boisson dans le tableau qui les stocke.  
+*/
 
 /*
     Interface pour ajouter une boisson non alcoolisee.
@@ -504,6 +579,16 @@ void interfaceAjoutBoissonNonAlcool(){
     }
 }
 
+/*! \fn void interfaceSuppBoisson()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman de supprimer une boisson.
+*
+*  \remarks Cette procédure permet au barman de supprimer une boisson. 
+*  Il doit entrer l'ID de la boisson à supprimer et une fonction est utilisée pour supprimer la boissons du tableau qui les stocke.  
+*/
+
 /*
     Interface pour supprimer une boisson.
 */
@@ -550,6 +635,16 @@ void interfaceSuppBoisson(){
 
 }
 
+/*! \fn void interfaceModifBoisson()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman de modifier une boisson.
+*
+*  \remarks Cette procédure permet au barman de modifier une boisson. 
+*  Il doit entrer l'ID de la boisson à modifer puis entrer une à une toutes les informations de la nouvelle boisson, qui sera ensuite actualisée dans le tableau.  
+*/
+
 /*
     Interface pour modifier une boisson.
 */
@@ -592,6 +687,16 @@ void interfaceModifBoisson(){
         modifBoisson(idChange);
     }
 }
+
+/*! \fn void interfaceGestionStock()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman de gérer le stock des boissons.
+*
+*  \remarks Cette procédure permet au barman de gérer les stocks des boissons. 
+*  Il doit entrer l'ID de la boisson pour laquelle il veut modifer les stocks, puis entrer les stocks entrés et les stocks vendus, qui seront ensuite actualisés dans le tableau.  
+*/
 
 /*
     Interface pour gerer le stock de boisson.
@@ -670,42 +775,56 @@ void interfaceGestionStock(){
     gestionStock(idStock, stockR, stockV);
 }
 
+/*! \fn void interfaceSatisfactionCommande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman de satisfaire une commande.
+*
+*  \remarks Cette procédure permet au barman de satisfaire une commande. 
+*  Il doit entrer l'ID de la commande à satisfaire, puis une fonction est appelée pour gérer les stocks et l'argent obtenue.  
+*/
+
 void interfaceSatisfactionCommande(){
-    int nCommande = 0;
+    int numPanier = 0;
     int retour = 0;
 
     system("clear");
     printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les boissons\n\n");
-    printf("\t\tID\tNom\tPrix\tQuantite_Commande\n\n");
+    printf("\t\t\tMenu Information sur les commandes\n\n");
 
     informationCommande();
 
     printf("=====================================================================================================\n\n");
 
-    printf("Entrez 0 pour revenir en arrière.\nEntrer l'ID de la commande que vous voulez satisfaire :");
-    retour = scanf("%d", &nCommande);
+    printf("Entrez 0 pour revenir en arrière.\nEntrer le numero du panier que vous voulez satisfaire :");
+    retour = scanf("%d", &numPanier);
 
-    if(retour != 1 || nCommande < 0){
-        while(retour != 1 || nCommande < 0){
+    if(retour != 1 || numPanier < 0 || numPanier > tailleTabPanier()){
+        while(retour != 1 || numPanier < 0 || numPanier > tailleTabPanier()){
             retour = 1;
             printf("\nCe nombre n'existe pas.\n");
             printf("Veuillez entrer un nombre valide pour soit sortir, soit satisfaire une commande :");
             getchar();
-            retour = scanf("%d", &nCommande);
+            retour = scanf("%d", &numPanier);
         }
     }
 
-    if(nCommande == 0){
-        interfaceGestionBoissonBarman();
+    if(numPanier == 0){
+        interfaceBarman();
     }else{
-        satisfactionCommande(nCommande);
+        satisfactionCommande(numPanier);
     }
 }
 
-/*
-    A COMPLETER AVEC LA NOUVELLE VERSION
+/*! \fn void interfaceGestionFinance()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman d'avoir des informations sur ses finances.  
+*/
 
+/*
     Interface de gestion des finances. Il permet, pour le moment, d'afficher les recettes journalieres.
 */
 void interfaceGestionFinance(){
@@ -739,8 +858,14 @@ void interfaceGestionFinance(){
             printf("Erreur dans le choix de l'interface.");
             break;
         }
-    }
+}
 
+/*! \fn void interfaceInformationBoissonBarman()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman d'avoir les informations des boissons.
+*/
 
 /*
     Interface affichant les informations sur les boissons, pour le barman. Toutes les boissons sont affichees sous forme de liste. 
@@ -783,6 +908,13 @@ void interfaceInformationBoissonBarman(){
     }
 }
 
+/*! \fn void interfaceInformationBoissonClient()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au client d'avoir les informations des boissons.
+*/
+
 /*
     Interface affichant les informations sur les boissons, pour le client. Toutes les boissons sont affichees sous forme de liste.
 */
@@ -824,6 +956,13 @@ void interfaceInformationBoissonClient(){
         }
 }
 
+/*! \fn void interfaceInitCommande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au client de commander une boisson.
+*/
+
 /*
     Interface permemttant de commander une boisson. Le client entre l'ID de la boisson qu'il desire, qui est ensuite traite par la fonction commandeBoissonClient()
 */
@@ -855,6 +994,13 @@ void interfaceInitCommande(){
         demandeCommande();
     }
 }
+
+/*! \fn void interfaceInformationCommande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure affichant l'historique des commandes.
+*/
 
 /*
     Interface affichant l'historique des commandes. Toutes les commandes sont affichees en liste. 
@@ -895,7 +1041,16 @@ void interfaceInformationCommande(){
     }
 }
 
+/*! \fn void interfaceInformationCommande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant de supprimer une commande.
+*/
 
+/*
+    Interface permettant de supprimer une boisson.
+*/
 void interfaceSuppCommande(){
     int idSupp = 0;
     int retour = 0;
@@ -929,9 +1084,67 @@ void interfaceSuppCommande(){
 
 }
 
-/*
-    SUREMENT A MODIFIER OU COMPLETER
+/*! \fn void interfaceModifCommande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant de modifier une commande.
+*/
 
+/*
+    Interface permettant de modifier une boisson.
+*/
+void interfaceModifCommande(){
+
+    // On cree une variable qui correspond au numero du panier a modifier.
+
+    int idChange = 0;
+    int retour = 0;
+
+    // On affiche tous les paniers, ainsi que leurs informations.
+
+    system("clear");
+    printf("=====================================================================================================\n\n");
+    printf("\t\t\tMenu Information sur les commandes\n\n");
+
+    informationCommande();
+
+    printf("=====================================================================================================\n\n");
+
+    // On demande a l'utilisateur d'entrer le numero du panier qu'il desire modifier.
+
+    printf("Entrez 0 pour revenir en arrière.\nEntrer le numero du panier a modifie :");
+    retour = scanf("%d", &idChange);
+
+    if(retour != 1 || idChange < 0 || idChange > tailleTabPanier()){
+        while(retour != 1 || idChange < 0 || idChange > tailleTabPanier()){
+            retour = 1;
+            printf("\nCe nombre n'existe pas.\n");
+            printf("Veuillez entrer un nombre valide pour soit sortir ou selectionner un panier:");
+            getchar();
+            retour = scanf("%d", &idChange);
+        }
+    }
+
+    if(idChange == 0){
+        interfaceClient();
+    }else{
+        modifPanier(idChange);
+        interfaceClient();
+    }
+}
+
+/*! \fn void interfaceGestionCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant au barman de gérer les cocktails.
+*
+*  \remarks Cette procédure permet au barman de gérer les cocktails. 
+*  Il a accès à différentes interfaces lui permettant de créer un cocktail, supprimer un cocktail et afficher les informations de tous les cocktails.  
+*/
+
+/*
     Interface de gestion des cocktails. En fonction de l'interface (barman ou client), des inforamtions differentes sont affichees.
     Pour le barman, il est possible d'avoir les informations sur les cocktails, de creer un coktails (et de supprimer un cocktail).
     Pour le client, il est possible d'avoir les informations sur les cocktails, de creer son propre cocktail et de commander un cocktail deja existant.
@@ -1021,8 +1234,15 @@ void interfaceGestionCocktail(){
     }
 }
 
+/*! \fn void interfaceInformationCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant d'afficher les informations des cocktails, côté barman.
+*/
+
 /*
-    Interface affichant les informations sur les cocktails.
+    Interface affichant les informations sur les cocktails, cote barman.
 */
 void interfaceInformationCocktail(){
     int numInter = 0;
@@ -1062,6 +1282,16 @@ void interfaceInformationCocktail(){
     }
 }
 
+/*! \fn void interfaceInformationCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure permettant d'afficher les informations des cocktails, côté client.
+*/
+
+/*
+    Interface affichant les informations sur les cocktails, cote client.
+*/
 void interfaceInformationCocktailClient(){
     int numInter = 0;
     int retour = 0;

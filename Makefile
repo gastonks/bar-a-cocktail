@@ -1,13 +1,14 @@
 # commande pour compiler
 CC=gcc
 CP=cp
-RM=rm -ir
 CFLAGS=-Wall
+RM=rm -r
 
 #nom des dossiers
 SRC=src
 OBJ=obj
 DATA=data
+DOC=doc
 SAVE=save
 
 #arguments pour trouver les éléments dans les dossiers
@@ -23,10 +24,12 @@ BINDIR=bin
 BIN=$(BINDIR)/main
 
 #varilable pour l'archivage
-nameArchive=barre_romain
+nameArchive=guillerm_francois
 
 #programme du make
 all:$(BIN)
+
+.PHONY: clean dox
 
 $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@
@@ -34,7 +37,7 @@ $(BIN): $(OBJS)
 $(OBJ)/%.o: $(SRC)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: clean save restore give
+.PHONY: clean save restore give dox
 
 save:
 	@$(CP) $(SRCS) $(HEADS) $(SAVE)
@@ -50,5 +53,11 @@ give:
 	@$(CP) Makefile $(nameArchive)/
 
 clean:
-	$(RM) $(BINDIR)/* $(OBJ)/* $(DATA)/* || echo Rien a supprimer
-	$(RM) $(nameArchive) || echo Rien a supprimer
+	$(RM) $(BINDIR)/* || echo Rien à supprimer dans bin
+	$(RM) $(OBJ)/* || echo Rien à supprimer dans obj
+	$(RM) $(DATA)/* || echo Rien à supprimer dans dat
+	$(RM) $(nameArchive) || echo Rien a supprimer dans save
+
+dox:
+	mkdir $(DOC) || echo test
+	doxygen Doxyfile

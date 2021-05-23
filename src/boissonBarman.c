@@ -1,3 +1,9 @@
+/*! \file boissonBarman.c
+*  \author Guillerm François
+*  \version 1
+*  \brief Programme contenant toutes les fonctions permettant au barman de gérer les boissons.  
+*/
+
 /*
     Ce fichier contient toutes les fonctions liées au fonctionnement de l'interface du barman.
 */
@@ -7,9 +13,17 @@
 
 float recetteBar;
 
+/*! \fn void initFileBarman()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Procedure premettant de vérifier si le fichier des boissons fonctionne correctement.
+*
+*  \remarks Cette procédure ouvre le fichier contenant les boissons, vérifie si le fichier s'est bien ouvert et le referme ensuite. 
+*/
+
 /*
     Fonction permettant d'initialiser le fichier devant contenir toutes les boissons et toutes leurs informations associées.
-    Cette fonction a pour simple but de vérifier si les deux fichiers ont bien été initialisés.
 */
 void initFileBarman(){
     // On crée une variable de type FILE, permettant de manipuler les fichiers, et on l'ouvre avec le paramètre "ab", qui permet d'ajouter des informations
@@ -26,6 +40,17 @@ void initFileBarman(){
     // On ferme le fichier, après avoir vérifié qu'ils étaient bien initialisés.
     fclose(file);
 }
+
+/*! \fn int idInit()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de donner un ID à une boisson.
+*
+*  \return Cette fonction renvoie un ID.
+*
+*  \remarks Cette fonction vérifie l'ID de la boisson la plus récente puis renvoie ce même ID augmenté de 1. 
+*/
 
 /*
     Fonction permettant d'initialiser l'ID des boissons.
@@ -67,6 +92,23 @@ int idInit(){
     return nID;  
 }
 
+/*! \fn void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite, float degreAlco)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant d'ajouter une boisson alcoolisée.
+*
+*  \param nom : nom de la boisson à ajouter
+*  \param contenance : contenance de la boisson à ajouter
+*  \param prix : prix de la boisson à ajouter
+*  \param quantite : quantité de la boisson à ajouter
+*  \param degreAlco : degré d'alcool de la boisson à ajouter
+*
+*  \remarks Cette fonction permet d'ajouter une boisson alcoolisée au tableau de boisson.
+*  Le tableau de boissons est recopié dans un tableau temporaire, on libère son espace, on lui alloue le même espace avec une case en plus pour la nouvelle boisson, on recopie toutes les boisson et enfin on ajoute la nouvelle boisson.
+*  Après avoir ajouté la nouvelle boisson, on libère l'espace du tableau temporaire, puis on recopie le contenu du nouveau tableau dans le fichier. 
+*/
+
 /*
     Fonction permettant d'ajouter une boisson alcoolisée.
 */
@@ -98,7 +140,7 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
         // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
         boisson* tmp = malloc(T*sizeof(boisson));
         if(tmp == NULL){
-            printf("Erreur allocation mémoire.");
+            printf("\nErreur d'allocation de memoire. 1\n");
             exit(-1);
         }
         for(int i = 0; i<T; i++) {
@@ -116,7 +158,7 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
         free(tab);
         tab = malloc((T+1)*sizeof(boisson));
         if(tab == NULL){
-            printf("Erreur allocation mémoire.");
+            printf("\nErreur d'allocation de memoire. 1\n");
             exit(-1);
         }
 
@@ -145,6 +187,11 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
     else {
         tab = malloc(1*sizeof(boisson));
         if(tab == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
+
+        if(tab == NULL){
             printf("Erreur allocation mémoire.");
             exit(-1);
         }
@@ -163,6 +210,22 @@ void ajoutBoissonAlcool(char nom[], float contenance, float prix, float quantite
     // On retourne a l'interface precedente.
     interfaceAjoutOuSuppBoisson();
 }
+
+/*! \fn void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quantite, float degreSrc)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant d'ajouter une boisson non alcoolisée.
+*
+*  \param nom : nom de la boisson à ajouter
+*  \param contenance : contenance de la boisson à ajouter
+*  \param prix : prix de la boisson à ajouter
+*  \param quantite : quantité de la boisson à ajouter
+*  \param degreSrc : degré de sucre de la boisson à ajouter
+*
+*  \remarks Cette fonction permet d'ajouter une boisson non alcoolisée au tableau de boisson.
+*  La fonction fonctionne exactement de la même manière que la fonction précédente.
+*/
 
 /*
     Fonction permettant d'ajouter une boisson non alcoolisée.
@@ -188,6 +251,11 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
     
     if (T>0) {
         boisson* tmp = malloc(T*sizeof(boisson));
+        if(tmp == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
+
         for(int i = 0; i<T; i++) {
             tmp[i].id = tab[i].id;
             strcpy(tmp[i].nom, tab[i].nom);
@@ -200,6 +268,10 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
 
         free(tab);
         tab = malloc((T+1)*sizeof(boisson));
+        if(tab == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
 
         for(int i = 0; i<T; i++) {
             tab[i].id = tmp[i].id;
@@ -220,9 +292,13 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
         tab[T].degreScr = nouvBoisson.degreScr;
 
         free(tmp);
-    } else {
-        tab[0].id = nouvBoisson.id;
+    } else {   
         tab = malloc(1*sizeof(boisson));
+        if(tab == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
+        tab[0].id = nouvBoisson.id;
         strcpy(tab[0].nom, nouvBoisson.nom);
         tab[0].contenance = nouvBoisson.contenance;
         tab[0].prix = nouvBoisson.prix;
@@ -235,6 +311,13 @@ void ajoutBoissonNonAlcool(char nom[], float contenance, float prix, float quant
 
     interfaceAjoutOuSuppBoisson();
 }
+
+/*! \fn void informationBoissonBarman()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant d'afficher les informations de toutes les boissons.
+*/
 
 /*
     Fonction permettant d'afficher les informations des boissons des boissons, pour le barman.
@@ -250,13 +333,28 @@ void informationBoissonBarman(){
     }
 }
 
+/*! \fn void suppBoisson(int idSupp)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de supprimer une boisson.
+*
+*  \param idSupp : ID de la boisson à supprimer
+*
+*  \remarks Cette fonction permet de supprimer une boisson.
+*  Cette fonction fonctionne de la même manière que les fonctions pour ajouter des boissons, mais dans le sens inverse.
+*  On crée un tableau temporaire pour recopier toutes les boissons, on libère l'espace du tableau de base et on lui alloue le même espace moins un car on supprimer une boisson.
+*  Ensuite on recopie les boissons dans le tableau tout en évitant de recopier la boisson à supprimer.
+*  Enfin, on recopie le nouveau tableau dans le fichier.
+*/
+
 /*
     Fonction permettant de supprimer une boisson.
 */
 void suppBoisson(int idSupp){
 
     /*
-        Cette partie est similaire a l'ajout d'une boisson, sauf qu'au lieu d'augmenter la taille du tableau, on la dominue.
+        Cette partie est similaire a l'ajout d'une boisson, sauf qu'au lieu d'augmenter la taille du tableau, on la diminue.
         On cree un tableau temporaire où on copie toutes les informations du tableau de base, on recree le tableau de base avec une case en moins, 
         puis on recopie toutes les informations dans le tableau de base sans la boisson a supprimer.
     */
@@ -270,6 +368,11 @@ void suppBoisson(int idSupp){
     if(T>1) {
         // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
         boisson* tmp = malloc(T*sizeof(boisson));
+        if(tmp == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
+
         for(int i = 0; i<T; i++) {
             tmp[i].id = tab[i].id;
             strcpy(tmp[i].nom, tab[i].nom);
@@ -283,6 +386,10 @@ void suppBoisson(int idSupp){
         // On libere l'espace du tableau de base et on le recree avec une case en moins.
         free(tab);
         tab = malloc((T-1)*sizeof(boisson));
+        if(tab == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
 
         // On recopie toutes les informations dans le tableau de base, et si on est situe sur la valeur a supprimer, on ne la recopie tout simplement pas.
         while(j<T) {
@@ -308,12 +415,26 @@ void suppBoisson(int idSupp){
     }
 
     // On recopie le tableau dans le fichier
+    suppCocktailBoisson(idSupp);
+    suppPanierBoisson(idSupp);
     initFichier(T-1);
 
     // On retourne a l'interface precedente.
     interfaceAjoutOuSuppBoisson();
 
 }
+
+/*! \fn void modifBoisson(int idChange)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de modifier les informations d'une boisson.
+*
+*  \param idChange : ID de la boisson à changer
+*
+*  \remarks Cette fonction permet de modifier une boisson.
+*  On demande tout simplement au barman d'entrer les nouvelles informations de la boisson, puis on modifie ces valeurs dans le tableau et enfin on recopie le nouveau tableau dans le fichier.
+*/
 
 /*
     Fonction permettant de modifier une boisson.
@@ -466,13 +587,19 @@ void modifBoisson(int idChange){
 
 }
 
+/*! \fn void gestionStock(int idStock, float stockR, float stockV)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de modifier le stock d'une boisson.
+*
+*  \param idStock : ID de la boisson au stock à changer
+*  \param stockR : stock reçu
+*  \param stockV : stock vendu
+*/
+
 /*
     Fonction permettant de modifier le stock d'une boisson.
-    Dans le fonctionnement, cette fonction est similaire à la fonction modifBoisson().
-    En effet, on demande l'ID à l'utilisateur, on vérifie si l'ID est correcte, on utilise deux fichiers, on recopie toutes les informations de l'un
-    dans l'autre, tout en apportant la modification nécessaire, on renome les deux fichiers, on supprime celui qui n'est plus utile et enfin on 
-    retourne à l'interface précédente.
-    Le seul changement notable est que l'utilisateur entre en paramètre le nombre de stocks qu'il a reçu ainsi que le nombre de stocks qu'il a vendu.
 */
 void gestionStock(int idStock, float stockR, float stockV){
 
@@ -483,6 +610,15 @@ void gestionStock(int idStock, float stockR, float stockV){
     interfaceGestionBoissonBarman();
 
 }
+
+/*! \fn void recette(float prix)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de mettre à ajour les recettes du barman.
+*
+*  \param prix : somme d'argent à ajouter aux recettes totales.
+*/
 
 /*
     Fonction permettant de calculer les recettes.
@@ -496,10 +632,101 @@ float recette(float prix){
 
 }
 
-void satisfactionCommande(int nCommande){
+/*! \fn void satisfactionCommande(int numPanier)
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de satisfaire la commande d'un client.
+*
+*  \param numPanier : ID du panier à satisfaire
+*
+*  \remarks Le barman choisi la commande qu'il veut satisfaire, la commande et alors supprimée, les stocks sont mis à jour, et les finances du barman aussi. 
+*/
+
+/*
+    Fonction permettant de satisfaire la commande d'un client.
+    La commande est alors supprimée et l'argent générée est alors actualisée dans les finances du barman.
+*/
+void satisfactionCommande(int numPanier){
     
-    interfaceGestionBoissonBarman();
+    // On crée des variables qui récupèrent le nombre de paniers, le nombre de boissons et le nombre de cocktails
+    int Tpanier = tailleTabPanier();
+    int Tboisson = tailleTabBarman();
+    int Tcocktail = tailleTabBarmanCocktail();
+    int erreur = 0;
+
+    // On fait une boucle pour parcourir les panier et trouver celui qui nous intéresse
+    for(int i = 0; i < Tpanier; i++){
+        // On trouve le panier qui nous intéresse 
+        if(i == numPanier-1){
+            // On crée une boucle pour parcourir les commandes du panier
+            for(int j = 0; j<tabPanier[i].nbrCommande; j++){
+                // On crée une boucle pour parcourir les boissons des commandes du panier.
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrBoisson; k++){
+                    // S'il n'y a pas assez de boissons en stock, on affiche un message d'erreur
+                    if(tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson < 0){
+                        printf("\nInformation\n");
+                        printf("\nImpossible à satisfaire la demande de boisson.");
+                        printf("\nIl manque %.2f de %s dans le stock.", fabs(tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson), tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].nom);
+                        printf("\nEntrer une touche pour continuer.");
+                        getchar();
+                        erreur++;
+                    }
+                    // Sinon, on met à jour les stocks
+                    else{
+                        tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite = tab[tabPanier[i].listCommande[j].listBoisson[k].idBoisson].quantite - tabPanier[i].listCommande[j].listBoisson[k].quantiteBoisson;
+                    }
+                }
+                // On fait le meme processus pour les cocktails, en mettant à jour les stocks s'il n'y a pas d'erreur
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrCocktail; k++){
+                    for(int m = 0; m < tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].tailleListBoisson; m++){
+                        if(tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail < 0){
+                            printf("\nInformation\n");
+                            printf("\nImpossible à satisfaire la demande de cocktail.");
+                            printf("\nIl manque %.2f de %s dans le stock.", fabs(tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail), tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].nom);
+                            printf("\nEntrer une touche pour continuer.");
+                            getchar();
+                            erreur++;
+                        }else{
+                            tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite = tab[tabCocktail[tabPanier[i].listCommande[j].listCocktail[k].idCocktail].listIdBoisson[m]].quantite - tabPanier[i].listCommande[j].listCocktail[k].quantiteCocktail;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // S'il y a eu des erreurs à causes des stocks, un message est affiché et le panier ne peut pas etre satisfait
+    if(erreur != 0){
+        printf("\n\nLe panier ne peut pas être satisfait.\nIl manque des boissons pour completer les commandes.");
+        printf("\nLe panier n'a pas été supprimer.\nVeuillez rajouter des boissons dans le stock pour pouvoir satisfaire le panier.");
+        printf("\nEntrer une touche pour continuer.");
+        getchar();
+        interfaceBarman();
+    }
+    // Sinon, on met à jour les finances, on supprime le panier satisfait et on met à jour les fichiers de sauvegarde.
+    else{
+        recette(tabPanier[numPanier-1].prix);
+        supprimerPanier(numPanier);
+        initFichier(Tboisson);
+        initFichierCocktail(Tcocktail);
+        interfaceBarman();
+    }
+
 }
+
+/*! \fn int tailleTabBarman()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de récupérer la taille du tableau de boissons.
+*
+*  \return La fonction renvoie la taille du tableau de boissons.
+*
+*  \remarks Cette fonction permet de récupérer la taille du tableau de boissons.
+*  On ouvre le fichier contenant les boissons et on lie tout simplement la première valeure de type entier, qui correspond à la taille.
+*  On renvoie ensuite la taille du tableau.
+*/
 
 /*
     Fonction permettant de calculer le nombre de boissons qu'il y a dans le fichier.
@@ -532,6 +759,17 @@ int tailleTabBarman() {
     return taille;
 
 }
+
+/*! \fn void initTab()
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de créer le tableau de boissons.
+*
+*  \remarks Cette fonction permet de créer le tableau de boissons.
+*  On ouvre le fichier, on lit la première valeur pour récupérer le nombre de boissons, on alloue de la mémoire pour le tableau de boissons, on lit toutes les informations des boissons dans un ordre défini pour les mettre dans le tableau et enfin on ferme le fichier.
+*/
+
 /*
     Fonction permettant d'initialiser le tableau contenant les boissons.
 */
@@ -575,6 +813,19 @@ void initTab() {
     fclose(file);
 
 }
+
+/*! \fn void initFichier(int T)
+*  \author Guillerm François
+*  \version 1
+*
+*  \brief Fonction premettant de copier les informations du tableau vers le fichier.
+*
+*  \param T : taille du tableau
+*
+*  \remarks Cette fonction permet de copier les informations du tableau vers le fichier.
+*  On ouvre le fichier, puis on recopie les informations du tableau une par une dans le fichier dans un ordre défini, tout en commençant par mettre le nombre de boissons au tout début du fichier.
+*  Le fichier est binaire car nous avons trouvé plus simple la manipulation des fichiers binaires par rapport aux fichiers classiques.
+*/
 
 /*
     Fonction permettant d'initialiser le fichier.

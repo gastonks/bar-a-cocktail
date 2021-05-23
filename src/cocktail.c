@@ -1,48 +1,109 @@
+/*! \file cocktail.c
+*  \author Barre Romain
+*  \version 1
+*  \brief Programme contenant toutes les fonctions permettant au barman de gérer les cocktails.  
+*/
 
+// On inclue le fichier header associé
 #include "cocktail.h"
 
+/*! \fn void initFileCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure premettant de vérifier si le fichier des cocktails fonctionne correctement.
+*
+*  \remarks Cette procédure ouvre le fichier contenant les cocktails, vérifie si le fichier s'est bien ouvert et le referme ensuite. 
+*/
 
+/*
+    Fonction permettant d'initialiser le fichier devant contenir tous les cocktails et toutes leurs informations associées.
+*/
 void initFileCocktail(){
+
+    // On ouvre le fichier
     FILE* fileCocktail = fopen("data/cocktail", "ab");
 
+    // On vérifie que le fichier s'est bien ouvert, et on affiche un message d'erreur si ce n'est pas le cas.
     if(fileCocktail == NULL){
         printf("Fichier non ouvert.");
         exit(-1);
     }
     
+    // On ferme le fichier
     fclose(fileCocktail);
 }
 
+/*! \fn int idInitCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de donner un ID à un cocktail.
+*
+*  \return Cette fonction renvoie un ID.
+*
+*  \remarks Cette fonction vérifie l'ID du cocktail le plus récent puis renvoie ce même ID augmenté de 1. 
+*/
+
+/*
+    Fonction permettant d'initialiser l'ID des cocktails.
+    Cette fonction renvoie une valeur entière, qui correspond à l'ID du dernier cocktail plus 1.
+    Cette fonction est utile lors de l'ajout d'un cocktail dans le fichier, permettant ainsi d'attribuer un ID à un nouveau cocktail.
+*/
 int idInitCocktail(){
+
+    // On crée une variable de type cocktail
     cocktail tmp;
 
     int nID = 0;
     int taille;
 
+    // On ouvre le fichier et on vérifie qu'il s'est bien ouvert
     FILE* file = fopen("data/cocktail", "rb");
     if(file == NULL){
         printf("fichier non ouvert");
         exit(-1);
     }
     
+    // On récupère le nombre de cocktails qui se situ au début du fichier
     fread(&taille, sizeof(int), 1, file);
 
+    // On lie les ID jusqu'à ce qu'on ne puisse plus en lire
     while(fread(&tmp, sizeof(cocktail), 1, file)) {
         nID = tmp.id;
     }
 
+    // On augmente alors l'ID de 1
     nID++;
 
-    fclose(file);   
+    // On ferme le fichier
+    fclose(file); 
+
+    // On renvoie le nouvel ID  
     return nID;
 }
 
+/*! \fn void creationCocktailBarman()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de créer un cocktail, côté barman.
+*
+*  \remarks Cette fonction permet de créer un cocktail à partir de plusieurs boissons que l'on peut choisir. 
+*/
+
+/*
+    Fonction permettant de créer un cocktail, côté barman.
+*/
 void creationCocktailBarman(){
 
+    // On crée une variable de type cocktail qui correspond au cocktail à créer.
     cocktail nCocktail;
 
+    // On crée des variables correspondant aux futurs informations du cocktail
     int nbBoisson = 0;
     int idBoisson = 0;
+
     int retour = 0;
     int numInter;
     int T = tailleTabBarmanCocktail();
@@ -51,7 +112,7 @@ void creationCocktailBarman(){
     printf("===============================================================\n\n");
     printf("\t\t\tMenu creation d'un cocktail\n\n");
 
-
+    // On donne le choix à l'utilisateur de revenir en arrière s'il a fait une erreur
     printf("Entrez 0 pour revenir en arrière.\nEntrez 1 pour ajouter le nouveau cocktail:");
     retour = scanf("%d", &numInter);
 
@@ -67,12 +128,17 @@ void creationCocktailBarman(){
 
     if(numInter==0){
 
+        // S'il a entré 0, il revient à l'interface précédente
         interfaceGestionCocktail();
 
     }else if(numInter == 1){
+        
+        // Sinon, il entre dans l'interface lui permettant de créer un cocktail
 
+        // On donne un ID au nouveau cocktail
         nCocktail.id = idInitCocktail();
 
+        // On demande à l'utilisateur d'entrer le nom du cocktail
         printf("Veuillez entrer le nom du cocktail :");
         getchar();
         retour = scanf("%[^\n]", nCocktail.nom);
@@ -81,6 +147,7 @@ void creationCocktailBarman(){
             exit(-1);
         }
 
+        // On demande à l'utilisateur d'entrer le nombre de boissons composant le cocktail
         printf("Combien de boisson votre cocktail est-il compose :");
         retour = scanf("%d", &nbBoisson);
         if(retour != 1 || nbBoisson < 1){
@@ -93,12 +160,14 @@ void creationCocktailBarman(){
             }
         }
 
+        // On initialise toutes les autres informations du cocktail à 0
         nCocktail.prix = 0;
         nCocktail.contenance = 0;
         nCocktail.degreAlco = 0;
         nCocktail.degreScr = 0;
         nCocktail.tailleListBoisson = nbBoisson;
 
+        // On alloue la mémoire pour le tableau contenant les ID des boissons composant le cocktails
         nCocktail.listIdBoisson = (int*) malloc(nbBoisson*sizeof(int));
 
         if(nCocktail.listIdBoisson == NULL){
@@ -106,6 +175,7 @@ void creationCocktailBarman(){
             exit(-1);
         }
 
+        // On affiche toutes les boissons pour que l'utilisateur choisisse les boissons de son cocktail
         printf("=====================================================================================================\n\n");
         printf("\t\t\tMenu Information sur les boissons\n\n");
         printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tQuantite\n\n");
@@ -114,6 +184,7 @@ void creationCocktailBarman(){
 
         printf("=====================================================================================================\n");
 
+        // On demande à l'utilisateur d'entrer les ID des boissons qu'il veut
         for(int i = 0; i < nbBoisson; i++){
             printf("\nEntrer l'ID de la boisson :");
             retour = scanf("%d", &idBoisson);
@@ -126,6 +197,9 @@ void creationCocktailBarman(){
                     retour = scanf("%d", &nbBoisson);
                 }
             }else{
+
+                // On ajoute ensuite les informations du cocktails par rapport aux informations des boissons
+
                 nCocktail.listIdBoisson[i] = idBoisson-1;
 
                 nCocktail.prix = nCocktail.prix + tab[idBoisson-1].prix;
@@ -139,8 +213,13 @@ void creationCocktailBarman(){
             }
         }
 
+        // On augmente ensuite le prix du cocktail de 10% comme demandé dans le projet
         nCocktail.prix = nCocktail.prix + 0.10 * nCocktail.prix;
 
+        /*
+            S'il y a deja des cocktails, on cree un second tableau dynamique où on copie toutes les informations de base, et on recree le tableau de base 
+            avec une case supplementaire permettant d'ajouter la nouvelle boisson.
+        */ 
         if (T>0) {
             // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
             cocktail* tmp = (cocktail*) malloc(T*sizeof(cocktail));
@@ -166,8 +245,8 @@ void creationCocktailBarman(){
                 }
             }
 
-            // On libere l'espace du tableau de base et on le cree avec une case supplementaire, puis on y recopie toutes les informations avec la
-            // nouvelle boisson a la fin.
+            // On libere l'espace du tableau de base et on le cree avec une case supplementaire, puis on y recopie toutes les informations avec le nouveau cocktail
+
             for(int i = 0;i<T; i++){
                 free(tabCocktail[i].listIdBoisson);
             }
@@ -219,7 +298,7 @@ void creationCocktailBarman(){
             }
             free(tmp);
         } 
-        // Sinon, si le fichier ne contient aucune boisson, on cree un tableau avec une seule case où on y copie la nouvelle boisson.
+        // Sinon, si le fichier ne contient aucune boisson, on cree un tableau avec une seule case où on y copie le nouveau cocktail.
         else {
             tabCocktail = (cocktail*) malloc(1*sizeof(cocktail));
             if(tabCocktail == NULL){
@@ -254,12 +333,27 @@ void creationCocktailBarman(){
     }
 }
 
+/*! \fn void creationCocktailClient()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de créer un cocktail, côté client.
+*
+*  \remarks Cette fonction permet de créer un cocktail à partir de plusieurs boissons que l'on peut choisir. 
+*  Cette fonction est exactement la même que creationCocktailBarman, à la seule différence que le client ne voit que les boissons qui sont en stock, au moment où il doit choisir les boissons de son cocktail.
+*/
+
+/*
+    Fonction permettant de créer un cocktail, côté client.
+    Cette fonction est exactement la même que creationCocktailBarman, à la seule différence que le client ne voit que les boissons qui sont en stock, au moment où il doit choisir les boissons de son cocktail.
+*/
 void creationCocktailClient(){
 
     cocktail nCocktail;
 
     int nbBoisson = 0;
     int idBoisson = 0;
+
     int retour = 0;
     int numInter;
     int T = tailleTabBarmanCocktail();
@@ -356,8 +450,12 @@ void creationCocktailClient(){
     nCocktail.prix = nCocktail.prix + 0.10 * nCocktail.prix;
 
     if (T>0) {
-        // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
         cocktail* tmp = (cocktail*) malloc(T*sizeof(cocktail));
+        if(tmp == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
+
         for(int i = 0; i<T; i++) {
             tmp[i].id = tabCocktail[i].id;
             strcpy(tmp[i].nom, tabCocktail[i].nom);
@@ -376,10 +474,12 @@ void creationCocktailClient(){
             }
         }
 
-        // On libere l'espace du tableau de base et on le cree avec une case supplementaire, puis on y recopie toutes les informations avec la
-        // nouvelle boisson a la fin.
         free(tabCocktail);
         tabCocktail = malloc((T+1)*sizeof(cocktail));
+        if(tabCocktail == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
 
         for(int i = 0; i<T; i++) {
             tabCocktail[i].id = tmp[i].id;
@@ -390,7 +490,7 @@ void creationCocktailClient(){
             tabCocktail[i].degreAlco = tmp[i].degreAlco;
             tabCocktail[i].degreScr = tmp[i].degreScr;
             tabCocktail[i].listIdBoisson = (int*) malloc(tmp[i].tailleListBoisson*sizeof(int));
-            if(tabCocktail[i].listIdBoisson){
+            if(tabCocktail[i].listIdBoisson == NULL){
                 printf("Erreur allocation mémoire.");
                 exit(-1);
             }
@@ -415,10 +515,8 @@ void creationCocktailClient(){
             tabCocktail[T].listIdBoisson[j] = nCocktail.listIdBoisson[j];
         }
 
-        // On libere l'espace du tableau temporaire.
         free(tmp);
     } 
-    // Sinon, si le fichier ne contient aucune boisson, on cree un tableau avec une seule case où on y copie la nouvelle boisson.
     else {
         tabCocktail = malloc(1*sizeof(cocktail));
         if(tabCocktail == NULL){
@@ -433,7 +531,7 @@ void creationCocktailClient(){
         tabCocktail[0].degreAlco = nCocktail.degreAlco;
         tabCocktail[0].degreScr = nCocktail.degreScr;
         tabCocktail[0].listIdBoisson = (int*) malloc(nCocktail.tailleListBoisson*sizeof(int));
-        if(tabCocktail[0].listIdBoisson){
+        if(tabCocktail[0].listIdBoisson == NULL){
                 printf("Erreur allocation mémoire.");
                 exit(-1);
             }
@@ -442,10 +540,7 @@ void creationCocktailClient(){
         }
     } 
 
-    // On recopie toutes les informations du tableau dans le fichier, en indicant la taille +1 car on a ajoute une boisson.
     initFichierCocktail(T+1);
-
-
 
     interfaceGestionCocktail();
     }else{
@@ -454,14 +549,24 @@ void creationCocktailClient(){
     }
 }
 
+/*! \fn void informationCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant d'afficher les cocktails et leurs informations.
+*/
+
+/*
+    Fonction permettant d'afficher les informations des cocktails
+*/
 void informationCocktail(){
 
-    // On cree des variables, une permettant de parcourir le tableau et l'autre qui contient le nombre de boissons.
+    // On cree des variables permettant de parcourir le tableau de cocktails, et les tableaux de boissons associée aux cocktails.
     int i;
     int j;
     int T = tailleTabBarmanCocktail();
 
-    // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
+    // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque cocktail.
     for(i = 0; i<T; i++) {
         printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\t\t%.2d\n", i+1, tabCocktail[i].nom, tabCocktail[i].contenance, tabCocktail[i].prix, tabCocktail[i].degreAlco, tabCocktail[i].degreScr,  tabCocktail[i].tailleListBoisson);
 
@@ -475,14 +580,22 @@ void informationCocktail(){
     }
 }
 
+/*! \fn void informationCocktailClient()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant d'afficher les cocktails et leurs informations, à la seule différence que seule les cocktails ayant du stock sont affichés.
+*/
+
+/*
+    Fonction premettant d'afficher les cocktails et leurs informations, à la seule différence que seule les cocktails ayant du stock sont affichés
+*/
 void informationCocktailClient(){
 
-    // On cree des variables, une permettant de parcourir le tableau.
     int i;
     int quantiteZero = 0;
     int T = tailleTabBarmanCocktail();
 
-    // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
     for(i = 0; i<T; i++) {
         quantiteZero = 0;
         for(int j = 0; j<tabCocktail[i].tailleListBoisson; j++){
@@ -504,13 +617,26 @@ void informationCocktailClient(){
     }
 }
 
+/*! \fn void supprimerCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de supprimer un cocktail.
+*
+*  \param idCocktail : ID du cocktail à supprimer
+*
+*  \remarks Cette fonction permet de supprimer un cocktail. 
+*/
 
+/*
+    Fonction permettant de supprimer un cocktail.
+*/
 void supprimerCocktail(int idCocktail){
 
     /*
-        Cette partie est similaire a l'ajout d'une boisson, sauf qu'au lieu d'augmenter la taille du tableau, on la dominue.
+        Cette partie est similaire a l'ajout d'une boisson, sauf qu'au lieu d'augmenter la taille du tableau, on la diminue.
         On cree un tableau temporaire où on copie toutes les informations du tableau de base, on recree le tableau de base avec une case en moins, 
-        puis on recopie toutes les informations dans le tableau de base sans la boisson a supprimer.
+        puis on recopie toutes les informations dans le tableau de base sans le cocktail a supprimer.
     */
 
     // On cree des variables pour stocker la taille du tableau et pour gerer la boucle permettant de recopier les valeurs d'un tableau a l'autre.
@@ -518,7 +644,7 @@ void supprimerCocktail(int idCocktail){
     int j = 0;
     int h = 0;
 
-    // Si le tableau contient plus d'une boisson, on fait l'operation enoncee precedemment, sinon on libere simplement l'espace du tableau.
+    // Si le tableau contient plus d'un cocktail, on fait l'operation enoncee precedemment, sinon on libere simplement l'espace du tableau.
     if(T>1) {
         // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
         cocktail* tmp = (cocktail*) malloc(T*sizeof(cocktail));
@@ -543,11 +669,14 @@ void supprimerCocktail(int idCocktail){
                 tmp[i].listIdBoisson[j] = tabCocktail[i].listIdBoisson[j];
             }
         }
-        // On libere l'espace du tableau de base et on le recree avec une case en moins.
-        
 
+        // On libere l'espace du tableau de base et on le recree avec une case en moins.
         free(tabCocktail);
         tabCocktail = (cocktail*) malloc((T-1)*sizeof(cocktail));
+        if(tabCocktail == NULL){
+            printf("\nErreur d'allocation de memoire. 1\n");
+            exit(-1);
+        }
 
         // On recopie toutes les informations dans le tableau de base, et si on est situe sur la valeur a supprimer, on ne la recopie tout simplement pas.
         while(j<T) {
@@ -574,21 +703,30 @@ void supprimerCocktail(int idCocktail){
                 j++;
             }
         }
-    // S'il n'y a qu'une seule boisson et que l'ID a supprimer est 1 (le seul possible) alors on libere simplement l'espace du tableau.
+    // S'il n'y a qu'un seul cocktail et que l'ID a supprimer est 1 (le seul possible) alors on libere simplement l'espace du tableau.
     }   else if (T==1 && idCocktail==1) {
         free(tabCocktail);
     }
 
+    suppPanierCocktail(idCocktail);
+
     // On recopie le tableau dans le fichier
     initFichierCocktail(T-1);
 
-    // On retourne a l'interface precedente.
-    interfaceGestionCocktail();
-
-
 }
 
+/*! \fn void supprimerCocktailDemande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant choisir le cocktail à supprimer.
+*
+*  \remarks Cette fonction permet de choisir le cocktail à supprimer. 
+*/
 
+/*
+    Fonction premettant choisir le cocktail à supprimer.
+*/
 void supprimerCocktailDemande(){
 
     int idSupp = 0;
@@ -626,6 +764,45 @@ void supprimerCocktailDemande(){
     }
 }
 
+/*! \fn void suppCocktailBoisson(int idBoisson)
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de supprimer un cocktail si une des boissons qui le compoe a été supprimée.
+*
+*  \param idCocktail : ID de la boisson supprimée.
+*
+*  \remarks Cette fonction permet de supprimer un cocktail si l'une des boissons qui le compose a été suprimée.
+*/
+
+/*
+    Fonction premettant de supprimer un cocktail si une des boissons qui le compoe a été supprimée.
+*/
+void suppCocktailBoisson(int idBoisson){
+
+    int T = tailleTabBarmanCocktail();
+
+    if(T > 0){
+
+        for(int i = 0; i < T; i++){
+            for(int j = 0; j < tabCocktail[i].tailleListBoisson; j++){
+                if(tabCocktail[i].listIdBoisson[j] == idBoisson-1){
+                    supprimerCocktail(i+1);
+                }
+            }
+        }
+    }
+}
+
+/*! \fn int tailleTabBarmanCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de récupérer le nombre de cocktails à partir du fichier de sauvegarde des cocktails.
+*
+*  \return Cette fonction renvoie le nombre de cocktails.
+*/
+
 /*
     Fonction permettant de calculer le nombre de cocktail qu'il y a dans le fichier.
     Cette fonction renvoie un entier.
@@ -657,15 +834,24 @@ int tailleTabBarmanCocktail() {
     return taille;
 
 }
+
+/*! \fn int initTabCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de créer le tableau de cocktails.
+*
+*  \remarks Cette fonction permet de créer le tableau de cocktails, en récupérant le nombre de cocktails au début du fichier puis en lisant toutes les informations du fichier.
+*/
+
 /*
-    Fonction permettant d'initialiser le tableau contenant les boissons.
+    Fonction permettant d'initialiser le tableau contenant les cocktails.
 */
 void initTabCocktail() {
-    // On cree une variable qui va permettre de recopier les informations du fichier.
-    //int i = 0;
-    int taille;
-    //cocktail initCocktail;
 
+    // On crée une variable qui va contenir la taille.
+    int taille;
+    
     // On ouvre le fichier en mode lecture, avec le parametre "rb".
     FILE* file = fopen("data/cocktail", "rb");
 
@@ -675,7 +861,7 @@ void initTabCocktail() {
         exit(-1);
     }
 
-    // On cree le tableau seulement s'il y a au moins une boisson.
+    // On cree le tableau seulement s'il y a au moins un cocktail.
     if(fread(&taille, sizeof(int), 1, file)>0) {
         tabCocktail = (cocktail*) malloc(taille*sizeof(cocktail));
         if(tabCocktail == NULL){
@@ -711,6 +897,17 @@ void initTabCocktail() {
     fclose(file);
 
 }
+
+/*! \fn int initFichierCocktail()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de recopier les informations du tableau vers le fichier.
+*
+*  \param T : nombre de cocktails
+*
+*  \remarks Cette fonction permet de recopier les informations du tableau de cocktails vers le fichier de sauvegarde.
+*/
 
 /*
     Fonction permettant d'initialiser le fichier.
@@ -749,4 +946,3 @@ void initFichierCocktail(int T) {
     // On ferme le fichier.
     fclose(file);
 }
-

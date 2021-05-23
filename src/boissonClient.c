@@ -1,76 +1,144 @@
+/*! \file boissonClient.c
+*  \author Barre Romain
+*  \version 1
+*  \brief Programme contenant toutes les fonctions permettant de gérer les paniers.  
+*/
+
+// On inclue le fichier header associé
 #include "boissonClient.h"
 
+/*! \fn void initFileClient()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Procedure premettant de vérifier si le fichier des paniers fonctionne correctement.
+*
+*  \remarks Cette procédure ouvre le fichier contenant les paniers, vérifie si le fichier s'est bien ouvert et le referme ensuite. 
+*/
 
+/*
+    Fonction permettant d'initialiser le fichier devant contenir tous les paniers et toutes leurs informations associées.
+*/
 void initFileClient(){
+
+    // On ouvre le fichier
     FILE* file = fopen("data/commandeClient", "ab");
 
+    // On vérifie qu'il s'est bien ouvert, et on affiche un message d'erreur si ce n'est pas le cas
     if(file == NULL){
         printf("Fichier non ouvert.");
         exit(-1);
     }
 
+    // On referme le fichier
     fclose(file);
 }
 
+/*! \fn int idInitPanier()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de donner un ID à un panier.
+*
+*  \return Cette fonction renvoie un ID.
+*
+*  \remarks Cette fonction vérifie l'ID du panier le plus récent puis renvoie ce même ID augmenté de 1. 
+*/
+
+/*
+    Fonction permettant d'initialiser l'ID des paniers.
+    Cette fonction renvoie une valeur entière, qui correspond à l'ID du dernier panier plus 1.
+    Cette fonction est utile lors de l'ajout d'un panier dans le fichier, permettant ainsi d'attribuer un ID à un nouveau panier.
+*/
 int idInitPanier(){
    
     // On crée une variable de type panier.    
-
     panier tmp;
 
     int nID = 0;
     int taille;
 
+    // On ouvre le fichier contenant les paniers
     FILE* file = fopen("data/commandeClient", "rb");
 
+    // On vérifie que le fichier s'est bien ouvert
     if(file == NULL){
         printf("Fichier non ouvert.");
         exit(-1);
     }
 
+    // On récupère la le nombre de paniers
     fread(&taille, sizeof(int), 1, file);
 
+    // On lit les paniers jusqu'à ce qu'il n'y en ait plus
     while(fread(&tmp, sizeof(panier), 1, file)) {
         nID = tmp.id;
     }
 
+    // On ferme le fichier
+    fclose(file); 
+
+    // On augmente alors l'ID de 1
     nID++;
 
-    fclose(file); 
-    
-    nID = tmp.id + 1;
-    fclose(file);  
     return nID;
-    
 }
 
+/*! \fn void informationBoissonClient()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant d'afficher les informations des boissons, mais seulement celles étant en stock.
+*/
+
+/*
+    Fonction premettant d'afficher les informations des boissons, mais seulement celles étant en stock.
+*/
 void informationBoissonClient(){
 
+    // On crée une variable pour parcourir le tableau, et une qui contient la taille du tableau
     int i;
     int T = tailleTabBarman();
 
-    // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
+    // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson, si celle ci est en stock.
     for(i = 0; i<T; i++) {
         if(tab[i].quantite > 0){
-            printf("\t\t%d\t%s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr);
+            printf("\t\t%d\t%.7s\t%.2f\t\t%.2f\t%.2f\t\t%.2f\n", i+1, tab[i].nom, tab[i].contenance, tab[i].prix, tab[i].degreAlco, tab[i].degreScr);
         }
     }
 
 }
 
+/*! \fn void demandeCommande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de passer une commande.
+*
+*  \remarks Cette fonction permet à l'utilisateur de passez une commande.
+*  Il doit entrer le nombre de commandes, puis pour chaque commmande, entrer le nombre de boissons et leur ID puis le nombre de cocktail et leur ID.
+*/
+
+/*
+    Fonction premettant de passer une commande.
+*/
 void demandeCommande(){
 
+    // On crée une variable de type panier, une variable pour récupérer les IDs des boissons et cocktails commandés, et une variable pour récupérer le nombre de cocktails commandés
     panier nPanier;
     int retour;
     int nombreId;
     int nombreCocktail;
 
+    // On initialise l'ID de la commande, et son prix à 0
     nPanier.id = idInitPanier();
     nPanier.prix = 0;
 
+    // On demande à l'utilisateur combien de commande il souhaite effectuer
     printf("Combien de commande voulez vous effectuer :");
     retour = scanf("%d", &nPanier.nbrCommande);
 
+    // On redemande le nombre de commande si la valeur entrée n'est pas correcte
     if(retour != 1 || nPanier.nbrCommande < 0 ){
         while(retour != 1 || nPanier.nbrCommande < 0){
             retour = 1;
@@ -81,166 +149,207 @@ void demandeCommande(){
         }
     }
 
+    // On alloue la mémoire pour le nombre de commandes entré précédemmenent, puis on vérifie qu'il n'y a pas eu d'erreur d'allocation
     nPanier.listCommande = (commande*) malloc(nPanier.nbrCommande*sizeof(commande));
     if(nPanier.listCommande == NULL){
         printf("Erreur allocation memoire.");
         exit(-1);
     }
 
+    // On fait une boucle qui va demander les boissons et les cocktails à commander, autant de fois qu'il y a de commandes pour ce panier
     for(int i = 0; i< nPanier.nbrCommande; i++){
-
-        system("clear");
-        printf("Commande n.%d\n",i+1);
-        printf("=====================================================================================================\n\n");
-        printf("\t\t\tMenu Information sur les boissons\n\n");
-        printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\n\n");
-
-        informationBoissonClient();
-
-        printf("=====================================================================================================\n\n");
-
-        printf("\nCombien de boisson voulez vous commander :");
-        retour = scanf("%d", &nPanier.listCommande[i].nbrBoisson);
-
-        if(retour != 1 || nPanier.listCommande[i].nbrBoisson < 0){
-            while(retour != 1 || nPanier.listCommande[i].nbrBoisson < 0 ){
-                retour = 1;
-                printf("\nCe nombre n'existe pas.\n");
-                printf("Veuillez entrer un nombre valide :");
-                getchar();
-                retour = scanf("%d", &nPanier.listCommande[i].nbrBoisson);
-            }
-        }
-        if(nPanier.listCommande[i].nbrBoisson != 0){
-            
-            nPanier.listCommande[i].listBoisson = (listIdBoisson*) malloc(nPanier.listCommande[i].nbrBoisson*sizeof(listIdBoisson));
-            if(nPanier.listCommande[i].listBoisson == NULL){
-                printf("Erreur allocation memoire.");
-                exit(-1);
-            }
-
-            nPanier.listCommande[i].prix = 0;  
-
-            for(int j = 0; j<nPanier.listCommande[i].nbrBoisson; j++){
-
-                printf("\nEntrez l'ID de la boisson que vous voulez commander :");
-                retour = scanf("%d", &nombreId);
-
-                if(retour != 1 || nombreId < 0){
-                    while(retour != 1 || nombreId < 0 ){
-                        retour = 1;
-                        printf("\nCe nombre n'existe pas.\n");
-                        printf("Veuillez entrer un nombre :");
-                        getchar();
-                        retour = scanf("%d", &nombreId);
-                    }
-                }
-
-                nPanier.listCommande[i].listBoisson[j].idBoisson = nombreId - 1;
-
-                printf("\nEntrez la quantite de boisson que vous voulez commander :");
-                retour = scanf("%d", &nPanier.listCommande[i].listBoisson[j].quantiteBoisson);
-
-                if(retour != 1 || nPanier.listCommande[i].listBoisson[j].quantiteBoisson < 0){
-                    while(retour != 1 || nPanier.listCommande[i].listBoisson[j].quantiteBoisson < 0 ){
-                        retour = 1;
-                        printf("\nCe nombre n'existe pas.\n");
-                        printf("Veuillez entrer un nombre valide :");
-                        getchar();
-                        retour = scanf("%d", &nPanier.listCommande[i].listBoisson[j].quantiteBoisson);
-                    }
-                }
-
-                nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + (nPanier.listCommande[i].listBoisson[j].quantiteBoisson*tab[nPanier.listCommande[i].listBoisson[j].idBoisson].prix);
-            }
+        // S'il n'y a pas de boisson, on ne propose pas a l'utilisateur d'en commander
+        if(tab == NULL){
+            printf("\nAucune boisson disponible.");
+            getchar();
         }else{
-            nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + 0; 
-            nPanier.listCommande[i].nbrBoisson = 0;
-        }
+            // On affiche les informations des boissons disponibles
+            system("clear");
+            printf("Commande n.%d\n",i+1);
+            printf("=====================================================================================================\n\n");
+            printf("\t\t\tMenu Information sur les boissons\n\n");
+            printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\n\n");
 
-        system("clear");
-        printf("Commande n.%d\n",i+1);
-        printf("=====================================================================================================\n\n");
-        printf("\t\t\tMenu Information sur les cocktails\n\n");
-        printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tNombre_Boisson\n\n");
-        informationCocktailClient();
-        printf("=====================================================================================================\n\n");
+            informationBoissonClient();
 
-        printf("\nCombien de cocktail voulez vous commander :");
-        retour = scanf("%d", &nombreCocktail);
+            printf("=====================================================================================================\n\n");
 
-        if(retour != 1 || nombreCocktail < 0){
-            while(retour != 1 || nombreCocktail < 0 ){
-                retour = 1;
-                printf("\nCe nombre n'existe pas.\n");
-                printf("Veuillez entrer un nombre valide :");
-                getchar();
-                retour = scanf("%d", &nPanier.listCommande[i].nbrCocktail);
+            // On demande à l'utilisateur combien de boissons il veut commander, puis on vérifie qu'il n'y a pas eu d'erreur
+            printf("\nCombien de boisson se compose votre commande :");
+            retour = scanf("%d", &nPanier.listCommande[i].nbrBoisson);
+
+            if(retour != 1 || nPanier.listCommande[i].nbrBoisson < 0){
+                while(retour != 1 || nPanier.listCommande[i].nbrBoisson < 0 ){
+                    retour = 1;
+                    printf("\nCe nombre n'existe pas.\n");
+                    printf("Veuillez entrer un nombre valide :");
+                    getchar();
+                    retour = scanf("%d", &nPanier.listCommande[i].nbrBoisson);
+                }
             }
-        }
-        
 
-        nPanier.listCommande[i].nbrCocktail = nombreCocktail;
-
-        if(nPanier.listCommande[i].nbrCocktail != 0){
-            
-            nPanier.listCommande[i].listCocktail = (listIdCocktail*) malloc(nPanier.listCommande[i].nbrCocktail*sizeof(listIdCocktail));
-            if(nPanier.listCommande[i].listCocktail == NULL){
-                printf("Erreur allocation memoire.");
-                exit(-1);
-            }     
-
-            for(int j = 0; j<nPanier.listCommande[i].nbrCocktail; j++){
-                printf("\nEntrez l'ID du cocktail que vous voulez commander :");
-                retour = scanf("%d", &nombreId);
-
-                if(retour != 1 || nombreId < 0){
-                    while(retour != 1 || nombreId < 0 ){
-                        retour = 1;
-                        printf("\nCe nombre n'existe pas.\n");
-                        printf("Veuillez entrer un nombre :");
-                        getchar();
-                        retour = scanf("%d", &nombreId);
-                    }
-                }
-
-                nPanier.listCommande[i].listCocktail[j].idCocktail = nombreId - 1;
-
-                printf("\nEntrez la quantite de cocktail que vous voulez commander :");
-                retour = scanf("%d", &nPanier.listCommande[i].listCocktail[j].quantiteCocktail);
-
-                if(retour != 1 || nPanier.listCommande[i].listCocktail[j].quantiteCocktail < 0){
-                    while(retour != 1 || nPanier.listCommande[i].listCocktail[j].quantiteCocktail < 0 ){
-                        retour = 1;
-                        printf("\nCe nombre n'existe pas.\n");
-                        printf("Veuillez entrer un nombre valide :");
-                        getchar();
-                        retour = scanf("%d", &nPanier.listCommande[i].listCocktail[j].quantiteCocktail);
-                    }
-                }
+            // S'il a commandé au moins une boisson, on va actualiser le tableau
+            if(nPanier.listCommande[i].nbrBoisson != 0){
                 
-                nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + (nPanier.listCommande[i].listCocktail[j].quantiteCocktail*tabCocktail[nPanier.listCommande[i].listCocktail[j].idCocktail].prix);
+                // On alloue la mémoire pour les boissons à commander
+                nPanier.listCommande[i].listBoisson = (listIdBoisson*) malloc(nPanier.listCommande[i].nbrBoisson*sizeof(listIdBoisson));
+                if(nPanier.listCommande[i].listBoisson == NULL){
+                    printf("Erreur allocation memoire.");
+                    exit(-1);
+                }
 
+                // On initialise le prix de la commande à 0
+                nPanier.listCommande[i].prix = 0;  
+
+                // On fait une boucle pour demander autant de fois qu'il faut la boisson à commander
+                for(int j = 0; j<nPanier.listCommande[i].nbrBoisson; j++){
+
+                    // On demande l'ID de la boisson à commander, puis on vérifie qu'il n'y a pas eu d'erreur
+                    printf("\nEntrez l'ID de la boisson que vous voulez commander :");
+                    retour = scanf("%d", &nombreId);
+
+                    if(retour != 1 || nombreId < 0){
+                        while(retour != 1 || nombreId < 0 ){
+                            retour = 1;
+                            printf("\nCe nombre n'existe pas.\n");
+                            printf("Veuillez entrer un nombre :");
+                            getchar();
+                            retour = scanf("%d", &nombreId);
+                        }
+                    }
+
+                    // On met l'ID de la boisson dans le tableau de boissons du panier
+                    nPanier.listCommande[i].listBoisson[j].idBoisson = nombreId - 1;
+
+                    // On demande la quantité pour cette boisson, puis on vérifie qu'il n'y a pas eu d'erreur
+                    printf("\nEntrez la quantite de boisson que vous voulez commander :");
+                    retour = scanf("%d", &nPanier.listCommande[i].listBoisson[j].quantiteBoisson);
+
+                    if(retour != 1 || nPanier.listCommande[i].listBoisson[j].quantiteBoisson < 0){
+                        while(retour != 1 || nPanier.listCommande[i].listBoisson[j].quantiteBoisson < 0 ){
+                            retour = 1;
+                            printf("\nCe nombre n'existe pas.\n");
+                            printf("Veuillez entrer un nombre valide :");
+                            getchar();
+                            retour = scanf("%d", &nPanier.listCommande[i].listBoisson[j].quantiteBoisson);
+                        }
+                    }
+
+                    // On met alors le prix à jour en fonction de la boisson commandée et de la quantité commandée
+                    nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + (nPanier.listCommande[i].listBoisson[j].quantiteBoisson*tab[nPanier.listCommande[i].listBoisson[j].idBoisson].prix);
+                }
             }
+            // Si l'utilisateur ne veut pas commander de boisson, on ne crée alors pas le tableau de boisson
+            else{
+                nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + 0; 
+                nPanier.listCommande[i].nbrBoisson = 0;
+            }
+        }
+
+        // Le fonctionnement est exactement le meme pour les cocktails
+        if(tabCocktail == NULL){
+            printf("\nAucun cocktail disponible.\n");
+            getchar();
         }else{
-            nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + 0; 
-            nPanier.listCommande[i].nbrCocktail = 0;
+            system("clear");
+            printf("Commande n.%d\n",i+1);
+            printf("=====================================================================================================\n\n");
+            printf("\t\t\tMenu Information sur les cocktails\n\n");
+            printf("\t\tID\tNom\tContenance\tPrix\tDegre_Alcool\tDegre_Sucre\tNombre_Boisson\n\n");
+            informationCocktailClient();
+            printf("=====================================================================================================\n\n");
+
+            printf("\nCombien de cocktail se compose votre commande :");
+            retour = scanf("%d", &nombreCocktail);
+
+            if(retour != 1 || nombreCocktail < 0){
+                while(retour != 1 || nombreCocktail < 0 ){
+                    retour = 1;
+                    printf("\nCe nombre n'existe pas.\n");
+                    printf("Veuillez entrer un nombre valide :");
+                    getchar();
+                    retour = scanf("%d", &nPanier.listCommande[i].nbrCocktail);
+                }
+            }
+            
+            nPanier.listCommande[i].nbrCocktail = nombreCocktail;
+
+            if(nPanier.listCommande[i].nbrCocktail != 0){
+                
+                nPanier.listCommande[i].listCocktail = (listIdCocktail*) malloc(nPanier.listCommande[i].nbrCocktail*sizeof(listIdCocktail));
+                if(nPanier.listCommande[i].listCocktail == NULL){
+                    printf("Erreur allocation memoire.");
+                    exit(-1);
+                }     
+
+                for(int j = 0; j<nPanier.listCommande[i].nbrCocktail; j++){
+                    printf("\nEntrez l'ID du cocktail que vous voulez commander :");
+                    retour = scanf("%d", &nombreId);
+
+                    if(retour != 1 || nombreId < 0){
+                        while(retour != 1 || nombreId < 0 ){
+                            retour = 1;
+                            printf("\nCe nombre n'existe pas.\n");
+                            printf("Veuillez entrer un nombre :");
+                            getchar();
+                            retour = scanf("%d", &nombreId);
+                        }
+                    }
+
+                    nPanier.listCommande[i].listCocktail[j].idCocktail = nombreId - 1;
+
+                    printf("\nEntrez la quantite de cocktail que vous voulez commander :");
+                    retour = scanf("%d", &nPanier.listCommande[i].listCocktail[j].quantiteCocktail);
+
+                    if(retour != 1 || nPanier.listCommande[i].listCocktail[j].quantiteCocktail < 0){
+                        while(retour != 1 || nPanier.listCommande[i].listCocktail[j].quantiteCocktail < 0 ){
+                            retour = 1;
+                            printf("\nCe nombre n'existe pas.\n");
+                            printf("Veuillez entrer un nombre valide :");
+                            getchar();
+                            retour = scanf("%d", &nPanier.listCommande[i].listCocktail[j].quantiteCocktail);
+                        }
+                    }
+                    
+                    nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + (nPanier.listCommande[i].listCocktail[j].quantiteCocktail*tabCocktail[nPanier.listCommande[i].listCocktail[j].idCocktail].prix);
+
+                }
+            }else{
+                nPanier.listCommande[i].prix = nPanier.listCommande[i].prix + 0; 
+                nPanier.listCommande[i].nbrCocktail = 0;
+            }
         }
 
         nPanier.prix = nPanier.prix + nPanier.listCommande[i].prix;
+
     }
 
-    initCommande(nPanier);
+    // Enfin, on copie les informations du tableau vers le fichier, seulement s'il y a eu au moins une commande
+    if(nPanier.nbrCommande != 0){
+        initCommande(nPanier);
+    }
 
+    // On retourne a l'interface précédente
     interfaceClient();
 }
 
-void initCommande(panier nPanier){
+/*! \fn void initCommande(panier nPanier)()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant d'actualiser le tableau de paniers.
+*
+*  \remarks Cette fonction permet d'actualiser le tableau de paniers.
+*  Cette fonction fonctionne de la même manière que pour la gestion des tableaux de boissons et de cocktails, nous avons donc décidé de ne pas la recommenter entièrement. 
+*/
 
+/*
+    Fonction premettant d'actualiser le tableau de paniers.
+*/
+void initCommande(panier nPanier){
 
     int T = tailleTabPanier();
     int nombreCocktail = 1;
-
 
     if (T>0) {
         // On cree le tableau temporaire et on y copie toutes les informations du tableau de base.
@@ -249,7 +358,6 @@ void initCommande(panier nPanier){
             printf("Erreur allocation mémoire.");
             exit(-1);
         }
-
 
         for(int i = 0; i<T; i++) {
             tmp[i].id = tabPanier[i].id;
@@ -264,7 +372,6 @@ void initCommande(panier nPanier){
                 nombreCocktail = tabPanier[i].listCommande[j].nbrCocktail;
                 if(tabPanier[i].listCommande[j].nbrBoisson != 0){
                     tmp[i].listCommande[j].nbrBoisson = tabPanier[i].listCommande[j].nbrBoisson;
-                    
                     tmp[i].listCommande[j].listBoisson = (listIdBoisson*) malloc(tabPanier[i].listCommande[j].nbrBoisson*sizeof(listIdBoisson));
                     if(tmp[i].listCommande[j].listBoisson == NULL){
                         printf("Erreur allocation mémoire.");
@@ -296,9 +403,7 @@ void initCommande(panier nPanier){
             }
         }
 
-        // On libere l'espace du tableau de base et on le cree avec une case supplementaire, puis on y recopie toutes les informations avec la
-        // nouvelle commande a la fin.
-
+        // On libere l'espace du tableau de base et on le cree avec une case supplementaire, puis on y recopie toutes les informations avec la nouvelle commande a la fin.
 
         for(int i = 0; i<T;i++){
             for(int j = 0; j<tabPanier[i].nbrCommande; j++){
@@ -321,7 +426,6 @@ void initCommande(panier nPanier){
             printf("Erreur allocation mémoire.");
             exit(-1);
         }
-
 
         for(int i = 0; i<T; i++) {
             tabPanier[i].id = tmp[i].id;
@@ -369,8 +473,6 @@ void initCommande(panier nPanier){
             }
         }
 
-
-        
         tabPanier[T].id = nPanier.id;
         tabPanier[T].nbrCommande = nPanier.nbrCommande;
         tabPanier[T].prix = nPanier.prix;
@@ -430,10 +532,10 @@ void initCommande(panier nPanier){
         }
         free(tmp);
     } 
-    // Sinon, si le fichier ne contient aucune boisson, on cree un tableau avec une seule case où on y copie la nouvelle boisson.
+    // Sinon, si le fichier ne contient aucun panier, on cree un tableau avec une seule case où on y copie le nouveau panier.
     else {
         tabPanier = malloc(1*sizeof(panier));
-        if(tab == NULL){
+        if(tabPanier == NULL){
             printf("Erreur allocation mémoire.");
             exit(-1);
         }
@@ -454,7 +556,6 @@ void initCommande(panier nPanier){
 
             if(nPanier.listCommande[j].nbrBoisson != 0){
                 tabPanier[0].listCommande[j].nbrBoisson = nPanier.listCommande[j].nbrBoisson;
-                //nPanier.listCommande[j].nbrCocktail != 0  d'ici
                 tabPanier[0].listCommande[j].listBoisson = (listIdBoisson*) malloc(nPanier.listCommande[j].nbrBoisson*sizeof(listIdBoisson));
                 if(tabPanier[0].listCommande[j].listBoisson == NULL){
                     printf("Erreur allocation mémoire.");
@@ -468,7 +569,6 @@ void initCommande(panier nPanier){
                 tabPanier[0].listCommande[j].nbrBoisson = 0;
             }
             
-            //nPanier.listCommande[j].nbrCocktail == 0 à partir d'ici
             nPanier.listCommande[j].nbrCocktail = nombreCocktail;
 
             if(nombreCocktail != 0){
@@ -490,17 +590,27 @@ void initCommande(panier nPanier){
         }
     }
 
-    // On recopie toutes les informations du tableau dans le fichier, en indicant la taille +1 car on a ajoute une boisson.
+    // On recopie toutes les informations du tableau dans le fichier, en indicant la taille +1 car on a ajoute un panier.
     initFichierCommande(T+1);
 }
 
+/*! \fn void informationCommande()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant d'afficher les informations des paniers.
+*/
+
+/*
+    Fonction premettant d'afficher les informations des paniers.
+*/
 void informationCommande(){   
 
-    // On cree des variables, une permettant de parcourir le tableau.
+    // On cree des variables, une permettant de parcourir le tableau, l'autre contenant le nombre de paniers.
     int i;
     int T = tailleTabPanier();
 
-    // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque boisson.
+    // On fait une boucle qui passe a travers tout le tableau et qui affiche chaque information de chaque panier.
     for(i = 0; i<T; i++) {
         
         printf("\tPanier n.%d:\t\tPrix du panier: %.2f euros\n\n", i+1, tabPanier[i].prix);
@@ -538,6 +648,24 @@ void informationCommande(){
     }
 }
 
+/*! \fn void supprimerPanier(int idSupp)
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de supprimer un panier.
+*
+*  \param idSupp : ID du panier à supprimer.
+*
+*  \remarks Cette fonction permet de supprimer un panier.
+*  L'ID du panier à supprimer est récupérée, puis le fonctionnement est similaire à la suppresion d'une boisson ou d'un cocktail.
+*  On copie le tableau dans un tableau temporaire, on libère l'espace du tableau de base, on lui alloue de la mémoire mais avec une case en moins car on supprime un panier,
+*  et on recopie le tableau temporaire dans le tableau de base, tout en évitant de recopier le panier à supprimer, et enfin on libère l'espace du tableau temporaire.
+*/
+
+/*
+    Fonction premettant de supprimer un panier.
+    L'ID du panier à supprimer est récupérée, puis le fonctionnement est similaire à la suppresion d'une boisson ou d'un cocktail.
+*/
 void supprimerPanier(int idSupp){
 
     int T = tailleTabPanier();
@@ -553,7 +681,6 @@ void supprimerPanier(int idSupp){
             printf("Erreur allocation mémoire.");
             exit(-1);
         }
-
 
         for(int i = 0; i<T; i++) {
             tmp[i].id = tabPanier[i].id;
@@ -619,6 +746,10 @@ void supprimerPanier(int idSupp){
         free(tabPanier);
 
         tabPanier = malloc((T-1)*sizeof(boisson));
+        if(tabPanier == NULL){
+            printf("Erreur allocation mémoire.");
+            exit(-1);
+        }
 
         // On recopie toutes les informations dans le tableau de base, et si on est situe sur la valeur a supprimer, on ne la recopie tout simplement pas.
         while(j<T) {
@@ -696,11 +827,282 @@ void supprimerPanier(int idSupp){
     // On recopie le tableau dans le fichier
     initFichierCommande(T-1);
 
-    // On retourne a l'interface precedente.
-    interfaceClient();
 }
 
+/*! \fn void modifPanier(int idModif)
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de modifier un panier.
+*
+*  \param idModif : ID du panier à modifier.
+*
+*  \remarks Cette fonction permet de modifier un panier.
+*  Il est cependant seulement possible de modifier la quantite des boissons ou des cocktails.
+*/
 
+/*
+    Fonction premettant de modifier un panier.
+*/
+void modifPanier(int idModif){
+
+    // On crée une variable contenant le nombre de paniers, une pou l'ID de la commande, une pour l'ID de la boisson et sa quantité, et une pour l'ID du cocktail et sa quantité
+    int T = tailleTabPanier();
+    int retour = 0;
+    int idCommande;
+    int idBoisson;
+    int quantiteBoiss;
+    int idCocktail;
+    int quantiteCock;
+
+    // On fait une boucle pour passer trouver le panier a modifier
+    for (int i = 0; i < T; i++){
+        if(i == idModif-1){
+            // On affiche les commandes du panier
+            system("clear");
+            for(int l = 0; l < tabPanier[i].nbrCommande; l ++){
+                printf("\t\tCommande n.%d:\t\tPrix de la commande: %.2f euros\n\n", l+1, tabPanier[i].listCommande[l].prix);
+                printf("\t=====================================================================================\n");
+                printf("\t\tCette commande est compose de(s) la (les) boisson(s) suivante(s):\n");
+                printf("\t");
+                if(tabPanier[i].listCommande[l].nbrBoisson != 0){
+                    for(int j = 0; j<tabPanier[i].listCommande[l].nbrBoisson; j++){
+                        printf("%s", tab[tabPanier[i].listCommande[l].listBoisson[j].idBoisson].nom);
+                        printf(" x");
+                        printf("%d\t", tabPanier[i].listCommande[l].listBoisson[j].quantiteBoisson);
+                    }
+                }else{
+                    printf("Aucune boisson commande.");
+                }
+                printf("\n\t=====================================================================================\n\n");
+                printf("\t=====================================================================================\n");
+                printf("\t\tCette commande est compose du (des) cocktail(s) suivant(s):\n");
+                printf("\t");
+                if(tabPanier[i].listCommande[l].nbrCocktail != 0){
+                    for(int j = 0; j<tabPanier[i].listCommande[l].nbrCocktail; j++){
+                        printf("%s", tabCocktail[tabPanier[i].listCommande[l].listCocktail[j].idCocktail].nom);
+                        printf(" x");
+                        printf("%d\t", tabPanier[i].listCommande[l].listCocktail[j].quantiteCocktail);
+                    }
+                }else{
+                    printf("Aucun cocktail commande.");
+                }
+                printf("\n\t=====================================================================================\n\n");
+            }
+
+            // On demande a l'utilisateur le numero de la commande a modifier
+            printf("Entrez le numero de la commande a modifie :");
+            retour = scanf("%d", &idCommande);
+            if(retour != 1 || idCommande < 0 || idCommande > tabPanier[i].nbrCommande){
+                while(retour != 1 || idCommande < 0 || idCommande > tabPanier[i].nbrCommande){
+                    retour = 1;
+                    printf("\nCe nombre n'existe pas.\n");
+                    printf("Veuillez entrer un nombre valide pour modifer une commande:");
+                    getchar();
+                    retour = scanf("%d", &idCommande);
+                }
+            }
+
+            // On affiche les boissons contenues dans la commande
+            for(int l = 0; l < tabPanier[i].nbrCommande; l++){
+                if(l == idCommande-1){
+                    system("clear");
+                    printf("\t=====================================================================================\n");
+                    printf("\t\tCette commande est compose de(s) la (les) boisson(s) suivante(s):\n");
+                    printf("\t");
+                    if(tabPanier[i].listCommande[l].nbrBoisson != 0){
+                        for(int j = 0; j<tabPanier[i].listCommande[l].nbrBoisson; j++){
+                            printf("%d. %s",j+1, tab[tabPanier[i].listCommande[l].listBoisson[j].idBoisson].nom);
+                            printf(" x");
+                            printf("%d\t", tabPanier[i].listCommande[l].listBoisson[j].quantiteBoisson);
+                        }
+                    }else{
+                        printf("Aucune boisson commande.\n");
+                    }
+
+                    // On demande a l'utilisateur l'ID de la boisson pour laquelle il faut modifier la quantite commandee, et 0 s'il ne veut rien modifier pour les boissons
+                    printf("\n\t=====================================================================================\n\n");
+                    if(tabPanier[i].listCommande[l].listBoisson != 0){
+                        printf("Entrez 0 pour ne rien modifier.\nEntrez le numero de la boisson pour modifier sa quantite commande:");
+                        retour = scanf("%d", &idBoisson);
+                        if(retour != 1 || idBoisson < 0 || idBoisson > tabPanier[i].listCommande[l].nbrBoisson){
+                            while(retour != 1 || idBoisson < 0 || idBoisson > tabPanier[i].listCommande[l].nbrBoisson){
+                                retour = 1;
+                                printf("\nCe nombre n'existe pas.\n");
+                                printf("Veuillez entrer un nombre valide pour selectionner une boisson:");
+                                getchar();
+                                retour = scanf("%d", &idBoisson);
+                            }
+                        }
+
+                        if(idBoisson != 0){
+                            printf("Entrez la nouvelle quantite de boisson:");
+                            retour = scanf("%d", &quantiteBoiss);
+                            if(retour != 1 || quantiteBoiss < 0 ){
+                                while(retour != 1 || quantiteBoiss < 0){
+                                    retour = 1;
+                                    printf("\nCe nombre n'existe pas.\n");
+                                    printf("Veuillez entrer un nombre valide pour la qauntite de boisson:");
+                                    getchar();
+                                    retour = scanf("%d", &quantiteBoiss);
+                                }
+                            }
+                            
+                            for(int k = 0; k < tabPanier[i].listCommande[l].nbrBoisson; k++){
+                                if(k == idBoisson-1){
+                                    tabPanier[i].listCommande[l].listBoisson[k].quantiteBoisson = quantiteBoiss;
+                                }
+                            }
+                        }else{
+                            printf("\t\nAucune boisson a modifier.");
+                            printf("\nAppuyer sur une toucher pour continuer.\n");
+                            getchar();
+                        }
+                    }
+
+                    // On affiche les cocktails
+                    system("clear");
+                    printf("\t=====================================================================================\n");
+                    printf("\t\tCette commande est compose du (des) cocktail(s) suivant(s):\n");
+                    printf("\t");
+                    if(tabPanier[i].listCommande[l].nbrCocktail != 0){
+                        for(int j = 0; j<tabPanier[i].listCommande[l].nbrCocktail; j++){
+                            printf("%d. %s",j+1, tabCocktail[tabPanier[i].listCommande[l].listCocktail[j].idCocktail].nom);
+                            printf(" x");
+                            printf("%d\t", tabPanier[i].listCommande[l].listCocktail[j].quantiteCocktail);
+                        }
+                    }else{
+                        printf("Aucun cocktail commande.\n");
+                    }
+                    if(tabPanier[i].listCommande[l].nbrCocktail != 0){
+                        // On demande a l'utilisateur l'ID du cocktail pour lequel il faut modifier la quantite, et 0 s'il ne veut rien modifier
+                        printf("\n\t=====================================================================================\n\n");
+                        printf("Entrez 0 pour ne rien modifier.\nEntrez le numero du cocktail pour modifier sa quantite commande:");
+                        retour = scanf("%d", &idCocktail);
+                        if(retour != 1 || idCocktail < 0 || idCocktail > tabPanier[i].listCommande[l].nbrCocktail){
+                            while(retour != 1 || idCocktail < 0 || idCocktail > tabPanier[i].listCommande[l].nbrCocktail){
+                                retour = 1;
+                                printf("\nCe nombre n'existe pas.\n");
+                                printf("Veuillez entrer un nombre valide pour selectionner un cocktail:");
+                                getchar();
+                                retour = scanf("%d", &idCocktail);
+                            }
+                        }
+                        if(idCocktail != 0){
+                            // On demande a l'utilisateur la nouvelle quantite
+                            printf("Entrez la nouvelle quantite de cocktail:");
+                            retour = scanf("%d", &quantiteCock);
+                            if(retour != 1 || quantiteCock < 0 ){
+                                while(retour != 1 || quantiteCock < 0){
+                                    retour = 1;
+                                    printf("\nCe nombre n'existe pas.\n");
+                                    printf("Veuillez entrer un nombre valide pour la qauntite de cocktail:");
+                                    getchar();
+                                    retour = scanf("%d", &quantiteCock);
+                                }
+                            }
+                            
+                            for(int k = 0; k < tabPanier[i].listCommande[l].nbrCocktail; k++){
+                                if(k == idCocktail-1){
+                                    tabPanier[i].listCommande[l].listCocktail[k].quantiteCocktail = quantiteCock;
+                                }
+                            }
+                        }else{
+                            printf("\nAucun cocktail a modifier.");
+                            printf("\nAppuyer sur une toucher pour continuer.\n");
+                            getchar();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Enfin, on copie les nouvelles informations du tableau dans le fichier
+    
+    initFichierCommande(T);
+
+}
+
+/*! \fn void suppPanierBoisson(int idBoisson)
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de supprimer un panier si une boisson contenue dans ce panier a été supprimée.
+*
+*  \param idBoisson : ID de la boisson supprimée.
+*
+*  \remarks Cette fonction permet de supprimer un panier si l'une des boissons qui le compose a été suprimée.
+*/
+
+/*
+    Fonction premettant de supprimer un panier si une boisson contenue dans ce panier a été supprimée.
+*/
+void suppPanierBoisson(int idBoisson){
+
+    int T = tailleTabPanier();
+
+    // On parcours les boissons de chacune des commmandes de chaque panier et si la boisson apparait, on supprime le panier
+    if(T > 0){
+
+        for(int i = 0; i < T; i++){
+            for(int j = 0; j < tabPanier[i].nbrCommande; j++){
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrBoisson; k++){
+                    if(tabPanier[i].listCommande[j].listBoisson[k].idBoisson == idBoisson-1){
+                        supprimerPanier(i+1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*! \fn void suppPanierCocktail(int idCocktail)
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de supprimer un panier si un cocktail contenu dans ce panier a été supprimé.
+*
+*  \param idCocktail : ID du cocktail supprimée.
+*
+*  \remarks Cette fonction permet de supprimer un panier si l'un des cocktails qui le compose a été suprimé.
+*/
+
+/*
+    Fonction premettant de supprimer un panier si un cocktail contenu dans ce panier a été supprimé.
+*/
+void suppPanierCocktail(int idCocktail){
+
+    int T = tailleTabPanier();
+    
+    if(T>0){
+
+        for(int i = 0; i < T; i++){
+            for(int j = 0; j < tabPanier[i].nbrCommande; j++){
+                for(int k = 0; k < tabPanier[i].listCommande[j].nbrCocktail; k++){
+                    if(tabPanier[i].listCommande[j].listCocktail[k].idCocktail == idCocktail-1){
+                        supprimerPanier(i+1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*! \fn int tailleTabPanier()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant d'obtenir le nombre de paniers.
+*
+*  \return Cette fonction renvoie le nombre de paniers.
+*
+*  \remarks Cette fonction permet de récupérer le nombre de paniers, à partir du premier int qui est écrit dans le fichier.
+*/
+
+/*
+    Fonction premettant d'obtenir le nombre de paniers.
+*/
 int tailleTabPanier() {
 
     // On cree une variable pour recuperer la taille.
@@ -718,21 +1120,30 @@ int tailleTabPanier() {
 
     }
 
-    // On lit la premiere valeur qui apparait, qui correspond au nombre de boissons.
+    // On lit la premiere valeur qui apparait, qui correspond au nombre de paniers.
     fread(&taille, sizeof(int), 1, file);
 
     // On ferme le fichier.
     fclose(file);
 
-    // On retourne le nombre de boissons.
+    // On retourne le nombre de paniers.
     return taille;
 
 }
 
+/*! \fn int initTabPanier()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant d'initialiser le tableau de paniers.
+*/
+
+/*
+    Fonction premettant d'initialiser le tableau de paniers.
+*/
 void initTabPanier() {
-    // On cree une variable qui va permettre de recopier les informations du fichier.
+    // On cree une variable pour récupérer le nombre de paniers.
     int taille;
-    //boisson rboisson;
 
     // On ouvre le fichier en mode lecture, avec le parametre "rb".
     FILE* file = fopen("data/commandeClient", "rb");
@@ -743,8 +1154,7 @@ void initTabPanier() {
         exit(-1);
     }
 
-
-    // On cree le tableau seulement s'il y a au moins une boisson.
+    // On cree le tableau seulement s'il y a au moins un panier.
     if(fread(&taille, sizeof(int), 1, file)>0) {
         tabPanier = (panier*) malloc(taille*sizeof(panier));
         if(tabPanier == NULL){
@@ -796,14 +1206,25 @@ void initTabPanier() {
         }
     }
 
-
     // On ferme le fichier.
     fclose(file);
 
 }
 
+/*! \fn int initTabPanier()
+*  \author Barre Romain
+*  \version 1
+*
+*  \brief Fonction premettant de recopier les informations du tableau vers le fichier.
+*
+*  \param T : nombre de paniers
+*/
+
+/*
+    Fonction premettant de recopier les informations du tableau vers le fichier.
+*/
 void initFichierCommande(int T) {
-    // On ouvre le fichier en mode ecriture, avec le parametre "wb", permettant de supprimer le contenu du fichier puis d'ecrire. 
+    // On ouvre le fichier en mode ecriture, avec le parametre "wb". 
     FILE *file = fopen("data/commandeClient","wb");
 
     // On cree une variable permettant de passer dans tout le tableau et de recopier les informations dans le fichier.
@@ -814,6 +1235,7 @@ void initFichierCommande(int T) {
         exit(-1);
     }
 
+    // On écrit d'abord le nombre de paniers au début du fichier
     fwrite(&T, sizeof(int), 1, file);
 
     // On parcoure le tableau et on copie les informations dans le fichier.
