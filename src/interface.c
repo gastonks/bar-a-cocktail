@@ -2,7 +2,7 @@
 
 //Definition d'une macro, permettant de gagner du temps et de l'espace dans le programme.
 
-const char* REMOVE_DATA = "rm -r data/*";
+const char* REMOVE_DATA = "rm -r date/*";
 
 int prix = 0;
 int idUser = 0; // 1 = Barman ; 2 = Client
@@ -58,7 +58,6 @@ void interfaceAccueil(){
 
         case 0:
             printf("Sortie du programme.\n");
-            exit(0);
             break;
         
         default:
@@ -82,15 +81,14 @@ void interfaceBarman(){
     printf("\t\t1. Gestion des boissons\n\n");
     printf("\t\t2. Gestion des cocktails\n\n");
     printf("\t\t3. Gestion des finances\n\n");
-    printf("\t\t4. Satisfaire le panier d'un client\n\n");
     printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1 || numInter < 0 || numInter > 4){
-        while(retour != 1 || numInter < 0 || numInter > 4){
+    if(retour != 1 || numInter < 0 || numInter > 3){
+        while(retour != 1 || numInter < 0 || numInter > 3){
             retour = 1;
             printf("\nCe numero d'interface n'existe pas.\n");
             printf("Veuillez entrer un nombre pour le choix de l'interface:");
@@ -109,9 +107,6 @@ void interfaceBarman(){
             break;
         case 3:
             interfaceGestionFinance();
-            break;
-        case 4:
-            interfaceSatisfactionCommande();
             break;
         case 0:
             interfaceAccueil();
@@ -141,15 +136,14 @@ void interfaceClient(){
     printf("\t\t3. Information sur les paniers\n\n");
     printf("\t\t4. Creer un panier\n\n");
     printf("\t\t5. Supprimer un panier\n\n");
-    printf("\t\t6. Modifier un panier\n\n");
     printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1 || numInter < 0 || numInter > 6){
-        while(retour != 1 || numInter < 0 || numInter > 6){
+    if(retour != 1 || numInter < 0 || numInter > 5){
+        while(retour != 1 || numInter < 0 || numInter > 5){
             retour = 1;
             printf("\nCe numero d'interface n'existe pas.\n");
             printf("Veuillez entrer un nombre pour le choix de l'interface:");
@@ -173,8 +167,6 @@ void interfaceClient(){
             break;
         case 5:
             interfaceSuppCommande();
-        case 6:
-            interfaceModifCommande();
         case 0:
             interfaceAccueil();
             break;
@@ -201,14 +193,15 @@ void interfaceGestionBoissonBarman(){
     printf("\t\t2. Ajouter ou supprimer une boisson\n\n");
     printf("\t\t3. Modifie une boisson\n\n");
     printf("\t\t4. Gestion du stock de boisson\n\n");
+    printf("\t\t5. Satisfaire une commande d'un client\n\n");
     printf("\t\t0. Revenir en arriere\n\n");
     printf("===============================================================\n\n");
 
     printf("Entrer le numero de l'interface:");
     retour = scanf("%d", &numInter);
 
-    if(retour != 1 || numInter < 0 || numInter > 4){
-        while(retour != 1 || numInter < 0 || numInter > 4){
+    if(retour != 1 || numInter < 0 || numInter > 5){
+        while(retour != 1 || numInter < 0 || numInter > 5){
             retour = 1;
             printf("\nCe numero d'interface n'existe pas.\n");
             printf("Veuillez entrer un nombre pour le choix de l'interface:");
@@ -230,6 +223,9 @@ void interfaceGestionBoissonBarman(){
             break;
         case 4:
             interfaceGestionStock();
+            break;
+        case 5:
+            interfaceSatisfactionCommande();
             break;
         case 0:
             interfaceBarman();
@@ -580,8 +576,8 @@ void interfaceModifBoisson(){
     printf("Entrez 0 pour revenir en arrière.\nEntrer l'ID de la boisson a modifie :");
     retour = scanf("%d", &idChange);
 
-    if(retour != 1 || idChange < 0 || idChange > tailleTabBarman()){
-        while(retour != 1 || idChange < 0 || idChange > tailleTabBarman()){
+    if(retour != 1 || idChange < 0){
+        while(retour != 1 || idChange < 0){
             retour = 1;
             printf("\nCe nombre n'existe pas.\n");
             printf("Veuillez entrer un nombre valide pour soit sortir ou selectionner une boisson:");
@@ -634,8 +630,8 @@ void interfaceGestionStock(){
     printf("Entrez 0 pour revenir en arrière.\nEntrer l'ID de la boisson pour modifier le stock :");
     retour = scanf("%d", &idStock);
 
-    if(retour != 1 || idStock < 0 || idStock > tailleTabBarman()){
-        while(retour != 1 || idStock < 0 || idStock > tailleTabBarman()){
+    if(retour != 1 || idStock < 0){
+        while(retour != 1 || idStock < 0){
             retour = 1;
             printf("\nCe nombre n'existe pas.\n");
             printf("Veuillez entrer un nombre valide pour soit sortir ou modifier le stock d'une boisson:");
@@ -675,34 +671,35 @@ void interfaceGestionStock(){
 }
 
 void interfaceSatisfactionCommande(){
-    int numPanier = 0;
+    int nCommande = 0;
     int retour = 0;
 
     system("clear");
     printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les commandes\n\n");
+    printf("\t\t\tMenu Information sur les boissons\n\n");
+    printf("\t\tID\tNom\tPrix\tQuantite_Commande\n\n");
 
     informationCommande();
 
     printf("=====================================================================================================\n\n");
 
-    printf("Entrez 0 pour revenir en arrière.\nEntrer le numero du panier que vous voulez satisfaire :");
-    retour = scanf("%d", &numPanier);
+    printf("Entrez 0 pour revenir en arrière.\nEntrer l'ID de la commande que vous voulez satisfaire :");
+    retour = scanf("%d", &nCommande);
 
-    if(retour != 1 || numPanier < 0 || numPanier > tailleTabPanier()){
-        while(retour != 1 || numPanier < 0 || numPanier > tailleTabPanier()){
+    if(retour != 1 || nCommande < 0){
+        while(retour != 1 || nCommande < 0){
             retour = 1;
             printf("\nCe nombre n'existe pas.\n");
             printf("Veuillez entrer un nombre valide pour soit sortir, soit satisfaire une commande :");
             getchar();
-            retour = scanf("%d", &numPanier);
+            retour = scanf("%d", &nCommande);
         }
     }
 
-    if(numPanier == 0){
-        interfaceBarman();
+    if(nCommande == 0){
+        interfaceGestionBoissonBarman();
     }else{
-        satisfactionCommande(numPanier);
+        satisfactionCommande(nCommande);
     }
 }
 
@@ -928,50 +925,8 @@ void interfaceSuppCommande(){
         interfaceClient();
     }else{   
         supprimerPanier(idSupp);
-        interfaceClient();
     }
 
-}
-
-
-void interfaceModifCommande(){
-
-    // On cree une variable qui correspond au numero du panier a modifier.
-
-    int idChange = 0;
-    int retour = 0;
-
-    // On affiche tous les paniers, ainsi que leurs informations.
-
-    system("clear");
-    printf("=====================================================================================================\n\n");
-    printf("\t\t\tMenu Information sur les commandes\n\n");
-
-    informationCommande();
-
-    printf("=====================================================================================================\n\n");
-
-    // On demande a l'utilisateur d'entrer le numero du panier qu'il desire modifier.
-
-    printf("Entrez 0 pour revenir en arrière.\nEntrer le numero du panier a modifie :");
-    retour = scanf("%d", &idChange);
-
-    if(retour != 1 || idChange < 0 || idChange > tailleTabPanier()){
-        while(retour != 1 || idChange < 0 || idChange > tailleTabPanier()){
-            retour = 1;
-            printf("\nCe nombre n'existe pas.\n");
-            printf("Veuillez entrer un nombre valide pour soit sortir ou selectionner un panier:");
-            getchar();
-            retour = scanf("%d", &idChange);
-        }
-    }
-
-    if(idChange == 0){
-        interfaceClient();
-    }else{
-        modifPanier(idChange);
-        interfaceClient();
-    }
 }
 
 /*

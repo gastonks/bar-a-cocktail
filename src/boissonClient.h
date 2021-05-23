@@ -48,7 +48,6 @@ void demandeCommande(void);
 void initCommande(panier nPanier);
 void informationCommande(void);
 void supprimerPanier(int idSupp);
-void modifPanier(int idModif);
 int tailleTabPanier(void);
 void initTabPanier(void);
 void initFichierCommande(int T);

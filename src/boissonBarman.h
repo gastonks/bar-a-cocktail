@@ -32,7 +32,7 @@ void informationBoissonBarman(void);
 void suppBoisson(int idSupp);
 void modifBoisson(int idChange);
 void gestionStock(int idStock, float stockR, float stockV);
-void satisfactionCommande(int numPanier);
+void satisfactionCommande(int nCommande);
 
 // Fonction pour la gestion des finances
 float recette(float prix);
@@ -44,7 +44,7 @@ int tailleTabBarman();
 
 boisson* tab;
 
-float recetteBar;
+
 
 
 #endif
